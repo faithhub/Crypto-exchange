@@ -9,6 +9,7 @@
     padding: 10px 0 10px 0;
   }
 </style>
+
 <!-- .topbar-wrap -->
 <div class="page-content">
   <div class="container">
@@ -89,23 +90,45 @@
                   <form role="form" method="POST" action="{{ route('document.upload') }}" enctype="multipart/form-data">
                     <h5 class="font-mid">Take a Selfie of Yourself</h5>
                     <div class="row align-items-center">
-                      <div class="col-sm-8">
+                      <div class="col-sm-12">
                         {{ csrf_field() }}
                         <div class="img-selfie-div mx-md-4">
-                          <button class="btn btn-primary" onclick="take_snapshot()">Take Selfie</button>
-
+                          <button type="button" class="btn btn-primary" onclick="take_snapshot()">Take Selfie</button>
                           <div class="row">
-                            <div class="col-lg-6 mb-2 results" id="my_camera"></div>
-                            <div class="col-lg-6 mb-2" id="results"></div>
+                            <div class="col-lg-6 mb-2">
+                              <div id="my_camera" class="mt-2"></div>
+                              <script src="{{ asset('webcamjs/webcam.min.js') }}"></script>
+                              <script>
+                                Webcam.set({
+                                  width: 320,
+                                  height: 240,
+                                  image_format: 'jpeg',
+                                  jpeg_quality: 90
+                                });
+                                Webcam.attach('#my_camera');
+
+                                function take_snapshot() {
+                                  // take snapshot and get image data
+                                  Webcam.snap(function(data_uri) {
+                                    console.log(data_uri)
+                                    // display results_shot in page
+                                    // document.getElementByID("").style.visibilty="hidden";
+                                    document.getElementById('img_shot').value = data_uri;
+                                    document.getElementById('results_shot').innerHTML = '<img src="' + data_uri + '"/>';
+                                  });
+                                }
+                              </script>
+                            </div>
+                            <div class="col-lg-6 mb-2" id="results_shot"></div>
                           </div>
                           <div class="row">
-                            <input type="" name="img_shot" id="img_shot">
-                            <div class="col-6" id="">
-                              <!-- <img class="img-selfie" id="" src="https://thumbs.dreamstime.com/b/nature-forest-trees-growing-to-upward-to-sun-wallpaper-42907586.jpg"> -->
+                            <input type="hidden" name="img_shot" id="img_shot">
+                            <!-- <div class="col-6" id="">
+                              <img class="img-selfie" id="" src="https://thumbs.dreamstime.com/b/nature-forest-trees-growing-to-upward-to-sun-wallpaper-42907586.jpg">
                             </div>
                             <div class="col-6" id="">
                               <img class="img-selfie" id="" src="https://thumbs.dreamstime.com/b/nature-forest-trees-growing-to-upward-to-sun-wallpaper-42907586.jpg">
-                            </div>
+                            </div> -->
                           </div>
                         </div>
                       </div>
@@ -235,25 +258,3 @@
 </div><!-- Modal End -->
 @endif
 @stop
-
-<script src="{{ asset('webcamjs/webcam.min.js') }}"></script>
-<script>
-  Webcam.set({
-    width: 320,
-    height: 240,
-    image_format: 'jpeg',
-    jpeg_quality: 90
-  });
-  Webcam.attach('#my_camera');
-
-  function take_snapshot() {
-    // take snapshot and get image data
-    Webcam.snap(function(data_uri) {
-      console.log(data_uri)
-      // display results in page
-      // document.getElementByID("").style.visibilty="hidden";
-      document.getElementById('img_shot').value = data_uri;
-      document.getElementById('results').innerHTML = '<img src="' + data_uri + '"/>';
-    });
-  }
-</script>
