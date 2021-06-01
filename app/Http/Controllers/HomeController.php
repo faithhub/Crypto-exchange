@@ -361,8 +361,19 @@ class HomeController extends Controller
                 'type' => 'required',
                 'date' => 'required',
                 'number' => 'required',
+                'img_shot' => 'required',
                 'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
                 'photo2' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            ],
+            [
+                'type.required' => 'Document Type must not be empty',
+                'date.required' => 'ID Expiry Date must not be empty',
+                'number.required' => 'ID Number must not be empty',
+                'img_shot.required' => 'Your Selfie shot is required',
+                'photo.required' => 'The Front View Of Document is required',
+                'photo.image' => 'The Front View Of Documen must be Image',
+                'photo2.required' => 'Picture Of You Holding The Document is required',
+                'photo2.image' => 'Picture Of You Holding The Document must be Image',
             ]
         );
 
@@ -371,6 +382,8 @@ class HomeController extends Controller
         $docm['date'] = $request->date;
         $docm['number'] = $request->number;
         $docm['status'] = 0;
+        $docm['selfie'] = $request->img_shot;
+
         if ($request->hasFile('photo')) {
             $docm['image1'] = uniqid() . '.jpg';
             $request->photo->move('kyc', $docm['image1']);

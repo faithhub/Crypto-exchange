@@ -8,6 +8,11 @@
   .img-selfie {
     padding: 10px 0 10px 0;
   }
+
+  .error {
+    color: red;
+    font-size: 12px;
+  }
 </style>
 
 <!-- .topbar-wrap -->
@@ -121,6 +126,11 @@
                             </div>
                             <div class="col-lg-6 mb-2" id="results_shot"></div>
                           </div>
+                          @if ($errors->has('img_shot'))
+                          <span class="error">
+                            {{ $errors->first('img_shot') }}
+                          </span>
+                          @endif
                           <div class="row">
                             <input type="hidden" name="img_shot" id="img_shot">
                             <!-- <div class="col-6" id="">
@@ -137,8 +147,15 @@
                     <div class="row align-items-center">
                       <div class="col-sm-8">
                         <div class="input-item input-with-label"><label class="input-item-label">File Upload</label>
-                          <div class="relative"><em class="input-file-icon fas fa-upload"></em><input type="file" name="photo" class="input-file" id="file-01"><label for="file-01">Choose a file</label></div>
+                          <div class="relative"><em class="input-file-icon fas fa-upload"></em>
+                          <input type="file" name="photo" class="input-file" id="file-01" accept="image/*">
+                          <label for="file-01">Choose a file</label></div>
                         </div>
+                        @if ($errors->has('photo'))
+                        <span class="error">
+                          {{ $errors->first('photo') }}
+                        </span>
+                        @endif
                       </div>
                       <div class="col-sm-4 d-none d-sm-block">
                         <div class="mx-md-4"><img src="{{asset('dash-assets/images/vector-id-front.png')}}" width="100" alt="vector"></div>
@@ -149,8 +166,15 @@
                     <div class="row align-items-center">
                       <div class="col-sm-8">
                         <div class="input-item input-with-label"><label class="input-item-label">File Upload</label>
-                          <div class="relative"><em class="input-file-icon fas fa-upload"></em><input type="file" name="photo2" class="input-file" id="file-02"><label for="file-02">Choose a file</label></div>
+                          <div class="relative"><em class="input-file-icon fas fa-upload"></em>
+                          <input type="file" name="photo2" class="input-file" id="file-02" accept="image/*">
+                          <label for="file-02">Choose a file</label></div>
                         </div>
+                        @if ($errors->has('photo2'))
+                        <span class="error">
+                          {{ $errors->first('photo2') }}
+                        </span>
+                        @endif
                       </div>
                       <div class="col-sm-4 d-none d-sm-block">
                         <div class="mx-md-4"><img src="{{asset('dash-assets/images/vector-id-back.png')}}" width="100" alt="vector"></div>
@@ -181,17 +205,34 @@
                       <option value="International Passport">International Passport</option>
                       <option value="National ID Card">National ID Card</option>
                       <option value="Voters' Card">Voters' Card</option>
-                    </select>
+                    </select>                    
+                    @if ($errors->has('type'))
+                    <span class="error">
+                      {{ $errors->first('type') }}
+                    </span>
+                    @endif
                   </div><!-- .input-item -->
-
                   <div class="input-item input-with-label"><label for="swalllet" class="input-item-label">ID Number </label>
                     <input class="input-bordered" type="text" id="token-address" name="number">
+                    @if ($errors->has('number'))
+                    <span class="error">
+                      {{ $errors->first('number') }}
+                    </span>
+                    @endif
                     <span class="input-note">Note: Ensure you enter a complete ID Number.</span>
                   </div><!-- .input-item -->
                 </div><!-- .col -->
               </div>
               <!-- .row -->
-              <div class="input-item input-with-label"><label for="token-address" class="input-item-label">ID Expiry Date:</label><input class="input-bordered date-picker-dob" type="text" id="date-of-birth" name="date"></div><!-- .input-item -->
+              <div class="input-item input-with-label">
+                <label for="token-address" class="input-item-label">ID Expiry Date:</label>
+                <input class="input-bordered date-picker-dob" type="text" id="date-of-birth" name="date">
+                @if ($errors->has('date'))
+                <span class="error">
+                  {{ $errors->first('date') }}
+                </span>
+                @endif
+              </div><!-- .input-item -->
             </div><!-- .step-fields -->
           </div>
           <div class="form-step form-step-final">
@@ -221,13 +262,27 @@
         <h4 class="popup-title">Account Verification Documents</h4>
 
         <p>You Have Successfully Uploaded Documents For Your Verification Process</p>
+        
+        <h5 class="mgt-1-5x font-mid">Your Selfie:</h5>
+        <div class="row-col-12">
+              <img src="{{ $docs->selfie }}" alt="pay-logo">
+        </div>
         <h5 class="mgt-1-5x font-mid">Your Uploaded Documments:</h5>
 
         <ul class="pay-list guttar-20px">
+          <li class="pay-item">
+            <input type="radio" class="pay-check" name="pay-option" id="pay-coin">
+            <label class="pay-check-label" for="pay-coin">
+              <img src="{{ asset('kyc') }}/{{$docs->image1}}" alt="pay-logo">
+            </label>
+          </li>
 
-          <li class="pay-item"><input type="radio" class="pay-check" name="pay-option" id="pay-coin"><label class="pay-check-label" for="pay-coin"><img src="{{ asset('kyc') }}/{{$docs->image1}}" alt="pay-logo"></label></li>
-
-          <li class="pay-item"><input type="radio" class="pay-check" name="pay-option" id="pay-coinpay"><label class="pay-check-label" for="pay-coinpay"><img src="{{ asset('kyc') }}/{{$docs->image2}}" alt="pay-logo"></label></li>
+          <li class="pay-item">
+            <input type="radio" class="pay-check" name="pay-option" id="pay-coinpay">
+            <label class="pay-check-label" for="pay-coinpay">
+              <img src="{{ asset('kyc') }}/{{$docs->image2}}" alt="pay-logo">
+            </label>
+          </li>
 
         </ul>
 
