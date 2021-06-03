@@ -218,16 +218,6 @@
                                             div.style.display = 'block';
                                         }
                                     </script>
-
-
-
-
-
-
-
-
-
-
                                     <div class="input-item input-with-label"><label for="token-address" class="input-item-label text-exlight">Comment/Instruction</label><textarea row="3" class="input-bordered" name="comment" type="text"></textarea></div><!-- .input-item -->
                                     <ul class="d-flex flex-wrap align-items-center guttar-30px">
                                         <li><button type="submit" class="btn btn-primary btn-outline">Buy</button>

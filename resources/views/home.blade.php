@@ -52,7 +52,45 @@
                         </div><!-- .col -->
 
 
-                        <div class="col-lg-4">
+                        <div class="col-lg-8">
+                                <div class="token-statistics  card card-token height-auto">
+                                        <div class="card-innr">
+                                                <div class="row">
+                                                        <div class="col-12">
+                                                                <div class="token-balance token-balance-with-icon mb-3">
+                                                                        <div class="token-balance-icon"><em class="h2 color-white fa fa-money-bill"></em></div>
+                                                                        <div class="token-balance-text">
+                                                                                <h6 class="card-sub-title">Naira Wallet Balance</h6><span class="lead"> {{$basic->currency_sym}}{{number_format($buy - $bacharge, $basic->decimal)}}</span>
+                                                                        </div>
+                                                                </div>
+                                                        </div>
+                                                </div>
+
+                                                <div class="token-balance token-balance-s2">
+                                                        <div class="row">
+                                                                @foreach($currency as $data)
+                                                                <div class="col-3">
+                                                                        <!-- {{$data}} -->
+                                                                        <h6 class="card-sub-title">{{$data->name}} Balance</h6>
+                                                                        <ul class="token-balance-list">
+                                                                                <li class="token-balance-sub">
+                                                                                        <span class="lead">
+                                                                                                <em class="pay-icon cf cf-@if($data->icon =='paypal')pivx @else{{$data->icon}}@endif"></em>
+                                                                                                {{number_format($bpend - $bcharge, $basic->decimal)}}
+                                                                                        </span>
+                                                                                </li>
+                                                                                <!-- <li class="token-balance-sub"><span class="lead">{{$basic->currency_sym}}{{number_format($bdecline - $bdeccharge, $basic->decimal)}}</span><span class="sub">Declined</span></li> -->
+                                                                        </ul>
+                                                                </div>
+                                                                @endforeach
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div><!-- .col -->
+                </div>
+                <div class="row">
+                        <div class="col-lg-6">
                                 <div class="token-statistics  card card-token height-auto">
                                         <div class="card-innr">
                                                 <div class="token-balance token-balance-with-icon">
@@ -71,9 +109,7 @@
                                         </div>
                                 </div>
                         </div><!-- .col -->
-
-
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                                 <div class="token-statistics bg-primary card card-token height-auto">
                                         <div class="card-innr">
                                                 <div class="token-balance token-balance-with-icon">

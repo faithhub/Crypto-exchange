@@ -85,6 +85,7 @@ class HomeController extends Controller
     {
         $data['page_title'] = "Dashboard";
         $user = Auth::user();
+        $data['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
         $data['trx'] = Trx::whereUser_id($user->id)->latest()->get();
         $data['approved'] = Deposit::where('user_id', Auth::id())->whereStatus(1)->select('amount')->sum('amount');;
         $data['pending'] = Deposit::where('user_id', Auth::id())->whereStatus(0)->select('amount')->sum('amount');;

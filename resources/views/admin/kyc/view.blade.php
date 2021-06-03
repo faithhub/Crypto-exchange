@@ -96,6 +96,14 @@
             <div class="data-details-head">Type: {{$kyc->type}}
             </div>
             <ul class="data-details-docs">
+              <li><span class="data-details-docs-title">Selfie Image</span>
+                <div class="data-doc-item data-doc-item-lg">
+                  <div class="data-doc-image"><img src="{{$kyc->selfie}}" alt="Selfie"></div>
+                  <ul class="data-doc-actions">
+                    <li><a href="{{$kyc->selfie}}" download><em class="ti ti-import"></em></a></li>
+                  </ul>
+                </div>
+              </li><!-- li -->
               <li><span class="data-details-docs-title">Front Side</span>
                 <div class="data-doc-item data-doc-item-lg">
                   <div class="data-doc-image"><img src="{{url('kyc')}}/{{$kyc->image1}}" alt="passport"></div>

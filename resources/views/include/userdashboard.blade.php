@@ -79,18 +79,26 @@
             <li><a href="{{route('home')}}"><em class="text-primary ti ti-dashboard"></em>&nbsp; Dashboard</a></li>
 
 
-
-            <li><a href="{{route('buy')}}"><em class="text-primary ti ti-shopping-cart"></em>&nbsp; Buy E-Currency</a></li>
-
-
-            <li><a href="{{route('sell')}}"><em class="text-primary ti ti-server"></em>&nbsp; Sell E-Currency</a></li>
-
-
-
-            <li><a href="{{route('transaction')}}"><em class="text-primary ti ti-book"></em>&nbsp; Transaction Log</a></li>
-
-
-
+            <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-wallet"></em>&nbsp; Deposit</a>
+              <ul class="navbar-dropdown">
+                <li><a href="{{route('deposit')}}"><em class="text-primary ti ti-wallet"></em>&nbsp; New Deposit</a></li>
+                <li><a href="{{route('deposit')}}"><em class="text-primary ti ti-server"></em>&nbsp; Deposit Log</a></li>
+              </ul>
+            </li>
+            <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-wallet"></em>&nbsp; Withdraw</a>
+              <ul class="navbar-dropdown">
+                <li><a href="{{route('deposit')}}"><em class="text-primary ti ti-wallet"></em>&nbsp; New Withdrawal</a></li>
+                <li><a href="{{route('deposit')}}"><em class="text-primary ti ti-server"></em>&nbsp; Withdrawals Log</a></li>
+              </ul>
+            </li>
+            <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-user"></em>&nbsp; Trade</a>
+              <ul class="navbar-dropdown">
+                <li><a href="{{route('buy')}}"><em class="text-primary ti ti-shopping-cart"></em>&nbsp; Buy E-Currency</a></li>
+                <li><a href="{{route('sell')}}"><em class="text-primary ti ti-server"></em>&nbsp; Sell E-Currency</a></li>
+                <li><a href="{{route('transaction')}}"><em class="text-primary ti ti-book"></em>&nbsp; Transaction Log</a></li>
+              </ul>
+            </li>
+            </li>
 
 
             <li class="page-links-all"><a href="{{route('verification')}}"><em class="text-primary ti ti-id-badge"></em>&nbsp; Verification</a></li>
@@ -98,26 +106,27 @@
 
             <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-user"></em>&nbsp; Profile</a>
               <ul class="navbar-dropdown">
+                <li class=" "><a class="" href="{{route('profile')}}">My Profile</a></li>
+                <li class=" "><a class="" href="{{route('referral')}}">Referral System</a></li>
+                <li class=" "><a class="" href="{{route('activities')}}">Activity Log</a></li>
+                <li class=" "><a class="" href="{{route('user.testimonial')}}">Post Testimonial</a></li>
+              </ul>
             </li>
-            <li class=" "><a class="" href="{{route('profile')}}">My Profile</a></li>
-            <li class=" "><a class="" href="{{route('referral')}}">Referral System</a></li>
-            <li class=" "><a class="" href="{{route('activities')}}">Activity Log</a></li>
-            <li class=" "><a class="" href="{{route('user.testimonial')}}">Post Testimonial</a></li>
-          </ul>
-          </li>
+
+            </li>
 
 
-          @php
-          $count = \App\Message::whereUser_id(Auth::user()->id)->whereAdmin(1)->whereStatus(0)->count();
-          @endphp
-          <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-email"></em>&nbsp; Messages </a>
-            <ul class="navbar-dropdown">
-          </li>
-          <li class=" "><a class="" href="{{route('createmessage')}}">Create Message</a></li>
+            @php
+            $count = \App\Message::whereUser_id(Auth::user()->id)->whereAdmin(1)->whereStatus(0)->count();
+            @endphp
+            <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-email"></em>&nbsp; Messages </a>
+              <ul class="navbar-dropdown">
+            </li>
+            <li class=" "><a class="" href="{{route('createmessage')}}">Create Message</a></li>
 
-          <li class=" "><a class="" href="{{route('inbox')}}">Messages Inbox @if($count > 0) <span class="badge badge-warning">{{$count}} New</span>@endif</a></li>
-          <li class=" "><a class="" href="{{route('user.testimonial')}}">Create Testimonial</a></li>
-          <li class=" "><a class="" href="{{route('user.faq')}}">FAQs</a></li>
+            <li class=" "><a class="" href="{{route('inbox')}}">Messages Inbox @if($count > 0) <span class="badge badge-warning">{{$count}} New</span>@endif</a></li>
+            <li class=" "><a class="" href="{{route('user.testimonial')}}">Create Testimonial</a></li>
+            <li class=" "><a class="" href="{{route('user.faq')}}">FAQs</a></li>
           </ul>
           </li>
 
