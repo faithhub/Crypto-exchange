@@ -50,12 +50,10 @@
                                         </div>
                                 </div>
                         </div><!-- .col -->
-
-
                         <div class="col-lg-8">
-                                <div class="token-statistics  card card-token height-auto">
-                                        <div class="card-innr">
-                                                <div class="row">
+                                <div class="token-statistics bg-primary  card card-token height-auto">
+                                        <div class="card-innr" style="min-height: 261px;">
+                                                <div class="row mb-4">
                                                         <div class="col-12">
                                                                 <div class="token-balance token-balance-with-icon mb-3">
                                                                         <div class="token-balance-icon"><em class="h2 color-white fa fa-money-bill"></em></div>

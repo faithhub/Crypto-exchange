@@ -324,6 +324,13 @@ class HomeController extends Controller
         return view('user.deposit', $data);
     }
 
+    public function create_deposit()
+    {
+        $data['page_title'] = "Make Deposit";
+        $data['gates'] = Gateway::whereStatus(1)->get();
+        return view('user.deposit', $data);
+    }
+
 
     public function activitylog()
     {
