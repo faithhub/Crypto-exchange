@@ -81,7 +81,7 @@
 
             <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-wallet"></em>&nbsp; Deposit</a>
               <ul class="navbar-dropdown">
-                <li><a href="{{route('deposit')}}"><em class="text-primary ti ti-wallet"></em>&nbsp; New Deposit</a></li>
+                <li><a href="{{route('make_deposit')}}"><em class="text-primary ti ti-wallet"></em>&nbsp; New Deposit</a></li>
                 <li><a href="{{route('deposit')}}"><em class="text-primary ti ti-server"></em>&nbsp; Deposit Log</a></li>
               </ul>
             </li>

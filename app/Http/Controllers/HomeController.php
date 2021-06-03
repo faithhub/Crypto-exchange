@@ -326,9 +326,15 @@ class HomeController extends Controller
 
     public function create_deposit()
     {
-        $data['page_title'] = "Make Deposit";
-        $data['gates'] = Gateway::whereStatus(1)->get();
-        return view('user.deposit', $data);
+        if ($_POST) {
+        } else {
+            $data['gates'] = $g = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
+            $data['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
+            $data['method'] = PaymentMethod::whereStatus(1)->orderBy('name', 'asc')->get();
+            $data['bank'] = Bank::whereStatus(1)->orderBy('name', 'asc')->get();
+            $data['page_title'] = "Deposit Naira Wallet";
+            return view('user.new-deposit', $data);
+        }
     }
 
 
