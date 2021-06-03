@@ -1,5 +1,10 @@
 @extends('include.userdashboard')
 @section('content')
+<style>
+  .error {
+    color: red;
+  }
+</style>
 <div class="page-content">
   <div class="container">
     <div class="row">
@@ -20,29 +25,35 @@
                     <div class="col-md-12">
                       <div class="input-item input-with-label">
                         <h5 class="mgt-1-5x font-mid">Select payment method:</h5>
-                        <select onchange="showDiv('div',this)" class="select-bordered select-block" id="" name="payment" required>
-                          <option value="1" selected>Choose...</option>
-                          <option value="2">Bank Transfer </option>
-                          <option value="3">Online Payment </option>
+                        <select onchange="showDiv()" class="select-bordered select-block" id="payment_method" name="payment_method">
+                          <option value="" selected>Choose...</option>
+                          <option value="2" @if (old('payment_method')=="2" ) selected @endif>Bank Transfer </option>
+                          <option value="3" @if (old('payment_method')=="3" ) selected @endif>Online Payment </option>
                         </select>
+                        @if ($errors->has('payment_method'))
+                        <span class="error">
+                          {{ $errors->first('payment_method') }}
+                        </span>
+                        @endif
                       </div>
                     </div>
-                  </div>
-
-                  <div id="div1" style="display:block;">
-
                   </div>
                   <div id="div2" style="display:none;">
                     <div class="row">
                       <div class="col-md-6">
                         <div class="input-item input-with-label">
                           <h5 class="mgt-1-5x font-mid">Payment Method</h5>
-                          <select required class="select-bordered select-block" id="mySelect" onchange="myFunction()" name="method">
-                            <option selected>Choose...</option>
+                          <select class="select-bordered select-block" name="method">
+                            <option selected value="">Choose...</option>
                             @foreach($method as $data)
-                            <option value="{{$data->id}}">{{$data->name}} </option>
+                            <option value="{{$data->id}}" @if (old('method')==$data->id) selected @endif>{{$data->name}} </option>
                             @endforeach
                           </select>
+                          @if ($errors->has('method'))
+                          <span class="error">
+                            {{ $errors->first('method') }}
+                          </span>
+                          @endif
                         </div>
                       </div>
 
@@ -50,11 +61,16 @@
                         <div class="input-item input-with-label">
                           <h5 class="mgt-1-5x font-mid">Select Bank</h5>
                           <select required class="select-bordered select-block" name="bank">
-                            <option selected>Choose...</option>
+                            <option selected value="">Choose...</option>
                             @foreach($bank as $data)
-                            <option value="{{$data->id}}">{{$data->name}} </option>
+                            <option value="{{$data->id}}" @if (old('bank')==$data->id) selected @endif>{{$data->name}} </option>
                             @endforeach
                           </select>
+                          @if ($errors->has('bank'))
+                          <span class="error">
+                            {{ $errors->first('bank') }}
+                          </span>
+                          @endif
                         </div>
                       </div>
                     </div>
@@ -64,25 +80,42 @@
                       <div class="col-md-12">
                         <div class="input-item input-with-label">
                           <h5 class="mgt-1-5x font-mid">Select Payment Gateway</h5>
-                          <select required class="select-bordered select-block" name="gateway" required>
-                            <option selected>Choose...</option>
+                          <select class="select-bordered select-block" name="gateway">
+                            <option selected value="">Choose...</option>
                             @foreach($gates as $data)
-                            <option value="{{$data->id}}">{{$data->name}} </option>
+                            <option value="{{$data->id}}" @if (old('gateway')==$data->id) selected @endif>{{$data->name}} </option>
                             @endforeach
                           </select>
+                          @if ($errors->has('gateway'))
+                          <span class="error">
+                            {{ $errors->first('gateway') }}
+                          </span>
+                          @endif
                         </div>
                       </div>
                     </div>
                   </div>
                   <h5 class="mgt-1-5x font-mid">Enter Amount:</h5>
                   <div class="copy-wrap mgb-0-5x">
-                    <input required="" type="number" name="amount" class="copy-address">
+                    <input required="" type="number" name="amount" class="copy-address" value="{{ old('amount') }}">
                     <buttonn class="copy-trigger"><em class="ti ti-wallet"></em></buttonn>
                   </div>
+                  @if ($errors->has('amount'))
+                  <span class="error">
+                    {{ $errors->first('amount') }}
+                  </span><br>
+                  @endif
                   <span class="text-light font-italic mgb-2x"><small>* Payment gateway company may charge you a processing fee.</small></span>
                   <div class="pdb-2-5x pdt-1-5x">
-                    <input required="" type="checkbox" class="input-checkbox input-checkbox-md" id="agree-term-3">
+                    <input type="checkbox" name="terms" class="input-checkbox input-checkbox-md" id="agree-term-3" @if (old('terms')=='on' ) checked @endif>
                     <label for="agree-term-3">I hereby agree to the <strong>BMY GUIDE agreement &amp; deposit terms term</strong>.</label>
+                    <div class="p">
+                      @if ($errors->has('terms'))
+                      <span class="error">
+                        {{ $errors->first('terms') }}
+                      </span><br>
+                      @endif
+                    </div>
                   </div>
                   <ul class="d-flex flex-wrap align-items-center guttar-30px">
                     <li><button type="submit" class="btn btn-primary">Accept &amp; Process Payment <em class="ti ti-arrow-right mgl-2x"></em></button></li>
@@ -98,29 +131,35 @@
           </div><!-- .container -->
         </div><!-- .page-content -->
         <script>
-          function showDiv(prefix, chooser) {
-            console.log(prefix)
-            console.log(chooser)
-            for (var i = 0; i < chooser.options.length; i++) {
-              var div = document.getElementById(prefix + chooser.options[i].value);
-              div.style.display = 'none';
+          function showDiv() {
+            var value = payment_method.value
+            console.log(value)
+            if (value == "2") {
+              displayDiv("div2");
+              hideDiv("div3");
             }
-
-            var selectedOption = (chooser.options[chooser.selectedIndex].value);
-            if (selectedOption == "1") {
-              displayDiv(prefix, "1");
+            if (value == "3") {
+              displayDiv("div3");
+              hideDiv("div2");
             }
-            if (selectedOption == "2") {
-              displayDiv(prefix, "2");
-            }
-            if (selectedOption == "3") {
-              displayDiv(prefix, "3");
+            if (value == "") {
+              hideDiv("div3");
+              hideDiv("div2");
             }
           }
 
-          function displayDiv(prefix, suffix) {
-            var div = document.getElementById(prefix + suffix);
+          function displayDiv(prefix) {
+            console.log(prefix)
+            var div = document.getElementById(prefix);
             div.style.display = 'block';
           }
+
+          function hideDiv(prefix) {
+            console.log(prefix)
+            var div = document.getElementById(prefix);
+            div.style.display = 'none';
+          }
+
+          window.onload = showDiv();
         </script>
         @endsection

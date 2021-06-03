@@ -22,7 +22,6 @@ use App\UserLogin;
 use App\Post;
 use App\Testimonial;
 use App\WithdrawMethod;
-use Illuminate\Http\Request;
 use App\Cryptowallet;
 use App\Lib\coinPayments;
 use App\Lib\BlockIo;
@@ -39,6 +38,7 @@ use Session;
 use Image;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -324,9 +324,80 @@ class HomeController extends Controller
         return view('user.deposit', $data);
     }
 
-    public function create_deposit()
+    public function create_deposit(Request $request)
     {
         if ($_POST) {
+            $this->validate($request, [
+                'amount' => 'required|numeric|min:500',
+                'payment_method' => 'required',
+                'terms' => 'required',
+                'method' => 'required_if:payment_method,==,2',
+                'bank' => 'required_if:payment_method,==,2',
+                'gateway' => 'required_if:payment_method,==,3',
+            ], [
+                'amount.min' => 'The minimum amount you can deposit is ₦500.00',
+                'amount.required' => 'The deposit amount is required',
+                'amount.numeric' => 'The deposit amount can only be numeric form',
+                'payment_method.required' => 'The payment method is required',
+                'terms.required' => 'You must Agree eith the Terms to continue',
+                'method.required_if' => 'The Bank Transfer Method is required',
+                'bank.required_if' => 'You need to select a Bank',
+                'gateway.required_if' => 'The Online Payment gateway is required',
+            ]);
+
+            if ($request->payment_method == "2") {
+                $methods = PaymentMethod::get();
+                $depo['user_id'] = Auth::id();
+                $depo['gateway_id'] = 0;
+                $depo['amount'] = $request->amount;
+                $depo['charge'] = 0;
+                $depo['usd'] = round($usdamo, 2);
+                $depo['btc_amo'] = 0;
+                $depo['btc_wallet'] = "";
+                $depo['trx'] = str_random(16);
+                $depo['try'] = 0;
+                $depo['status'] = 0;
+                Deposit::create($depo);
+
+                Session::put('Track', $depo['trx']);
+
+                return redirect()->route('user.deposit.preview');
+            } else {
+                $gate = Gateway::findOrFail($request->gateway);
+
+                if (isset($gate)) {
+                    if ($gate->minamo <= $request->amount && $gate->maxamo >= $request->amount) {
+                        $charge = $gate->fixed_charge + ($request->amount * $gate->percent_charge / 100);
+                        $usdamo = ($request->amount + $charge) / $basic->rate;
+
+
+                        $depo['user_id'] = Auth::id();
+                        $depo['gateway_id'] = $gate->id;
+                        $depo['amount'] = $request->amount;
+                        $depo['charge'] = $charge;
+                        $depo['usd'] = round($usdamo, 2);
+                        $depo['btc_amo'] = 0;
+                        $depo['btc_wallet'] = "";
+                        $depo['trx'] = str_random(16);
+                        $depo['try'] = 0;
+                        $depo['status'] = 0;
+                        Deposit::create($depo);
+
+                        Session::put('Track', $depo['trx']);
+
+                        return redirect()->route('user.deposit.preview');
+                    } else {
+                        return back()->with('danger', 'Please Follow Deposit Limit');
+                    }
+                } else {
+                    return back()->with('danger', 'Please Select Deposit gateway');
+                }
+            }
+
+            // if ($request->amount <= 500) {
+            //     return back()->with('danger', 'Invalid Amount Entered');
+            // }
+            dd($request->all());
         } else {
             $data['gates'] = $g = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
             $data['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
