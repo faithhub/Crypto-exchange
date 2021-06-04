@@ -345,23 +345,40 @@ class HomeController extends Controller
                 'gateway.required_if' => 'The Online Payment gateway is required',
             ]);
 
+            //dd($request->all());
             if ($request->payment_method == "2") {
-                $methods = PaymentMethod::get();
+                $methods = PaymentMethod::where('id', $request->method)->first();
+                $acc_details = Bank::find($request->bank);
+                // dd($acc_details);
+                // dd($methods->percent / 100 * $request->amount);
+                $trx = "TRX" . str_random(16);
                 $depo['user_id'] = Auth::id();
+                $depo['trx'] = $trx;
+                $depo['payment_method_id'] = 0;
+                $depo['method_id'] = 0;
                 $depo['gateway_id'] = 0;
                 $depo['amount'] = $request->amount;
-                $depo['charge'] = 0;
-                $depo['usd'] = round($usdamo, 2);
-                $depo['btc_amo'] = 0;
-                $depo['btc_wallet'] = "";
-                $depo['trx'] = str_random(16);
-                $depo['try'] = 0;
+                $depo['charge'] = $methods->percent / 100 * $request->amount;
                 $depo['status'] = 0;
+                $depo['bank'] = $acc_details->name;
+                $depo['acc_num'] = $acc_details->account;
+                $depo['acc_name'] = $acc_details->accname;
+
                 Deposit::create($depo);
 
                 Session::put('Track', $depo['trx']);
 
-                return redirect()->route('user.deposit.preview');
+                return back();
+
+                // Message::create([
+                //     'user_id' =>Auth::id(),
+                //     'title' => 'Deposit To Naira Wallet',
+                //     'details' => 'Your Deposit to your Naira Wallet of' . $request->amount . ' of Transaction ID of ' . $trx . ' was successful. Your account will be credited once payment is confirmed by our server, Thank you for choosing us',
+                //     'admin' => 1,
+                //     'status' =>  0
+                // ]);
+
+                // return redirect()->route('user.deposit.preview');
             } else {
                 $gate = Gateway::findOrFail($request->gateway);
 
@@ -397,7 +414,6 @@ class HomeController extends Controller
             // if ($request->amount <= 500) {
             //     return back()->with('danger', 'Invalid Amount Entered');
             // }
-            dd($request->all());
         } else {
             $data['gates'] = $g = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
             $data['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
