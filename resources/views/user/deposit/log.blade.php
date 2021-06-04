@@ -50,7 +50,12 @@
                 <span class="sub sub-symbol">{!! $basic->currency !!}</span>
               </td>
               <td class="data-col dt-amount"><span class="lead amount-pay"> {{isset($data->payment_method_id) ? $data->payment_method_id : 'N/A'}}</span>
+              @if($data->payment_method_id == "Bank Transfer")
                 <span>{{isset($data->method->name) ? $data->method->name : 'N/A'}}</span>
+              @endif
+              @if($data->payment_method_id == "Online Payment")
+                <span>{{isset($data->gateway_id) ? $data->gateway->name : 'N/A'}}</span>
+              @endif
               </td>
               <td class="data-col dt-usd-amount"><span class="lead amount-pay"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}}</b></span>
                 <span class="sub sub-symbol">{{$basic->currency}} <em class="fas fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}} of {{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}"></em></span>

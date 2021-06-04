@@ -60,7 +60,7 @@
                       <div class="col-md-6">
                         <div class="input-item input-with-label">
                           <h5 class="mgt-1-5x font-mid">Select Bank</h5>
-                          <select required class="select-bordered select-block" name="bank">
+                          <select class="select-bordered select-block" name="bank">
                             <option selected value="">Choose...</option>
                             @foreach($bank as $data)
                             <option value="{{$data->id}}" @if (old('bank')==$data->id) selected @endif>{{$data->name}} </option>

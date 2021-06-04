@@ -29,7 +29,7 @@
             <div class="card-head">
               <h5 class="card-title card-title-md">Transaction Summary</h5>
             </div>
-
+            @if($data->payment_method_id == "Bank Transfer")            
             <div class="schedule-item">
               <div class="row">
                 <div class="col-xl-4 col-md-6 col-lg-4">
@@ -52,6 +52,33 @@
                 </div>
               </div>
             </div>
+            @endif
+            
+            @if($data->payment_method_id == "Online Payment")            
+            <div class="schedule-item">
+              <div class="row">
+                <div class="col-xl-4 col-md-6 col-lg-4">
+                  <div class="pdb-1x">
+                    <h5 class="schedule-title"><span>Amount </span> </h5>
+                    <b><span style="color:#21a184">{{$basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}} </span></b>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-md-6 col-lg-4">
+                  <div class="pdb-1x">
+                    <h5 class="schedule-title"><span>Payment Gateway</span></h5>
+                    <span>Payment Gateway:<b style="color:#21a184"> {{$data->payment_method_id}}</b></span>
+                    <span><b style="color:#21a184">Credit/Debit Card</b></span>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-md-6 col-lg-4">
+                  <div class="pdb-1x">
+                    <h5 class="schedule-title"><span>Payment Method</span></h5>
+                    <span>Payment Method:<b style="color:#21a184"> {{$data->gateway->name}}</b></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            @endif
             <div class="schedule-item">
               <div class="row">
                 <div class="col-xl-3 col-md-3 align-self-center text-xl-left">

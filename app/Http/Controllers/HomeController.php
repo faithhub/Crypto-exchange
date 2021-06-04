@@ -329,7 +329,7 @@ class HomeController extends Controller
     {
         $user = Auth::user();
         $data['page_title'] = "Deposit Log";
-        $data['invests'] = $d = Transaction::where('user_id', Auth::user()->id)->with('method:*')->latest()->get();
+        $data['invests'] = $d = Transaction::where('user_id', Auth::user()->id)->with('method:*')->with('gateway:*')->latest()->get();
         //dd($d);
         // $data['invests'] = Deposit::whereUser_id($user->id)->where('status', '!=', 0)->latest()->get();
         return view('user.deposit.log', $data);
@@ -350,7 +350,7 @@ class HomeController extends Controller
                 'amount.required' => 'The deposit amount is required',
                 'amount.numeric' => 'The deposit amount can only be numeric form',
                 'payment_method.required' => 'The payment method is required',
-                'terms.required' => 'You must Agree eith the Terms to continue',
+                'terms.required' => 'You must Agree with the Terms to continue',
                 'method.required_if' => 'The Bank Transfer Method is required',
                 'bank.required_if' => 'You need to select a Bank',
                 'gateway.required_if' => 'The Online Payment gateway is required',
@@ -381,40 +381,30 @@ class HomeController extends Controller
                 Session::put('Track', $trx);
 
                 return redirect()->route('deposit_preview');
-
-                // Message::create([
-                //     'user_id' =>Auth::id(),
-                //     'title' => 'Deposit To Naira Wallet',
-                //     'details' => 'Your Deposit to your Naira Wallet of' . $request->amount . ' of Transaction ID of ' . $trx . ' was successful. Your account will be credited once payment is confirmed by our server, Thank you for choosing us',
-                //     'admin' => 1,
-                //     'status' =>  0
-                // ]);
-
-                // return redirect()->route('user.deposit.preview');
             } else {
                 $gate = Gateway::findOrFail($request->gateway);
+                $basic = GeneralSettings::first();
+                //dd($basic->rate);
 
                 if (isset($gate)) {
                     if ($gate->minamo <= $request->amount && $gate->maxamo >= $request->amount) {
-                        $charge = $gate->fixed_charge + ($request->amount * $gate->percent_charge / 100);
-                        $usdamo = ($request->amount + $charge) / $basic->rate;
-
-
+                        $charge = $request->amount * $gate->percent_charge / 100;
+                        //dd($gate);
+                        $trx = strtoupper(str_random(16));
                         $depo['user_id'] = Auth::id();
-                        $depo['gateway_id'] = $gate->id;
+                        $depo['type'] = "Deposit";
+                        $depo['trx'] = $trx;
+                        $depo['payment_method_id'] = $request->payment_method;
+                        $depo['gateway_id'] = $request->gateway;
                         $depo['amount'] = $request->amount;
-                        $depo['charge'] = $charge;
-                        $depo['usd'] = round($usdamo, 2);
-                        $depo['btc_amo'] = 0;
-                        $depo['btc_wallet'] = "";
-                        $depo['trx'] = str_random(16);
-                        $depo['try'] = 0;
-                        $depo['status'] = 0;
-                        Deposit::create($depo);
+                        $depo['charge'] = round($charge, 2);
+                        $depo['status'] = "Pending";
 
-                        Session::put('Track', $depo['trx']);
+                        Transaction::create($depo);
 
-                        return redirect()->route('user.deposit.preview');
+                        Session::put('Track', $trx);
+
+                        return redirect()->route('deposit_preview');
                     } else {
                         return back()->with('danger', 'Please Follow Deposit Limit');
                     }
@@ -440,7 +430,7 @@ class HomeController extends Controller
     {
         $data['basic'] = GeneralSettings::first();
         $data['page_title'] = "Preview Deposit Transaction";
-        $data['data'] = $trans = Transaction::where('trx', Session::get('Track'))->where('user_id', Auth::user()->id)->where('status', 'Pending')->with('method:*')->first();
+        $data['data'] = $trans = Transaction::where('trx', Session::get('Track'))->where('user_id', Auth::user()->id)->where('status', 'Pending')->with('method:*')->with('gateway:*')->first();
         // dd($trans);
         if ($trans != null) {
             return view('user.deposit.preview', $data);
@@ -471,6 +461,9 @@ class HomeController extends Controller
         // dd($trans);
         if ($trans != null) {
             if ($trans->status == "Pending") {
+                if ($trans->gateway_id != null) {
+                    $data['gate'] = Gateway::whereStatus(1)->where('id', $trans->gateway_id)->first();
+                }
                 return view('user.deposit.confirm', $data);
             } else {
                 session()->flash('error', 'The Transaction Status is not Pending, check again.');
@@ -481,8 +474,10 @@ class HomeController extends Controller
             return redirect()->route('deposit');
         }
     }
+
     public function confirm_deposit_save(Request $request)
     {
+        $basic = GeneralSettings::first();
         $this->validate($request, [
             'trans_number' => 'required',
             'prove' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
@@ -501,13 +496,50 @@ class HomeController extends Controller
                 $trans->status = "Paid";
                 $trans->trans_prove_num = $request->trans_number;
                 $trans->save();
-                return redirect('user/deposit');
+
+                Message::create([
+                    'user_id' => Auth::id(),
+                    'title' => 'Deposit To Naira Wallet',
+                    'details' => 'Your Deposit to your Naira Wallet of ' . $basic->currency_sym . $trans->amount . ' of Transaction ID of ' . $trans->trx . ' was successful. Your account will be credited once payment is confirmed by Admin, Thank you for choosing us',
+                    'admin' => 1,
+                    'status' =>  0
+                ]);
+                return redirect()->route('deposit')->with("success", "  Your Deposit was successful,  awaiting Admin Approver for Confirmation");
             } else {
                 session()->flash('error', 'The Transaction Status is not Pending, check again.');
                 return redirect()->route('deposit');
             }
         } else {
             session()->flash('error', 'The Transaction is not found.');
+            return redirect()->route('deposit');
+        }
+    }
+
+    public function paystack_save(Request $request)
+    {        
+        $basic = GeneralSettings::first();
+        if ($request->trx != null) {
+            $trans = Transaction::where('trx', $request->trx)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
+            $trans->status = "Confirmed";
+            $trans->save();
+
+            $user = User::find(Auth::user()->id);
+            $user->balance = $user->balance+$trans->amount;
+            $user->save();
+
+            Message::create([
+                'user_id' => Auth::id(),
+                'title' => 'Deposit To Naira Wallet',
+                'details' => 'Your Deposit to your Naira Wallet of ' . $basic->currency_sym . $trans->amount . ' of Transaction ID of ' . $trans->trx . ' was successful. Your account will be credited once payment is confirmed by Admin, Thank you for choosing us',
+                'admin' => 1,
+                'status' =>  0
+            ]);
+
+            $txt = $basic->currency_sym . $trans->amount . ' Deposited Amount ';
+            send_email(Auth::user()->email, Auth::user()->username, 'Deposited Amount', $txt);
+            return redirect()->route('deposit')->with("success", "  Your Deposit was successful");
+        } else {
+            session()->flash('error', 'The Transaction can not be concluded, try again.');
             return redirect()->route('deposit');
         }
     }

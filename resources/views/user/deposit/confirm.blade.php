@@ -18,7 +18,9 @@
     <div class="row">
       <div class="main-content col-lg-12">
         <div class="content-area card">
-          <div class="card-innr">
+        @if($data->payment_method_id == "Bank Transfer")
+        
+        <div class="card-innr">
             <h4 class="card-title" id="dep_text">Deposit Transaction Preview</h4>
             <div class="text-right mt-2">
               <a href="{{ route('cancel-deposit',$data->trx) }}" onclick="return confirm('Are you sure you want to Cancelled this Deposit Transaction?')" class="btn btn-danger btn-between">Cancel Payment <em class="ti ti-wallet"></em></a>
@@ -29,7 +31,7 @@
                 <h4 class="card-title"> Payment Preview</h4>
               </div>
               <div class="card-text">
-                <p>You have opted to Deposit using {{$data->payment_method_id}}
+                <p>You have opted to Deposit using <b style="color:#21a184">{{$data->payment_method_id}}</b>
                   Please find your pre-payment summary below.</p>
               </div>
 
@@ -143,6 +145,216 @@
               </div>
             </div>
           </div>
+          @endif
+          @if($data->payment_method_id == "Online Payment")
+          
+          <div class="card-innr">
+            <h4 class="card-title" id="dep_text">Deposit Transaction Preview</h4>
+            <div class="text-right mt-2">
+              <a href="{{ route('cancel-deposit',$data->trx) }}" onclick="return confirm('Are you sure you want to Cancelled this Deposit Transaction?')" class="btn btn-danger btn-between">Cancel Payment <em class="ti ti-wallet"></em></a>
+            </div>
+
+            <div id="confirm">
+              <div class="card-head">
+                <h4 class="card-title"> Payment Preview</h4>
+              </div>
+              <div class="card-text">
+                <p>You have opted to Deposit using <b style="color:#21a184">{{$data->payment_method_id}} (Credit/Debit Card)</b>
+                  Please find your pre-payment summary below.</p>
+              </div>
+
+              <div class="token-overview-wrap">
+                <div class="token-overview">
+                  <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                      <div class="token-bonus token-bonus-sale"><span class="token-overview-title">Amount</span><span class="token-overview-value bonus-on-sale">{{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}</span></div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                      <div class="token-bonus token-bonus-amount"><span class="token-overview-title">Deposit Charge</span><span class="token-overview-value bonus-on-amount">{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}}</span></div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="token-total"><span class="token-overview-title font-bold">Total Amount</span><span class="token-overview-value token-total-amount text-primary">{{ $basic->currency_sym}}{{number_format($data->amount + $data->charge, $basic->decimal)}}</span></div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <div class="text-left mt-2">
+                <!-- <button type="submit" onclick="proceed()" class="btn btn-primary btn-between">Proceed To Pay <em class="ti ti-wallet"></em></button> -->
+                <!-- {{$gate}} -->
+								@if($data->gateway->id == "107")
+								<script src="https://js.paystack.co/v1/inline.js"></script>
+								<button onclick="payWithPaystack()" class="btn btn-primary ">Pay With Paystack <em class="ti ti-credit-card"></em></button>
+								<script>
+									function payWithPaystack() {
+										var handler = PaystackPop.setup({
+											key: "{{$gate->val1}}",
+											email: "{{ Auth::user()->email }}",
+											amount: "{{($data->amount+$data->charge) * 10}}"+00,
+											currency: "NGN",
+											ref: '' + Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+											firstname: '',
+											lastname: '',
+											// label: "Optional string that replaces customer email"
+											metadata: {
+												custom_fields: [{
+													display_name: "Mobile Number",
+													variable_name: "",
+													value: "{{ Auth::user()->phone }}"
+												}]
+											},
+											callback: function(response) {
+												alert('Deposit successful. transaction refference number is ' + response.reference);
+												window.location = 'javascript: submitform()';
+											},
+											onClose: function() {
+												alert('window closed');
+											}
+										});
+										handler.openIframe();
+									}
+								</script>
+								<script type="text/javascript">
+									function submitform() {
+										document.forms["myform"].submit();
+									}
+								</script>
+								<form id="myform" action="{{route('paystack_save')}}" method="post">
+									{{csrf_field()}}
+									<input type="hidden" name="trx" value="{{ $data->trx }}" />
+								</form>
+								@elseif($data->gateway->id == "100")
+								<script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
+								<button onclick="payWithRave()" class="btn btn-primary">Pay With Flutterwave <em class="ti ti-credit-card"></em></button>
+								<script>
+									const API_publicKey = "{{App\Gateway::whereId($data->gateway)->first()->val1}}";
+									function payWithRave() {
+										var x = getpaidSetup({
+											PBFPubKey: API_publicKey,
+											customer_email: "{{ Auth::user()->email }}",
+											amount: "{{ round($data->main_amo, 2)}}",
+											customer_phone: "{{ Auth::user()->mobile }}",
+											currency: "NGN",
+											txref: "rave-123456",
+											payment_options: "card",
+											meta: [{
+												metaname: "flightID",
+												metavalue: "AP1234"
+											}],
+											onclose: function() {},
+											callback: function(response) {
+												var txref = response.tx.txRef; // collect txRef returned and pass to a 					server page to complete status check.
+												console.log("This is the response returned after a charge", response);
+												if (
+													response.tx.chargeResponseCode == "00" ||
+													response.tx.chargeResponseCode == "0"
+												) {
+													window.location = 'javascript: submitform()';
+												} else {
+													// redirect to a failure page.
+												}
+
+												x.close(); // use this to close the modal immediately after payment.
+											}
+										});
+									}
+								</script>
+								<script type="text/javascript">
+									function submitform() {
+										document.forms["myform"].submit();
+									}
+								</script>
+								<form id="myform" action="{{route('buy.rave')}}" method="post">
+									{{csrf_field()}}
+									<input type="hidden" name="trx" value="{{ $data->trx }}" />
+								</form>
+								@elseif($data->gateway->id == "103")
+								<button data-toggle="modal" data-target="#get-pay-address" class="btn btn-primary ">Pay With Stripe<em class="ti ti-credit-card"></em></button>
+								<!-- Modal End -->
+								<div class="modal fade" id="get-pay-address" tabindex="-1">
+									<div class="modal-dialog modal-dialog-md modal-dialog-centered">
+										<div class="modal-content"><a href="#" class="modal-close" data-dismiss="modal" aria-label="Close"><em class="ti ti-close"></em></a>
+											<div class="popup-body">
+												<h4 class="popup-title">Pay With Stripe</h4>
+												<p>Please Enter Your Credit Card Details Below. <strong>USD{{number_format($data->main_amo/$basic->rate, $basic->decimal)}}</strong> will be charged from your card and <strong>{{$data->get_amount}} {{$data->currency->symbol}}</strong> will be credited to your <strong>{{$data->currency->name}} Wallet</strong> once we recevied payment.</p>
+												<div class="gaps-1x"></div>
+												<h6 class="font-bold">Name Written On Card</h6>
+												<div class="copy-wrap mgb-0-5x"><span class="copy-feedback"></span>
+													<form role="form" id="payment-form" method="POST" action="{{ route('buy.stripe')}}">
+														@csrf
+
+														<input type="text" name="name" placeholder="Card Name" class="copy-address"><button class="copy-trigger copy-clipboard"><em class="ti ti-user"></em></button>
+												</div>
+
+
+												<div class="gaps-1x"></div>
+												<h6 class="font-bold">Card Number</h6>
+												<div class="copy-wrap mgb-0-5x"><span class="copy-feedback"></span>
+
+													<input type="tel" name="cardNumber" placeholder="Valid Card Number" class="copy-address"><button class="copy-trigger copy-clipboard"><em class="ti ti-credit-card"></em></button>
+												</div>
+
+
+												<div class="gaps-1x"></div>
+												<h6 class="font-bold">Card Expiry Date</h6>
+												<div class="copy-wrap mgb-0-5x"><span class="copy-feedback"></span>
+
+													<input type="tel" name="cardExpiry" placeholder="MM / YYYY" autocomplete="off" required class="copy-address"><button class="copy-trigger copy-clipboard"><em class="ti ti-calendar"></em></button>
+												</div>
+
+												<div class="gaps-1x"></div>
+												<h6 class="font-bold">CCV</h6>
+												<div class="copy-wrap mgb-0-5x"><span class="copy-feedback"></span>
+
+													<input type="numbert" name="cardCVC" placeholder="CVC" class="copy-address"><button class="copy-trigger copy-clipboard"><em class="ti ti-credit-card"></em></button>
+												</div>
+
+												<!-- .copy-wrap -->
+												<!-- .pay-info-list -->
+												<div class="pdb-2-5x pdt-1-5x"><input type="checkbox" required class="input-checkbox input-checkbox-md" id="agree-term"><label for="agree-term">I hereby agree to the <strong>{{$basic->sitename}} purchase aggrement &amp; payment terms</strong>.</label></div><button class="btn btn-primary" type="submit">Pay USD{{number_format($data->main_amo/$basic->rate, $basic->decimal)}}<em class="ti ti-credit-card mgl-4-5x"></em></button></form>
+												<div class="gaps-3x"></div>
+												<div class="note note-plane note-light mgb-1x"><em class="fas fa-info-circle"></em>
+													<p>Ensure you have confirmed your {{$data->currency->name}} wallet address before proceeding with payment.</p>
+												</div>
+												<div class="note note-plane note-danger"><em class="fas fa-info-circle"></em>
+													<p>{{$basic->sitename}} will not be liable to any loss arising from you providing a wrong walletaddress.</p>
+												</div>
+											</div>
+										</div><!-- .modal-content -->
+									</div><!-- .modal-dialog -->
+								</div><!-- Modal End -->
+								@section('script')
+								<script type="text/javascript" src="https://rawgit.com/jessepollak/card/master/dist/card.js"></script>
+								<script>
+									(function($) {
+										$(document).ready(function() {
+											var card = new Card({
+												form: '#payment-form',
+												container: '.card-wrapper',
+												formSelectors: {
+													numberInput: 'input[name="cardNumber"]',
+													expiryInput: 'input[name="cardExpiry"]',
+													cvcInput: 'input[name="cardCVC"]',
+													nameInput: 'input[name="name"]'
+												}
+											});
+										});
+									})(jQuery);
+								</script>
+								@stop
+								@else
+								<a href="#" data-toggle="modal" data-target="#pay-confirm"><span class="schedule-bonus">Confirm Payment</span></a>
+								@endif
+              </div>
+            </div>
+            <div class="pay-notes">
+              <div class="note note-plane note-light note-md font-italic"><em class="fas fa-info-circle"></em>
+                <p>Fund will appear in your account after payment successfully made. </p>
+              </div>
+            </div>
+          </div>
+          @endif
         </div>
       </div>
     </div>
