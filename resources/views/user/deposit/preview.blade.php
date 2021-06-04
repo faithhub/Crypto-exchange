@@ -14,15 +14,18 @@
             <div class="card-head">
               <h4 class="card-title">Deposit Transaction Preview</h4>
             </div>
-            <div class="card-text">
-              <p>Find below the summary of your <b>Deposit Transaction Details</b>. {{$basic->sitename}} will not be liable to any loss arising from wrong account information.</p>
-              <p>You can cancel this operation by clicking the button below</p>
+            <div class="schedule-item">
+              <div class="card-text">
+                <p>Find below the summary of your <b>Deposit Transaction Details</b>. {{$basic->sitename}} will not be liable to any loss arising from wrong account information.</p>
+                <p>You can cancel this operation by clicking the button below</p>
 
-              <div class="pdb-1x">
-                <a href="{{ route('cancel-deposit',$data->trx) }}"><span class="schedule-bonus">Cancel Deposit</span></a>
+                <div class="pdb-1x">
+                  <a href="{{ route('cancel-deposit',$data->trx) }}" onclick="return confirm('Are you sure you want to Cancelled this Deposit Transaction?')"><span class="schedule-bonus" style="color:red">Cancel Deposit</span></a>
+                </div>
               </div>
+              <hr>
+              <div class="gaps-3x"></div>
             </div>
-            <div class="gaps-3x"></div>
             <div class="card-head">
               <h5 class="card-title card-title-md">Transaction Summary</h5>
             </div>
@@ -31,23 +34,29 @@
               <div class="row">
                 <div class="col-xl-4 col-md-6 col-lg-4">
                   <div class="pdb-1x">
-                    <h5 class="schedule-title"><span>Amount In USD</span> </h5><span>{{number_format($data->amount, $basic->decimal)}} USD</span><span>1{{$data->currency->symbol}} = ${{number_format($data->currency->price, $basic->decimal)}}</span>
+                    <h5 class="schedule-title"><span>Amount </span> </h5>
+                    <b><span style="color:#21a184">{{$basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}} </span></b>
                   </div>
                 </div>
                 <div class="col-xl-4 col-md-6 col-lg-4">
                   <div class="pdb-1x">
-                    <h5 class="schedule-title"><span>Amount In {{$basic->currency}}</span></h5><span>{{$basic->currency_sym}}{{number_format($data->main_amo, $basic->decimal)}}</span><span>$1.00 = {{$basic->currency_sym}}{{number_format($data->currency->buy, $basic->decimal)}}</span>
+                    <h5 class="schedule-title"><span>Payment Gateway</span></h5>
+                    <span>Payment Gateway:<b style="color:#21a184"> {{$data->payment_method_id}}</b></span>
                   </div>
                 </div>
                 <div class="col-xl-4 col-md-6 col-lg-4">
+                  <div class="pdb-1x">
+                    <h5 class="schedule-title"><span>Payment Method</span></h5>
+                    <span>Payment Method:<b style="color:#21a184"> {{$data->method->name}}</b></span>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="schedule-item">
               <div class="row">
-                <div class="col-xl-3 col-md-3 align-self-center text-xl-right">
+                <div class="col-xl-3 col-md-3 align-self-center text-xl-left">
                   <div class="pdb-1x">
-                    <a href=""><span class="schedule-bonus">Proceed With Payment</span></a>
+                    <a href="{{ route('confirm_deposit', $data->trx) }}" onclick="return confirm('Are you sure you want to Proceed with this Deposit Transaction?')"><span class="schedule-bonus">Proceed With Payment</span></a>
                   </div>
                 </div>
               </div>

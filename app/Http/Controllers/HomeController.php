@@ -325,6 +325,16 @@ class HomeController extends Controller
         return view('user.deposit', $data);
     }
 
+    public function depositLog()
+    {
+        $user = Auth::user();
+        $data['page_title'] = "Deposit Log";
+        $data['invests'] = $d = Transaction::where('user_id', Auth::user()->id)->with('method:*')->latest()->get();
+        //dd($d);
+        // $data['invests'] = Deposit::whereUser_id($user->id)->where('status', '!=', 0)->latest()->get();
+        return view('user.deposit.log', $data);
+    }
+
     public function create_deposit(Request $request)
     {
         if ($_POST) {
@@ -352,7 +362,7 @@ class HomeController extends Controller
                 $acc_details = Bank::find($request->bank);
                 //dd($acc_details);
                 // dd($methods->percent / 100 * $request->amount);
-                $trx = str_random(16);
+                $trx = strtoupper(str_random(16));
                 $depo['user_id'] = Auth::id();
                 $depo['type'] = "Deposit";
                 $depo['trx'] = $trx;
@@ -428,8 +438,9 @@ class HomeController extends Controller
 
     public function deposit_preview()
     {
+        $data['basic'] = GeneralSettings::first();
         $data['page_title'] = "Preview Deposit Transaction";
-        $data['data'] = $trans = Transaction::where('trx', Session::get('Track'))->where('status', 'Pending')->with('method:*')->first();
+        $data['data'] = $trans = Transaction::where('trx', Session::get('Track'))->where('user_id', Auth::user()->id)->where('status', 'Pending')->with('method:*')->first();
         // dd($trans);
         if ($trans != null) {
             return view('user.deposit.preview', $data);
@@ -441,11 +452,31 @@ class HomeController extends Controller
 
     public function cancel_deposit($id)
     {
-        $trans = Transaction::where('trx', $id)->where('status', 'Pending')->first();
+        $trans = Transaction::where('trx', $id)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
         $trans['status'] = 'Cancelled';
         $trans->save();
         session()->flash('success', 'The Transaction has been cancelled');
         return redirect()->route('home');
+    }
+
+    public function confirm_deposit($id)
+    {
+        $data['basic'] = GeneralSettings::first();
+        $data['page_title'] = "Confirm Deposit Transaction";
+        $data['data'] = $trans = Transaction::where('trx',$id)->where('status', 'Pending')->where('user_id', Auth::user()->id)->with('method:*')->first();
+        // dd($trans);
+        if ($trans != null) {
+           if($trans->status == "Pending"){
+            return view('user.deposit.confirm', $data);
+           }else{
+            session()->flash('error', 'The Transaction Status is not Pending, check again.');
+            return back();
+           }
+        } else {
+            session()->flash('error', 'The Transaction can not be concluded, try again.');
+            return back();
+        }
+
     }
 
 
@@ -1027,14 +1058,6 @@ class HomeController extends Controller
         return view('user.trx', $data);
     }
 
-    public function depositLog()
-    {
-        $user = Auth::user();
-
-        $data['page_title'] = "Deposit Log";
-        $data['invests'] = Deposit::whereUser_id($user->id)->where('status', '!=', 0)->latest()->get();
-        return view('user.deposit-log', $data);
-    }
     public function withdrawLog()
     {
         $user = Auth::user();
