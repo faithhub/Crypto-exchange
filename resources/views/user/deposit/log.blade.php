@@ -32,7 +32,7 @@
                     @elseif($data->status == "Pending")
                     <div class="data-state data-state-pending">
                       @elseif($data->status == "Paid")
-                      <div class="data-state data-state-Paid">
+                      <div class="data-state data-state-approved">
                         @elseif($data->status == "Cancelled")
                         <div class="data-state data-state-canceled">
                           @elseif($data->status == "Declined")
@@ -63,7 +63,9 @@
                 &nbsp;&nbsp
                 <a href="{{ route('confirm_deposit', $data->trx) }}" class="btn btn-auto btn-primary btn-xs"><span>Pay <span class="d-none d-xl-inline-block">Now</span></span><em class="ti ti-wallet"></em></a>
                 @elseif($data->status == "Paid")
-                <span class="dt-type-md badge badge-outline badge-warning badge-md">Paid</span><span class="dt-type-sm badge badge-sq badge-outline badge-warning badge-md">P</span>
+                <span class="dt-type-md badge badge-outline badge-success badge-md">Paid</span><span class="dt-type-sm badge badge-sq badge-outline badge-warning badge-md">P</span>
+                &nbsp;&nbsp
+                <span class="dt-type-md badge badge-outline badge-success badge-sm"><i class="fa fa-spinner fa-spin"></i>&nbsp;Awaiting Approve</span>
                 @elseif($data->status == "Declined")
                 <span class="dt-type-md badge badge-outline badge-danger badge-md">Declined</span><span class="dt-type-sm badge badge-sq badge-outline badge-danger badge-md">D</span>
                 @elseif($data->status == "Cancelled")
@@ -131,7 +133,25 @@
                         <li>
                           <div class="data-details-head">Transaction ID</div>
                           <div class="data-details-des"><span>{{$data->trx}}</span> <span></span></div>
-                        </li><!-- li -->
+                        </li>
+                        @if($data->status == "Paid")
+                        @if(isset($data->trans_prove_num))
+                        <li>
+                          <div class="data-details-head">Payment Number</div>
+                          <div class="data-details-des"><span>{{$data->trans_prove_num}}</span> <span></span></div>
+                        </li>
+                        @endif
+                        @if(isset($data->image))
+                        <li>
+                          <div class="data-details-head">Payment Prove</div>
+                          <div class="data-details-des">
+                          <a href="{{asset('transaction_proves/'.$data->image)}}" download="">
+                            <img class="img-fluid" src="{{asset('transaction_proves/'.$data->image)}}" style="width:50px">
+                          </a>
+                          </div>
+                        </li>
+                        @endif
+                        @endif
                         <li>
                           <div class="data-details-head">Amount</div>
                           <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}</b></div>
@@ -146,6 +166,8 @@
                           <div class="data-details-head">Total Amount</div>
                           <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($data->amount + $data->charge, $basic->decimal)}}</b></div>
                         </li>
+
+
 
                         <!-- li -->
                       </ul>

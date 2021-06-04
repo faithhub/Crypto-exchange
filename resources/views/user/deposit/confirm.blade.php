@@ -23,6 +23,7 @@
             <div class="text-right mt-2">
               <a href="{{ route('cancel-deposit',$data->trx) }}" onclick="return confirm('Are you sure you want to Cancelled this Deposit Transaction?')" class="btn btn-danger btn-between">Cancel Payment <em class="ti ti-wallet"></em></a>
             </div>
+
             <div id="confirm">
               <div class="card-head"><span class="card-sub-title text-primary font-mid">Step 1</span>
                 <h4 class="card-title"> Payment Preview</h4>
@@ -98,28 +99,42 @@
             <div id="back_confirm" style="display:none">
               <div class="mt-3">
                 <div class="">
-                  <form method="POST" action="{{}}" enctype="multipart/form-data">
+                  <form method="POST" action="{{ route('confirm_deposit_save') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="col-md-12">
                       <div class="input-item input-with-label">
-                      <label class="input-item-label text-exlight">Transaction Number</label>
-                      <input name="code" class="input-bordered" required="" type="text">
-                      <label class="input-item-label text-exlight"><small> (Please enter your payment transaction number,)</small></label>
+                        <label class="input-item-label text-exlight">Transaction Number</label>
+                        <input name="trans_number" class="input-bordered" type="text">
+                        <label class="input-item-label text-exlight"><small> (Please enter your payment transaction number,)</small></label><br>
+                        <label class="input-item-label text-exlight"><small>
+                            @if ($errors->has('trans_number'))
+                            <span class="error">
+                              {{ $errors->first('trans_number') }}
+                            </span><br>
+                            @endif</small></label>
+                        <br>
                       </div>
 
                       <input name="trx" value="{{$data->trx}}" hidden="">
                       <div class="input-item input-with-label"><label class="input-item-label text-exlight">Attachment Upload</label>
-                        <div class="relative"><em class="input-file-icon fas fa-upload"></em><input type="file" name="image" class="input-file" id="file-01"><label for="file-01">Choose a file</label>
+                        <div class="relative"><em class="input-file-icon fas fa-upload"></em>
+                          <input type="file" name="prove" required class="input-file" id="file-01" accept="image/*"><label for="file-01">Choose a file</label>
                         </div>
-                        <small> (Please attach a screenshot of your bank transfer of payment slip)</small>
+                        <label><small> (Please attach a screenshot of your bank transfer of payment slip)</small></label><br>
+                        <label><small>
+                            @if ($errors->has('prove'))
+                            <span class="error">
+                              {{ $errors->first('prove') }}
+                            </span><br>
+                            @endif</small></label>
                       </div>
-                    <button type="submit" id="btn-confirm" class="btn btn-primary btn-between">Confirm Payment</button>
+                      <button type="submit" class="btn btn-primary btn-between">Confirm Payment</button>
                     </div>
                   </form>
                 </div>
               </div>
               <div class="text-left mt-3">
-            <a href="#" class="mt-3" onclick="back()"><span class="schedule-bonus" style="color: grey;">Back To Payment Details</span></a>
+                <a href="#" class="mt-3" onclick="back()"><span class="schedule-bonus" style="color: grey;">Back To Payment Details</span></a>
               </div>
             </div>
             <div class="pay-notes">

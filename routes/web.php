@@ -95,6 +95,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('/preview-deposit', 'HomeController@deposit_preview')->name('deposit_preview');
         Route::get('/cancel-deposit/{id}', 'HomeController@cancel_deposit')->name('cancel-deposit');
         Route::get('/confirm-deposit/{id}', 'HomeController@confirm_deposit')->name('confirm_deposit');
+        Route::post('/confirm-deposit', 'HomeController@confirm_deposit_save')->name('confirm_deposit_save');
         Route::get('/deposit', 'HomeController@depositLog')->name('deposit');
         Route::post('/deposit', 'HomeController@deposit')->name('deposit');
         Route::post('/deposit-data-insert', 'HomeController@depositDataInsert')->name('deposit.data-insert');

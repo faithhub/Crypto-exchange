@@ -446,37 +446,70 @@ class HomeController extends Controller
             return view('user.deposit.preview', $data);
         } else {
             session()->flash('error', 'The Transaction can not be concluded, try again.');
-            return back();
+            return redirect()->route('deposit');
         }
     }
 
     public function cancel_deposit($id)
     {
         $trans = Transaction::where('trx', $id)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
-        $trans['status'] = 'Cancelled';
-        $trans->save();
-        session()->flash('success', 'The Transaction has been cancelled');
-        return redirect()->route('home');
+        if ($trans != null) {
+            $trans['status'] = 'Cancelled';
+            $trans->save();
+            session()->flash('success', 'The Transaction has been cancelled');
+            return redirect()->route('deposit');
+        } else {
+            return redirect()->route('deposit');
+        }
     }
 
     public function confirm_deposit($id)
     {
         $data['basic'] = GeneralSettings::first();
         $data['page_title'] = "Confirm Deposit Transaction";
-        $data['data'] = $trans = Transaction::where('trx',$id)->where('status', 'Pending')->where('user_id', Auth::user()->id)->with('method:*')->first();
+        $data['data'] = $trans = Transaction::where('trx', $id)->where('status', 'Pending')->where('user_id', Auth::user()->id)->with('method:*')->first();
         // dd($trans);
         if ($trans != null) {
-           if($trans->status == "Pending"){
-            return view('user.deposit.confirm', $data);
-           }else{
-            session()->flash('error', 'The Transaction Status is not Pending, check again.');
-            return back();
-           }
+            if ($trans->status == "Pending") {
+                return view('user.deposit.confirm', $data);
+            } else {
+                session()->flash('error', 'The Transaction Status is not Pending, check again.');
+                return redirect()->route('deposit');
+            }
         } else {
             session()->flash('error', 'The Transaction can not be concluded, try again.');
-            return back();
+            return redirect()->route('deposit');
         }
-
+    }
+    public function confirm_deposit_save(Request $request)
+    {
+        $this->validate($request, [
+            'trans_number' => 'required',
+            'prove' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+        ], [
+            'prove.required' => 'The Transaction Attachment Prove is required',
+            'trans_number.required' => 'The Transaction Number is required',
+        ]);
+        $trans = Transaction::where('trx', $request->trx)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
+        // dd($trans);
+        if ($trans != null) {
+            if ($trans->status == "Pending") {
+                if ($request->hasFile('prove')) {
+                    $trans->image = uniqid() . '.jpg';
+                    $request->prove->move('transaction_proves', $trans->image);
+                }
+                $trans->status = "Paid";
+                $trans->trans_prove_num = $request->trans_number;
+                $trans->save();
+                return redirect('user/deposit');
+            } else {
+                session()->flash('error', 'The Transaction Status is not Pending, check again.');
+                return redirect()->route('deposit');
+            }
+        } else {
+            session()->flash('error', 'The Transaction is not found.');
+            return redirect()->route('deposit');
+        }
     }
 
 
