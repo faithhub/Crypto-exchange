@@ -27,8 +27,8 @@
                         <h5 class="mgt-1-5x font-mid">Select payment method:</h5>
                         <select onchange="showDiv()" class="select-bordered select-block" id="payment_method" name="payment_method">
                           <option value="" selected>Choose...</option>
-                          <option value="2" @if (old('payment_method')=="2" ) selected @endif>Bank Transfer </option>
-                          <option value="3" @if (old('payment_method')=="3" ) selected @endif>Online Payment </option>
+                          <option value="Bank Transfer" @if (old("payment_method")=="Bank Transfer" ) selected @endif>Bank Transfer </option>
+                          <option value="Online Payment" @if (old("payment_method")=="Online Payment" ) selected @endif>Online Payment </option>
                         </select>
                         @if ($errors->has('payment_method'))
                         <span class="error">
@@ -38,7 +38,7 @@
                       </div>
                     </div>
                   </div>
-                  <div id="div2" style="display:none;">
+                  <div id="divBank Transfer" style="display:none;">
                     <div class="row">
                       <div class="col-md-6">
                         <div class="input-item input-with-label">
@@ -75,7 +75,7 @@
                       </div>
                     </div>
                   </div>
-                  <div id="div3" style="display:none;">
+                  <div id="divOnline Payment" style="display:none;">
                     <div class="row">
                       <div class="col-md-12">
                         <div class="input-item input-with-label">
@@ -134,17 +134,17 @@
           function showDiv() {
             var value = payment_method.value
             console.log(value)
-            if (value == "2") {
-              displayDiv("div2");
-              hideDiv("div3");
+            if (value == "Bank Transfer") {
+              displayDiv("divBank Transfer");
+              hideDiv("divOnline Payment");
             }
-            if (value == "3") {
-              displayDiv("div3");
-              hideDiv("div2");
+            if (value == "Online Payment") {
+              displayDiv("divOnline Payment");
+              hideDiv("divBank Transfer");
             }
             if (value == "") {
-              hideDiv("div3");
-              hideDiv("div2");
+              hideDiv("divOnline Payment");
+              hideDiv("divBank Transfer");
             }
           }
 

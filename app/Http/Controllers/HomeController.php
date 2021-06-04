@@ -347,10 +347,10 @@ class HomeController extends Controller
             ]);
 
             //dd($request->all());
-            if ($request->payment_method == "2") {
+            if ($request->payment_method == "Bank Transfer") {
                 $methods = PaymentMethod::where('id', $request->method)->first();
                 $acc_details = Bank::find($request->bank);
-                // dd($acc_details);
+                //dd($acc_details);
                 // dd($methods->percent / 100 * $request->amount);
                 $trx = str_random(16);
                 $depo['user_id'] = Auth::id();
@@ -429,13 +429,23 @@ class HomeController extends Controller
     public function deposit_preview()
     {
         $data['page_title'] = "Preview Deposit Transaction";
-        $data['trans'] = $trans = Transaction::where('trx', Session::get('Track'))->first();
+        $data['data'] = $trans = Transaction::where('trx', Session::get('Track'))->where('status', 'Pending')->with('method:*')->first();
+        // dd($trans);
         if ($trans != null) {
             return view('user.deposit.preview', $data);
         } else {
             session()->flash('error', 'The Transaction can not be concluded, try again.');
             return back();
         }
+    }
+
+    public function cancel_deposit($id)
+    {
+        $trans = Transaction::where('trx', $id)->where('status', 'Pending')->first();
+        $trans['status'] = 'Cancelled';
+        $trans->save();
+        session()->flash('success', 'The Transaction has been cancelled');
+        return redirect()->route('home');
     }
 
 

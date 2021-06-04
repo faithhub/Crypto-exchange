@@ -92,7 +92,8 @@ Route::group(['prefix' => 'user'], function () {
         //user Deposit
         Route::get('/make-deposit', 'HomeController@create_deposit')->name('make_deposit');
         Route::post('/make-deposit', 'HomeController@create_deposit')->name('make_deposit_now');
-        Route::post('/preview-deposit', 'HomeController@deposit_preview')->name('deposit_preview');
+        Route::get('/preview-deposit', 'HomeController@deposit_preview')->name('deposit_preview');
+        Route::get('/cancel-deposit/{id}', 'HomeController@cancel_deposit')->name('cancel_deposit');
         Route::get('/deposit', 'HomeController@depositLog')->name('deposit');
         Route::post('/deposit', 'HomeController@deposit')->name('deposit');
         Route::post('/deposit-data-insert', 'HomeController@depositDataInsert')->name('deposit.data-insert');
