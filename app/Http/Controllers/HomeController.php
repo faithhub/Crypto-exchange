@@ -6,6 +6,7 @@ use App\Bank;
 use App\BuyMoney;
 use App\Currency;
 use App\Deposit;
+use App\Transaction;
 use App\ExchangeMoney;
 use App\PaymentMethod;
 use App\Gateway;
@@ -351,24 +352,25 @@ class HomeController extends Controller
                 $acc_details = Bank::find($request->bank);
                 // dd($acc_details);
                 // dd($methods->percent / 100 * $request->amount);
-                $trx = "TRX" . str_random(16);
+                $trx = str_random(16);
                 $depo['user_id'] = Auth::id();
+                $depo['type'] = "Deposit";
                 $depo['trx'] = $trx;
-                $depo['payment_method_id'] = 0;
-                $depo['method_id'] = 0;
+                $depo['payment_method_id'] = $request->payment_method;
+                $depo['method_id'] = $request->method;
                 $depo['gateway_id'] = 0;
                 $depo['amount'] = $request->amount;
-                $depo['charge'] = $methods->percent / 100 * $request->amount;
-                $depo['status'] = 0;
+                $depo['charge'] = round($methods->percent / 100 * $request->amount, 2);
+                $depo['status'] = "Pending";
                 $depo['bank'] = $acc_details->name;
                 $depo['acc_num'] = $acc_details->account;
                 $depo['acc_name'] = $acc_details->accname;
 
-                Deposit::create($depo);
+                Transaction::create($depo);
 
-                Session::put('Track', $depo['trx']);
+                Session::put('Track', $trx);
 
-                return back();
+                return redirect()->route('deposit_preview');
 
                 // Message::create([
                 //     'user_id' =>Auth::id(),
@@ -420,7 +422,19 @@ class HomeController extends Controller
             $data['method'] = PaymentMethod::whereStatus(1)->orderBy('name', 'asc')->get();
             $data['bank'] = Bank::whereStatus(1)->orderBy('name', 'asc')->get();
             $data['page_title'] = "Deposit Naira Wallet";
-            return view('user.new-deposit', $data);
+            return view('user.deposit.index', $data);
+        }
+    }
+
+    public function deposit_preview()
+    {
+        $data['page_title'] = "Preview Deposit Transaction";
+        $data['trans'] = $trans = Transaction::where('trx', Session::get('Track'))->first();
+        if ($trans != null) {
+            return view('user.deposit.preview', $data);
+        } else {
+            session()->flash('error', 'The Transaction can not be concluded, try again.');
+            return back();
         }
     }
 
