@@ -516,7 +516,7 @@ class HomeController extends Controller
     }
 
     public function paystack_save(Request $request)
-    {        
+    {
         $basic = GeneralSettings::first();
         if ($request->trx != null) {
             $trans = Transaction::where('trx', $request->trx)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
@@ -524,7 +524,36 @@ class HomeController extends Controller
             $trans->save();
 
             $user = User::find(Auth::user()->id);
-            $user->balance = $user->balance+$trans->amount;
+            $user->balance = $user->balance + $trans->amount;
+            $user->save();
+
+            Message::create([
+                'user_id' => Auth::id(),
+                'title' => 'Deposit To Naira Wallet',
+                'details' => 'Your Deposit to your Naira Wallet of ' . $basic->currency_sym . $trans->amount . ' of Transaction ID of ' . $trans->trx . ' was successful. Your account will be credited once payment is confirmed by Admin, Thank you for choosing us',
+                'admin' => 1,
+                'status' =>  0
+            ]);
+
+            $txt = $basic->currency_sym . $trans->amount . ' Deposited Amount ';
+            send_email(Auth::user()->email, Auth::user()->username, 'Deposited Amount', $txt);
+            return redirect()->route('deposit')->with("success", "  Your Deposit was successful");
+        } else {
+            session()->flash('error', 'The Transaction can not be concluded, try again.');
+            return redirect()->route('deposit');
+        }
+    }
+
+    public function rave_save(Request $request)
+    {
+        $basic = GeneralSettings::first();
+        if ($request->trx != null) {
+            $trans = Transaction::where('trx', $request->trx)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
+            $trans->status = "Confirmed";
+            $trans->save();
+
+            $user = User::find(Auth::user()->id);
+            $user->balance = $user->balance + $trans->amount;
             $user->save();
 
             Message::create([

@@ -228,12 +228,12 @@
 								<script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
 								<button onclick="payWithRave()" class="btn btn-primary">Pay With Flutterwave <em class="ti ti-credit-card"></em></button>
 								<script>
-									const API_publicKey = "{{App\Gateway::whereId($data->gateway)->first()->val1}}";
+									const API_publicKey = "{{$gate->val1}}";
 									function payWithRave() {
 										var x = getpaidSetup({
 											PBFPubKey: API_publicKey,
 											customer_email: "{{ Auth::user()->email }}",
-											amount: "{{ round($data->main_amo, 2)}}",
+											amount: "{{ round($data->amount+$data->charge, 2)}}",
 											customer_phone: "{{ Auth::user()->mobile }}",
 											currency: "NGN",
 											txref: "rave-123456",
@@ -265,61 +265,50 @@
 										document.forms["myform"].submit();
 									}
 								</script>
-								<form id="myform" action="{{route('buy.rave')}}" method="post">
+								<form id="myform" action="{{route('rave_save')}}" method="post">
 									{{csrf_field()}}
 									<input type="hidden" name="trx" value="{{ $data->trx }}" />
 								</form>
 								@elseif($data->gateway->id == "103")
-								<button data-toggle="modal" data-target="#get-pay-address" class="btn btn-primary ">Pay With Stripe<em class="ti ti-credit-card"></em></button>
+								<button data-toggle="modal" data-target="#get-pay-address" class="btn btn-primary ">Pay With Stripe <em class="ti ti-credit-card"></em></button>
 								<!-- Modal End -->
 								<div class="modal fade" id="get-pay-address" tabindex="-1">
 									<div class="modal-dialog modal-dialog-md modal-dialog-centered">
 										<div class="modal-content"><a href="#" class="modal-close" data-dismiss="modal" aria-label="Close"><em class="ti ti-close"></em></a>
 											<div class="popup-body">
 												<h4 class="popup-title">Pay With Stripe</h4>
-												<p>Please Enter Your Credit Card Details Below. <strong>USD{{number_format($data->main_amo/$basic->rate, $basic->decimal)}}</strong> will be charged from your card and <strong>{{$data->get_amount}} {{$data->currency->symbol}}</strong> will be credited to your <strong>{{$data->currency->name}} Wallet</strong> once we recevied payment.</p>
+												<p>Please Enter Your Credit Card Details Below. <strong>{{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}</strong>will be credited to your <strong> Naira Wallet</strong> once the payment is successful.</p>
 												<div class="gaps-1x"></div>
 												<h6 class="font-bold">Name Written On Card</h6>
 												<div class="copy-wrap mgb-0-5x"><span class="copy-feedback"></span>
 													<form role="form" id="payment-form" method="POST" action="{{ route('buy.stripe')}}">
 														@csrf
-
 														<input type="text" name="name" placeholder="Card Name" class="copy-address"><button class="copy-trigger copy-clipboard"><em class="ti ti-user"></em></button>
 												</div>
-
-
 												<div class="gaps-1x"></div>
 												<h6 class="font-bold">Card Number</h6>
 												<div class="copy-wrap mgb-0-5x"><span class="copy-feedback"></span>
-
-													<input type="tel" name="cardNumber" placeholder="Valid Card Number" class="copy-address"><button class="copy-trigger copy-clipboard"><em class="ti ti-credit-card"></em></button>
+													<input type="number" name="cardNumber" placeholder="Card Number" pattern="[/^([0-9]{4}$/]" class="copy-address">
+                          <button class="copy-trigger copy-clipboard"><em class="ti ti-credit-card"></em></button>
 												</div>
-
-
 												<div class="gaps-1x"></div>
 												<h6 class="font-bold">Card Expiry Date</h6>
 												<div class="copy-wrap mgb-0-5x"><span class="copy-feedback"></span>
-
-													<input type="tel" name="cardExpiry" placeholder="MM / YYYY" autocomplete="off" required class="copy-address"><button class="copy-trigger copy-clipboard"><em class="ti ti-calendar"></em></button>
+													<input type="number" name="cardExpiry" placeholder="MM / YYYY" required class="copy-address">
+                          <button class="copy-trigger copy-clipboard"><em class="ti ti-calendar"></em></button>
 												</div>
 
 												<div class="gaps-1x"></div>
 												<h6 class="font-bold">CCV</h6>
 												<div class="copy-wrap mgb-0-5x"><span class="copy-feedback"></span>
-
-													<input type="numbert" name="cardCVC" placeholder="CVC" class="copy-address"><button class="copy-trigger copy-clipboard"><em class="ti ti-credit-card"></em></button>
+													<input type="number" name="cardCVC" placeholder="CVC" class="copy-address"><button class="copy-trigger copy-clipboard"><em class="ti ti-credit-card"></em></button>
 												</div>
 
 												<!-- .copy-wrap -->
 												<!-- .pay-info-list -->
-												<div class="pdb-2-5x pdt-1-5x"><input type="checkbox" required class="input-checkbox input-checkbox-md" id="agree-term"><label for="agree-term">I hereby agree to the <strong>{{$basic->sitename}} purchase aggrement &amp; payment terms</strong>.</label></div><button class="btn btn-primary" type="submit">Pay USD{{number_format($data->main_amo/$basic->rate, $basic->decimal)}}<em class="ti ti-credit-card mgl-4-5x"></em></button></form>
+												<div class="pdb-2-5x pdt-1-5x"><input type="checkbox" required class="input-checkbox input-checkbox-md" id="agree-term"><label for="agree-term">I hereby agree to the <strong>{{$basic->sitename}} purchase aggrement &amp; payment terms</strong>.</label></div>
+                        <button class="btn btn-primary" type="submit">Pay {{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}<em class="ti ti-credit-card mgl-4-5x"></em></button></form>
 												<div class="gaps-3x"></div>
-												<div class="note note-plane note-light mgb-1x"><em class="fas fa-info-circle"></em>
-													<p>Ensure you have confirmed your {{$data->currency->name}} wallet address before proceeding with payment.</p>
-												</div>
-												<div class="note note-plane note-danger"><em class="fas fa-info-circle"></em>
-													<p>{{$basic->sitename}} will not be liable to any loss arising from you providing a wrong walletaddress.</p>
-												</div>
 											</div>
 										</div><!-- .modal-content -->
 									</div><!-- .modal-dialog -->
