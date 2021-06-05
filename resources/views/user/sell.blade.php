@@ -20,7 +20,9 @@
               <div class="row guttar-15px">
                 @foreach($currency as $data)
                 <div class="col-6 a1" data-coin="{{$data->id}}" data-sym="{{$data->symbol}}" data-id="{{$data->name}}" data-rate="{{$data->buy}}">
-                  <div class="pay-option"><input class="pay-option-check" type="radio" data-id="{{$data->id}}" name="currency_id"><label class="pay-option-label" for="{{$data->id}}"><span class="pay-title"><em class="pay-icon cf cf-@if($data->icon =='paypal')pivx @else{{$data->icon}}@endif"></em><span class="pay-cur">{{$data->symbol}}</span></span><span class="pay-amount">{{$basic->currency_sym}}{{number_format($data->buy, $basic->decimal)}}</span></label></div>
+                  <div class="pay-option"><input class="pay-option-check" type="radio" data-id="{{$data->id}}" name="currency_id">
+                    <label class="pay-option-label" for="{{$data->id}}"><span class="pay-title"><em class="pay-icon cf cf-@if($data->icon =='paypal')pivx @else{{$data->icon}}@endif"></em><span class="pay-cur">{{$data->symbol}}</span></span><span class="pay-amount">{{$basic->currency_sym}}{{number_format($data->buy, $basic->decimal)}}</span></label>
+                  </div>
                 </div>
                 @endforeach
                 <script>
@@ -107,7 +109,9 @@
                     </div>
 
                     <div class="col-md-6">
-                      <div class="input-item input-with-label"><label class="input-item-label text-exlight">Amount In {{$basic->currency}}</label><input placeholder="{{$basic->currency_sym}}0.00" id="local" onkeyup="myFunction()" class="input-bordered" name="local" type="text"></div>
+                      <div class="input-item input-with-label"><label class="input-item-label text-exlight">Amount In {{$basic->currency}}</label>
+                        <input placeholder="{{$basic->currency_sym}}0.00" id="local" onkeyup="myFunction()" class="input-bordered" name="local" type="text">
+                      </div>
                     </div>
                   </div>
                   <div class="row">

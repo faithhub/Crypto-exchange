@@ -320,6 +320,7 @@ class HomeController extends Controller
 
     public function deposit()
     {
+        $data['basic'] = GeneralSettings::first();
         $data['page_title'] = " Payment Methods";
         $data['gates'] = Gateway::whereStatus(1)->get();
         return view('user.deposit', $data);

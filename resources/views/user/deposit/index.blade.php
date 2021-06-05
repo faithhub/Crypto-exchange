@@ -95,17 +95,32 @@
                       </div>
                     </div>
                   </div>
-                  <h5 class="mgt-1-5x font-mid">Enter Amount:</h5>
-                  <div class="copy-wrap mgb-0-5x">
-                    <input required="" type="number" name="amount" class="copy-address" value="{{ old('amount') }}">
-                    <buttonn class="copy-trigger"><em class="ti ti-wallet"></em></buttonn>
+                  <div class="row">
+                    <div class="col-6">
+                      <h5 class="mgt-1-5x font-mid">Enter Amount ($):</h5>
+                      <div class="copy-wrap mgb-0-5x">
+                        <input type="number" name="usd" id="usd" class="copy-address" onkeyup="myFunction()" value="{{ old('usd') }}" placeholder="$20">
+                        <buttonn class="copy-trigger"><em class="ti ti-wallet"></em></buttonn>
+                      </div>
+                      <!-- <span class="text-light font-italic mgb-2x"><small>* Payment gateway company may charge you a processing fee.</small></span> -->
+                    </div>
+                    <div class="col-6">
+                      <h5 class="mgt-1-5x font-mid">Amount In Naira {{$basic->currency_sym}}:</h5>
+                      <div class="copy-wrap mgb-0-5x">
+                        <input value="{{$basic->rate}}" type="hidden" id="rate">
+                        <input required="" type="" name="yoo_amount" id="naira" class="copy-address" value="{{ old('yoo_amount') }}" placeholder="{{$basic->currency_sym}}0.00" readonly>
+                        <input type="hidden" name="amount" id="naira_amount" value="{{ old('amount') }}" readonly>
+                        <buttonn class="copy-trigger"><em class="ti ti-wallet"></em></buttonn>
+                      </div>
+                      @if ($errors->has('amount'))
+                      <span class="error">
+                        {{ $errors->first('amount') }}
+                      </span><br>
+                      @endif
+                      <span class="text-light font-italic mgb-2x"><small>* Payment gateway company may charge you a processing fee.</small></span>
+                    </div>
                   </div>
-                  @if ($errors->has('amount'))
-                  <span class="error">
-                    {{ $errors->first('amount') }}
-                  </span><br>
-                  @endif
-                  <span class="text-light font-italic mgb-2x"><small>* Payment gateway company may charge you a processing fee.</small></span>
+
                   <div class="pdb-2-5x pdt-1-5x">
                     <input type="checkbox" name="terms" class="input-checkbox input-checkbox-md" id="agree-term-3" @if (old('terms')=='on' ) checked @endif>
                     <label for="agree-term-3">I hereby agree to the <strong>BMY GUIDE agreement &amp; deposit terms term</strong>.</label>
@@ -161,5 +176,16 @@
           }
 
           window.onload = showDiv();
+
+          function myFunction() {
+            var rate = $('#rate').val();
+            var usd = $('#usd').val();
+            var amount = rate * usd;
+            //console.log(amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))
+            if (amount > 0) {
+              document.getElementById("naira_amount").value = amount;
+              document.getElementById("naira").value = "{{$basic->currency_sym}}" + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            }
+          };
         </script>
         @endsection

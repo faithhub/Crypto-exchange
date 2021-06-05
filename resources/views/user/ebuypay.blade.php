@@ -98,8 +98,6 @@
 								@if($data->gateway == 107)
 								<script src="https://js.paystack.co/v1/inline.js"></script>
 								<button onclick="payWithPaystack()" class="btn btn-primary ">Pay With Paystack <em class="ti ti-credit-card"></em></button>
-
-
 								<script>
 									function payWithPaystack() {
 										var handler = PaystackPop.setup({
@@ -129,9 +127,6 @@
 										handler.openIframe();
 									}
 								</script>
-
-
-
 								<script type="text/javascript">
 									function submitform() {
 										document.forms["myform"].submit();
@@ -141,17 +136,11 @@
 									{{csrf_field()}}
 									<input type="hidden" name="trx" value="{{ $data->trx }}" />
 								</form>
-
-
 								@elseif($data->gateway == 100)
 								<script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
 								<button onclick="payWithRave()" class="btn btn-primary">Pay With Flutterwave <em class="ti ti-credit-card"></em></button>
-
-
-
 								<script>
 									const API_publicKey = "{{App\Gateway::whereId($data->gateway)->first()->val1}}";
-
 									function payWithRave() {
 										var x = getpaidSetup({
 											PBFPubKey: API_publicKey,
@@ -192,12 +181,8 @@
 									{{csrf_field()}}
 									<input type="hidden" name="trx" value="{{ $data->trx }}" />
 								</form>
-
-
-
 								@elseif($data->gateway == 103)
 								<button data-toggle="modal" data-target="#get-pay-address" class="btn btn-primary ">Pay With Stripe<em class="ti ti-credit-card"></em></button>
-
 								<!-- Modal End -->
 								<div class="modal fade" id="get-pay-address" tabindex="-1">
 									<div class="modal-dialog modal-dialog-md modal-dialog-centered">
