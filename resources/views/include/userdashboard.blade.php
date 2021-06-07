@@ -219,8 +219,7 @@
           hideDuration: "10000",
           timeOut: "9000",
           extendedTimeOut: "1000"
-        }, toastr.success('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('
-          success ') }}')
+        }, toastr.success('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('success') }}')
       });
     }(jQuery);
   </script>

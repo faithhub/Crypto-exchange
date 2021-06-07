@@ -97,7 +97,7 @@
                   </div>
                   <div class="row">
                     <div class="col-6">
-                      <h5 class="mgt-1-5x font-mid">Enter Amount ($):</h5>
+                      <h5 class="mgt-1-5x font-mid">Amount IN USD ($):</h5>
                       <div class="copy-wrap mgb-0-5x">
                         <input type="number" name="usd" id="usd" class="copy-address" onkeyup="myFunction()" value="{{ old('usd') }}" placeholder="$20">
                         <buttonn class="copy-trigger"><em class="ti ti-wallet"></em></buttonn>
@@ -105,7 +105,7 @@
                       <!-- <span class="text-light font-italic mgb-2x"><small>* Payment gateway company may charge you a processing fee.</small></span> -->
                     </div>
                     <div class="col-6">
-                      <h5 class="mgt-1-5x font-mid">Amount In Naira {{$basic->currency_sym}}:</h5>
+                      <h5 class="mgt-1-5x font-mid">Amount IN {{$basic->currency}} ({{$basic->currency_sym}}):</h5>
                       <div class="copy-wrap mgb-0-5x">
                         <input value="{{$basic->rate}}" type="hidden" id="rate">
                         <input required="" type="" name="yoo_amount" id="naira" class="copy-address" value="{{ old('yoo_amount') }}" placeholder="{{$basic->currency_sym}}0.00" readonly>

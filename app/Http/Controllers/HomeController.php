@@ -318,6 +318,7 @@ class HomeController extends Controller
     }
 
 
+    //Deposit Section
     public function deposit()
     {
         $data['basic'] = GeneralSettings::first();
@@ -574,6 +575,103 @@ class HomeController extends Controller
         }
     }
 
+    //Buy
+
+    public function buycoin()
+    {
+        $auth = Auth::user();
+        // if ($auth->verified != 2) {
+        //     return back()->withAlert('You are not eligible to buy cryptocurrency. Please verify your account first');
+        // }
+        $get['gates'] = $g = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
+        $get['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
+        $get['method'] = PaymentMethod::whereStatus(1)->orderBy('name', 'asc')->get();
+        $get['bank'] = Bank::whereStatus(1)->orderBy('name', 'asc')->get();
+        $get['page_title'] = " Buy E-Currency";
+        return view('user.buy.index', $get);
+    }
+
+    public function confirm_buy_first($id)
+    {
+        $get['basic'] = $basic = GeneralSettings::first();
+        if($id != null){
+            $get['currency'] = $g = Currency::whereStatus(1)->where('id', $id)->first();
+            Session::put('currency_buy', $g->id);
+            return redirect()->route('confirm_buy');
+        }else{
+            return redirect()->route('buy');
+        }
+    }
+
+    public function confirm_buy(Request $request)
+    {
+        $get['basic'] = $basic = GeneralSettings::first();
+        $coin = $g = Currency::whereStatus(1)->where('id', $request->coin)->first();
+        //dd($g);
+        if ($_POST) {
+           //dd($request->all());
+            $this->validate($request, [
+                'amount' => 'required',
+                'wallet' => 'required',
+                'rewallet' => 'required|same:wallet',
+            ], [
+                'wallet.required' => 'The Wallet Address / Account ID is required',
+                'rewallet.required' => 'The Retype Wallet Address / Account ID is required',
+                'rewallet.same' => 'The Retype Wallet Address / Account ID did not match',
+                'amount.required' => 'Amount is required',
+                // 'amount.min' => 'Amount must not less than ₦500',
+            ]);
+            if($request->amount > Auth::user()->balance){
+                Session::flash('error', 'Not enough balance in your Naira Wallet, fund it and try again');
+                return redirect('user/buy-coin');
+            }
+            if($g != null){                
+                $trx = strtoupper(str_random(16));
+                $depo['user_id'] = Auth::id();
+                $depo['type'] = "Buy";
+                $depo['trx'] = $trx;
+                $depo['gateway_id'] = 0;
+                $depo['amount'] = $request->amount;
+                $depo['status'] = "Pending";
+
+                Transaction::create($depo);
+
+                $user = User::find(Auth::user()->id);
+                $user->balance = $user->balance - $request->amount;
+                $user->save();
+
+                Message::create([
+                    'user_id' => Auth::id(),
+                    'title' => 'Deposit To Naira Wallet',
+                    'details' => 'Your Buy Request Transaction of ' . $basic->currency_sym . $request->amount . ' of ' . $coin->symbol . ' was successful. Your Wallet will be credited once payment is confirmed by Admin, Thank you for choosing us',
+                    'admin' => 1,
+                    'status' =>  0
+                ]);
+                return redirect()->route('buy')->with("success", "  Your Buy Request was successful,  awaiting Admin Approver for Confirmation");
+
+            }else{
+                Session::flash('error', 'The coin is not available to buy at the moment, Try again later');
+                return redirect('user/buy-coin');
+            }
+
+        } else {
+            if (Session::get('currency_buy') != null) {
+                $get['currency'] = $g = Currency::whereStatus(1)->where('id', Session::get('currency_buy'))->first();
+                if($g != null){
+                    //dd($g);
+                    $get['gates'] = $g = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
+                    $get['method'] = PaymentMethod::whereStatus(1)->orderBy('name', 'asc')->get();
+                    $get['bank'] = Bank::whereStatus(1)->orderBy('name', 'asc')->get();
+                    $get['page_title'] = "Confrim Buy Transaction";
+                    return view('user.buy.confirm', $get);
+                }else{
+                    return redirect('user/buy-coin');                    
+                }
+            } else {
+                return redirect('user/buy-coin');
+            }
+        }
+    }
 
     public function activitylog()
     {
@@ -1161,21 +1259,6 @@ class HomeController extends Controller
         return view('user.withdraw-log', $data);
     }
 
-
-    public function buycoin()
-    {
-        $auth = Auth::user();
-        // if ($auth->verified != 2) {
-        //     return back()->withAlert('You are not eligible to buy cryptocurrency. Please verify your account first');
-        // }
-
-        $get['gates'] = $g = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
-        $get['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
-        $get['method'] = PaymentMethod::whereStatus(1)->orderBy('name', 'asc')->get();
-        $get['bank'] = Bank::whereStatus(1)->orderBy('name', 'asc')->get();
-        $get['page_title'] = " Buy E-Currency";
-        return view('user.buy', $get);
-    }
     public function sellcoin()
     {
         $get['localbanks'] = DB::table('localbanks')->get();

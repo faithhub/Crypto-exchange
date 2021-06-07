@@ -90,9 +90,6 @@
               <div class="popup-body">
                 <h4 class="popup-title">Sell <a id="name"> <a /></h4>
                 <p class="lead text-primary">1USD = {{$basic->currency_sym}}<a id="buy"></a> </p>
-
-
-
                 <div class="note note-plane note-light mgb-1x"><em class="fas fa-info-circle"></em>
                   <p>The sold <a id="name"></a> will be approved after your transaction has been confirmed and approved on our server..</p>
                 </div>
@@ -107,7 +104,6 @@
                     <div class="col-md-6">
                       <div class="input-item input-with-label"><label class="input-item-label text-exlight">Amount In USD</label><input id="usd" onkeyup="myFunction()" name="usd" placeholder="$0.00" class="input-bordered" type="text"></div>
                     </div>
-
                     <div class="col-md-6">
                       <div class="input-item input-with-label"><label class="input-item-label text-exlight">Amount In {{$basic->currency}}</label>
                         <input placeholder="{{$basic->currency_sym}}0.00" id="local" onkeyup="myFunction()" class="input-bordered" name="local" type="text">

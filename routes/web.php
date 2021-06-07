@@ -103,6 +103,25 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('/deposit-data-insert', 'HomeController@depositDataInsert')->name('deposit.data-insert');
         Route::get('/deposit-preview', 'HomeController@depositPreview')->name('user.deposit.preview');
         Route::post('/deposit-confirm', 'PaymentController@depositConfirm')->name('deposit.confirm');
+
+        //Buy
+        Route::get('/buy-coin', 'HomeController@buycoin')->name('buy');
+        Route::get('/buy-confirm', 'HomeController@confirm_buy')->name('confirm_buy');
+        Route::post('/buy-confirm', 'HomeController@confirm_buy')->name('confirm_buy');
+        Route::get('/confirm-buy/{id}', 'HomeController@confirm_buy_first')->name('confirm_buy_first');
+        Route::post('/buy-wallet', 'HomeController@buywallet')->name('buy.wallet');
+        Route::post('/buy-online', 'HomeController@buyonline')->name('buy.online');
+        Route::get('/buy-online', 'HomeController@buyonlinePreview')->name('user.onlinebuy');
+        Route::post('/pay-paystack', 'PaymentController@buypaystack')->name('buy.paystack');
+        Route::post('/pay-rave', 'PaymentController@buyrave')->name('buy.rave');
+        Route::post('/pay-bank', 'PaymentController@buybank')->name('buy.bank');
+        Route::post('/buystripe', 'PaymentController@buystripe')->name('buy.stripe');
+        Route::get('/sell-coin', 'HomeController@sellcoin')->name('sell');
+        Route::post('/sell-wallet', 'HomeController@sellwallet')->name('sell.wallet');
+        Route::post('/sell-online', 'HomeController@sellonline')->name('sell.online');
+
+
+
         Route::post('/crypto/payment/status', 'PaymentControlle@cryptoStatus')->name('userDepositCrypto');
 
         Route::post('/card-confirm', 'PaymentController@cardpay')->name('cardpay');
@@ -179,18 +198,6 @@ Route::group(['prefix' => 'user'], function () {
 
 
         //Trade
-
-        Route::get('/buy-coin', 'HomeController@buycoin')->name('buy');
-        Route::post('/buy-wallet', 'HomeController@buywallet')->name('buy.wallet');
-        Route::post('/buy-online', 'HomeController@buyonline')->name('buy.online');
-        Route::get('/buy-online', 'HomeController@buyonlinePreview')->name('user.onlinebuy');
-        Route::post('/pay-paystack', 'PaymentController@buypaystack')->name('buy.paystack');
-        Route::post('/pay-rave', 'PaymentController@buyrave')->name('buy.rave');
-        Route::post('/pay-bank', 'PaymentController@buybank')->name('buy.bank');
-        Route::post('/buystripe', 'PaymentController@buystripe')->name('buy.stripe');
-        Route::get('/sell-coin', 'HomeController@sellcoin')->name('sell');
-        Route::post('/sell-wallet', 'HomeController@sellwallet')->name('sell.wallet');
-        Route::post('/sell-online', 'HomeController@sellonline')->name('sell.online');
 
         Route::post('buy', 'HomeController@buy')->name('buy.amount');
         Route::get('buy/{trx}', 'HomeController@buyPreview')->name('buy.buyPreview');
