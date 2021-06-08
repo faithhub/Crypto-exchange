@@ -8,21 +8,23 @@
           <div class="card-innr">
             <div class="">
               <div class="popup-body">
-                <h4 class="popup-title">Buy <a id="name">{{$currency->name}}</a><a></a></h4>
+                <h3 class="popup-title" style="font-size: 30px;">Sell <a id="name">{{$currency->name}}</a><a></a></h3>
                 <!-- <p class="lead text-primary"><a>1USD = {{$basic->currency_sym}}{{$currency->buy}}</p> -->
                 <div class="note note-plane note-light mgb-1x"><em class="fas fa-info-circle"></em>
-                  <p>The purchased <a id="name"></a> will appear in your <a id="currency2">{{$currency->name}}</a> Wallet only after you transaction has been confirmed and approved on our server..</p>
+                <p>Note: Find below the summary of your Bitcoin purchase. {{$basic->sitename}} will not be liable to any loss arising from wrong wallet address, or reduction in Bitcoin price rate</p>
+                </div>                
+                <div class="note note-plane note-light mgb-1x"><em class="fas fa-info-circle"></em>
+                <p>Note: The purchased will appear in your <a id="currency2">{{$currency->name}}</a> Wallet only after you transaction has been confirmed and approved on our server.</p>
                 </div>
-                <div class="note note-plane note-danger"><em class="fas fa-info-circle"></em>
+                <!-- <div class="note note-plane note-danger"><em class="fas fa-info-circle"></em>
                   <p>Ensure you enter a <strong>valid <b>{{$currency->name}}</b> wallet address</strong> not be liable for any loss arising from you entering a wrong <b>{{$currency->name}}</b> wallet address.</p>
-                </div>
+                </div> -->
                 <br>
-                <form method="POST" action="{{ route('confirm_buy') }}">
+                <form method="POST" action="{{ route('confirm_sell') }}">
                   @csrf
                   <input value="{{$currency->id}}" type="hidden" name="coin">
                   <input value="{{Auth::user()->balance}}" type="hidden" id="balance">
-                  <input value="{{$currency->buy}}" type="hidden" name="coin_rate">
-                  <hr>
+                  <input value="{{$currency->sell}}" type="hidden" name="coin_rate">
                   <div id="summary">
                     <div class="card-head">
                       <h5 class="card-title card-title-md">Currency Summary</h5>
@@ -36,7 +38,7 @@
                         </div>
                         <div class="col-xl-4 col-md-5 col-lg-4">
                           <div class="pdb-1x">
-                            <h5 class="schedule-title"><span>{{$currency->symbol}} Buy Rate</span> </h5><span><b style="color: #21a184;">1USD = {{$basic->currency_sym}}{{ number_format($currency->buy, $basic->decimal) }}</b></span>
+                            <h5 class="schedule-title"><span>{{$currency->symbol}} Sell Rate</span> </h5><span><b style="color: #21a184;">1USD = {{$basic->currency_sym}}{{ number_format($currency->sell, $basic->decimal) }}</b></span>
                           </div>
                         </div>
                         <div class="col-xl-4 col-md col-lg-4">
@@ -61,7 +63,7 @@
                     <div class="col-lg-6">
                       <h5 class="mgt-1-5x font-mid">Amount IN {{$basic->currency}} ({{$basic->currency_sym}}):</h5>
                       <div class="copy-wrap mgb-0-5x">
-                        <input value="{{$currency->buy}}" type="hidden" id="rate">
+                        <input value="{{$currency->sell}}" type="hidden" id="rate">
                         <input required="" type="" name="yoo_amount" id="naira" class="copy-address" value="{{ old('yoo_amount') }}" placeholder="{{$basic->currency_sym}}0.00" readonly>
                         <input type="hidden" name="amount" id="naira_amount" value="{{ old('amount') }}" readonly>
                         <buttonn class="copy-trigger"><em class="ti ti-wallet"></em></buttonn>
@@ -76,8 +78,7 @@
                       </span>
                     </div>
                   </div>
-
-                  <div class="row mb-3">
+                  <!-- <div class="row mb-3">
                     <div class="col-md-6">
                       <h5 class="mgt-1-5x font-mid">{{$currency->name}} Wallet Address / Account ID</h5>
                       <div class="copy-wrap mgb-0-5x">
@@ -100,15 +101,10 @@
                         @endif
                       </div>
                     </div>
-                  </div>
+                  </div> -->
 
-                  <div class="input-item input-with-label">
-                    <label for="token-address" class="input-item-label text-exlight">Comment/Instruction</label>
-                    <textarea row="3" class="input-bordered" name="comment" type="text">{{ old('comment') }}</textarea>
-                  </div><!-- .input-item -->
-
-                  <div class="text-left" id="buy_btn" style="display: none;">
-                    <button type="submit" onclick="return confirm('Are you sure you want to Proceed?')" class="btn btn-primary">Buy</button></li>
+                  <div class="text-left mt-2" id="buy_btn" style="display: none;">
+                    <button type="submit" onclick="return confirm('Are you sure you want to Proceed?')" class="btn btn-primary btn-outline">Proceed To Sell</button></li>
                   </div>
                 </form>
               </div>

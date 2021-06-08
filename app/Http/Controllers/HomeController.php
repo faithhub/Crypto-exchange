@@ -594,11 +594,11 @@ class HomeController extends Controller
     public function confirm_buy_first($id)
     {
         $get['basic'] = $basic = GeneralSettings::first();
-        if($id != null){
+        if ($id != null) {
             $get['currency'] = $g = Currency::whereStatus(1)->where('id', $id)->first();
             Session::put('currency_buy', $g->id);
             return redirect()->route('confirm_buy');
-        }else{
+        } else {
             return redirect()->route('buy');
         }
     }
@@ -609,7 +609,7 @@ class HomeController extends Controller
         $coin = $g = Currency::whereStatus(1)->where('id', $request->coin)->first();
         //dd($g);
         if ($_POST) {
-           //dd($request->all());
+            //dd($request->all());
             $this->validate($request, [
                 'amount' => 'required',
                 'wallet' => 'required',
@@ -621,17 +621,21 @@ class HomeController extends Controller
                 'amount.required' => 'Amount is required',
                 // 'amount.min' => 'Amount must not less than ₦500',
             ]);
-            if($request->amount > Auth::user()->balance){
+            if ($request->amount > Auth::user()->balance) {
                 Session::flash('error', 'Not enough balance in your Naira Wallet, fund it and try again');
                 return redirect('user/buy-coin');
             }
-            if($g != null){                
+            if ($g != null) {
                 $trx = strtoupper(str_random(16));
                 $depo['user_id'] = Auth::id();
                 $depo['type'] = "Buy";
                 $depo['trx'] = $trx;
                 $depo['gateway_id'] = 0;
                 $depo['amount'] = $request->amount;
+                $depo['currency_id'] = $request->coin;
+                $depo['wallet'] = $request->wallet;
+                $depo['currency_amount_usd'] = $request->usd;
+                $depo['currency_rate'] = $request->coin_rate;
                 $depo['status'] = "Pending";
 
                 Transaction::create($depo);
@@ -647,29 +651,159 @@ class HomeController extends Controller
                     'admin' => 1,
                     'status' =>  0
                 ]);
-                return redirect()->route('buy')->with("success", "  Your Buy Request was successful,  awaiting Admin Approver for Confirmation");
-
-            }else{
+                return redirect()->route('transaction')->with("success", "  Your Buy Request was successful,  awaiting Admin Approver for Confirmation");
+            } else {
                 Session::flash('error', 'The coin is not available to buy at the moment, Try again later');
-                return redirect('user/buy-coin');
+                return redirect()->route('transaction');
             }
-
         } else {
             if (Session::get('currency_buy') != null) {
                 $get['currency'] = $g = Currency::whereStatus(1)->where('id', Session::get('currency_buy'))->first();
-                if($g != null){
+                if ($g != null) {
                     //dd($g);
                     $get['gates'] = $g = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
                     $get['method'] = PaymentMethod::whereStatus(1)->orderBy('name', 'asc')->get();
                     $get['bank'] = Bank::whereStatus(1)->orderBy('name', 'asc')->get();
                     $get['page_title'] = "Confrim Buy Transaction";
                     return view('user.buy.confirm', $get);
-                }else{
-                    return redirect('user/buy-coin');                    
+                } else {
+                    return redirect('user/buy-coin');
                 }
             } else {
                 return redirect('user/buy-coin');
             }
+        }
+    }
+
+
+    public function sellcoin()
+    {
+        $get['localbanks'] = DB::table('localbanks')->get();
+        $get['page_title'] = "Sell Currency";
+        $get['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
+        $get['method'] = PaymentMethod::whereStatus(1)->orderBy('name', 'asc')->get();
+        $get['gates'] = $g = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
+        $get['bank'] = Bank::whereStatus(1)->orderBy('name', 'asc')->get();
+        //dd($g);
+        return view('user.sell.index', $get);
+    }
+
+    public function sell_form($id)
+    {
+        $data['currency'] = $coin = Currency::whereStatus(1)->where('id', $id)->first();
+        if ($coin != null) {
+            return view('user.sell.form', $data);
+        } else {
+            return redirect()->route('sell')->with("error", "Transaction can not be confirmed");
+        }
+    }
+
+
+    public function confirm_sell(Request $request)
+    {
+        $get['basic'] = $basic = GeneralSettings::first();
+        $coin = $g = Currency::whereStatus(1)->where('id', $request->coin)->first();
+        //dd($g);
+        if ($_POST) {
+            //dd($request->all());
+            $this->validate($request, [
+                'amount' => 'required',
+            ], [
+                'amount.required' => 'Amount is required',
+            ]);
+            if ($request->amount < 500) {
+                return redirect()->route('sell')->with('warning', 'The Mininmum Amount to sell is ₦500');;
+            }
+            if ($g != null) {
+                $trx = strtoupper(str_random(16));
+                $depo['user_id'] = Auth::id();
+                $depo['type'] = "Sell";
+                $depo['trx'] = $trx;
+                $depo['gateway_id'] = 0;
+                $depo['amount'] = $request->amount;
+                $depo['currency_id'] = $request->coin;
+                $depo['currency_amount_usd'] = $request->usd;
+                $depo['currency_rate'] = $request->coin_rate;
+                $depo['status'] = "Pending";
+
+                Transaction::create($depo);
+
+                return redirect()->route('sell_get', $trx);
+                // ->with("success", "  Your Sell Request was successful,  awaiting Admin Approver for Confirmation");
+
+            } else {
+                Session::flash('error', 'The coin is not available to buy at the moment, Try again later');
+                return redirect()->route('sell');
+            }
+        } else {
+            return redirect('user/buy-coin');
+        }
+    }
+    
+    public function cancel_sell($id)
+    {
+        $trans = Transaction::where('trx', $id)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
+        if ($trans != null) {
+            $trans['status'] = 'Cancelled';
+            $trans->save();
+            session()->flash('success', 'The Transaction has been cancelled');
+            return redirect()->route('sell');
+        } else {
+            return redirect()->route('sell');
+        }
+    }
+
+    public function sell_get($id)
+    {
+        $data['basic'] = $basic = GeneralSettings::first();
+        $data['data'] = $data = Transaction::where('user_id', Auth::user()->id)->where('status', 'Pending')->where('trx', $id)->with('currency:*')->first();
+        if ($data != null) {
+            return view('user.sell.saved', $data);
+        } else {
+            return redirect()->route('sell')->with('warning', 'The Transaction is not found or has been processed');
+        }
+    }
+
+    public function save_sell(Request $request)
+    {
+        $g = Transaction::where('trx', $request->id)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
+        //dd($request->all());        
+        $basic = GeneralSettings::first();
+        $this->validate($request, [
+            'trans_number' => 'required',
+            'prove' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+        ], [
+            'prove.required' => 'The Transaction Attachment Prove is required',
+            'trans_number.required' => 'The Transaction Number is required',
+        ]);
+        $trans = Transaction::where('trx', $request->trx)->where('status', 'Pending')->where('user_id', Auth::user()->id)->with('currency:*')->first();
+        // dd($trans);
+        if ($trans != null) {
+            if ($trans->status == "Pending") {
+                if ($request->hasFile('prove')) {
+                    $trans->image = uniqid() . '.jpg';
+                    $request->prove->move('transaction_proves', $trans->image);
+                }
+                $trans->status = "Paid";
+                $trans->trans_prove_num = $request->trans_number;
+                $trans->save();
+
+                
+                Message::create([
+                    'user_id' => Auth::id(),
+                    'title' => 'Sell To Naira Wallet',
+                    'details' => 'Your Sell Request Transaction of ' . $basic->currency_sym . $request->amount . ' of ' . $trans->currency->symbol . ' was successful. Your transaction will be confirmed by Admin, Thank you for choosing us',
+                    'admin' => 1,
+                    'status' =>  0
+                ]);
+                return redirect()->route('transaction')->with("success", "  Your Sell was successful,  awaiting Admin Approver for Confirmation");
+            } else {
+                session()->flash('warning', 'The Transaction Status is not Pending, check again.');
+                return redirect()->route('sell');
+            }
+        } else {
+            session()->flash('error', 'The Transaction is not found.');
+            return redirect()->route('sell');
         }
     }
 
@@ -1259,17 +1393,6 @@ class HomeController extends Controller
         return view('user.withdraw-log', $data);
     }
 
-    public function sellcoin()
-    {
-        $get['localbanks'] = DB::table('localbanks')->get();
-        $get['page_title'] = "Sell Currency";
-        $get['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
-        $get['method'] = PaymentMethod::whereStatus(1)->orderBy('name', 'asc')->get();
-        $get['gates'] = $g = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
-        $get['bank'] = Bank::whereStatus(1)->orderBy('name', 'asc')->get();
-        //dd($g);
-        return view('user.sell', $get);
-    }
 
 
 
@@ -2109,14 +2232,12 @@ class HomeController extends Controller
     public function transactions()
     {
         $auth = Auth::user();
-        $data['page_title'] = "My Trade";
-        $data['sell'] =  Trx::where('user_id', $auth->id)->whereType(0)->latest()->get();
-        $data['buy'] =  Trx::where('user_id', $auth->id)->latest()->whereType(1)->get();
-
-        return view('user.mytrade', $data);
+        $data['page_title'] = "My Transactons";
+        $data['buy'] = $tt = Transaction::where('user_id', Auth::user()->id)->where('type', 'Buy')->with('currency:*')->latest()->get();
+        $data['sell'] = $t = Transaction::where('user_id', Auth::user()->id)->where('type', 'Sell')->with('currency:*')->latest()->get();
+        //dd($tt);
+        return view('user.transactions.index', $data);
     }
-
-
 
 
     public function notifications()

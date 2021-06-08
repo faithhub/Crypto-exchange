@@ -7,7 +7,7 @@
         <div class="content-area card">
           <div class="card-innr">
             <div class="card-head">
-              <h4 class="card-title">Buy Cryptocurrency</h4>
+              <h4 class="card-title">Sell Cryptocurrency</h4>
             </div>
             <div class="card-text">
               <p>Please select any of the following e-currency to continue your purchase.</p>
@@ -22,7 +22,7 @@
                     <label class="pay-option-label" for="{{$data->id}}"><span class="pay-title">
                         <em class="pay-icon cf cf-@if($data->icon =='paypal')pivx @else{{$data->icon}}@endif"></em>
                         <span class="pay-cur">{{$data->symbol}}</span></span>
-                      <span class="pay-amount">{{$basic->currency_sym}}{{number_format($data->buy, $basic->decimal)}} / $1</span>
+                      <span class="pay-amount">{{$basic->currency_sym}}{{number_format($data->sell, $basic->decimal)}} / $1</span>
                     </label>
                   </div>
                 </div>
@@ -42,7 +42,7 @@
                     if (cur == 0) {
                       document.getElementById("show").innerHTML = "<div class='note note-plane note-danger'><em class='fas fa-info-circle'></em><p>Please select a crypto currency to proceed with purchase</p></div>";
                     } else {
-                      document.getElementById("show").innerHTML = "<a href='{{ route('confirm_buy_first',"") }}/" + value2 + "' class='btn btn-outline btn-secondary btn-md'>Proceed &nbsp; <em class='ti ti-shopping-cart'></em></a>";
+                      document.getElementById("show").innerHTML = "<a href='{{ route('sell_form',"") }}/" + value2 + "' class='btn btn-outline btn-secondary btn-md'>Proceed &nbsp; <em class='ti ti-shopping-cart'></em></a>";
                     }
                     console.log(value2)
 

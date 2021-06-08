@@ -225,6 +225,53 @@
   </script>
 
   @endif
+  
+  @if(Session::has('error'))
+  <script>
+    ! function(t) {
+      "use strict";
+      var c = t(".toastr-info");
+      c.length > 0 && c.ready(function() {
+        toastr.clear(), toastr.options = {
+          closeButton: !0,
+          debug: !1,
+          newestOnTop: !0,
+          progressBar: !1,
+          positionClass: "toast-top-center",
+          preventDuplicates: !0,
+          showDuration: "1000",
+          hideDuration: "10000",
+          timeOut: "9000",
+          extendedTimeOut: "1000"
+        }, toastr.error('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('error') }}')
+      });
+    }(jQuery);
+  </script>
+  @endif
+
+  
+  @if(Session::has('warning'))
+  <script>
+    ! function(t) {
+      "use strict";
+      var c = t(".toastr-info");
+      c.length > 0 && c.ready(function() {
+        toastr.clear(), toastr.options = {
+          closeButton: !0,
+          debug: !1,
+          newestOnTop: !0,
+          progressBar: !1,
+          positionClass: "toast-top-center",
+          preventDuplicates: !0,
+          showDuration: "1000",
+          hideDuration: "10000",
+          timeOut: "9000",
+          extendedTimeOut: "1000"
+        }, toastr.warning('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('warning') }}')
+      });
+    }(jQuery);
+  </script>
+  @endif
 
   @if (session('message'))
   <script>

@@ -116,7 +116,14 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('/pay-rave', 'PaymentController@buyrave')->name('buy.rave');
         Route::post('/pay-bank', 'PaymentController@buybank')->name('buy.bank');
         Route::post('/buystripe', 'PaymentController@buystripe')->name('buy.stripe');
+
+        //Sell
         Route::get('/sell-coin', 'HomeController@sellcoin')->name('sell');
+        Route::get('/sell-confirm/{id}', 'HomeController@sell_form')->name('sell_form');
+        Route::post('/sell-confirm', 'HomeController@confirm_sell')->name('confirm_sell');
+        Route::get('/sell-save/{id}', 'HomeController@sell_get')->name('sell_get');
+        Route::get('/cancel-sell/{id}', 'HomeController@cancel_sell')->name('cancel_sell');
+        Route::post('/sell-save', 'HomeController@save_sell')->name('save_sell');
         Route::post('/sell-wallet', 'HomeController@sellwallet')->name('sell.wallet');
         Route::post('/sell-online', 'HomeController@sellonline')->name('sell.online');
 
@@ -198,7 +205,6 @@ Route::group(['prefix' => 'user'], function () {
 
 
         //Trade
-
         Route::post('buy', 'HomeController@buy')->name('buy.amount');
         Route::get('buy/{trx}', 'HomeController@buyPreview')->name('buy.buyPreview');
         Route::post('confirm-buy', 'HomeController@buyConfirm')->name('buy.confirmed');
