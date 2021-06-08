@@ -19,18 +19,25 @@
                                 <div class="token-statistics bg-secondary card card-token height-auto">
                                         <div class="card-innr">
                                                 <div class="token-balance token-balance-with-iconx">
-                                                        <div class="token-balance-icon"><em class="h2 color-white ti ti-user"></em></div>
-                                                        <div class="token-balance-text">
-                                                                <h6 class="card-sub-title">Account Details</h6><span class="lead">{{Auth::user()->username}} <span>
-                                                                                <marquee>Current Location:
-                                                                                        @if($ipcount > 0)
-                                                                                        {{$ip->location}}
-                                                                                        @else
-                                                                                        Unknown
-                                                                                        @endif
-                                                                                </marquee>
-                                                                        </span><span></span></span>
+
+                                                        <h6 class="card-sub-title">Account Details</h6>
+
+                                                        <div class="">
+                                                                <div class="token-balance token-balance-with-icon mb-3">
+                                                                        <div class="token-balance-icon"><em class="h2 color-white fa fa-money-bill"></em></div>
+                                                                        <div class="token-balance-text">
+                                                                                <h6 class="card-sub-title">Naira Wallet Balance</h6><span class="lead"> {{$basic->currency_sym}}{{number_format($buy - $bacharge, $basic->decimal)}}</span>
+                                                                        </div>
+                                                                </div>
                                                         </div>
+                                                        <!-- <div class="token-balance-icon">
+                                                        <em class="h2 color-white ti ti-user"></em>
+                                                        </div> -->
+                                                        <!-- <div class="token-balance-text">
+                                                                <span class="lead">{{Auth::user()->username}} <span>
+                                                        </div> -->
+
+
                                                 </div>
                                                 <div class="token-balance token-balance-s2">
                                                         <h6 class="card-sub-title">Summary</h6>
@@ -46,42 +53,53 @@
                                                                                 @endif
                                                                         </span><span class="sub">Login IP</span></li>
                                                         </ul>
+
+                                                        <marquee>Current Location:
+                                                                @if($ipcount > 0)
+                                                                {{$ip->location}}
+                                                                @else
+                                                                Unknown
+                                                                @endif
+                                                        </marquee>
                                                 </div>
                                         </div>
                                 </div>
                         </div><!-- .col -->
-                        <div class="col-lg-8">
-                                <div class="token-statistics bg-primary  card card-token height-auto">
-                                        <div class="card-innr" style="min-height: 261px;">
-                                                <div class="row mb-4">
-                                                        <div class="col-12">
-                                                                <div class="token-balance token-balance-with-icon mb-3">
-                                                                        <div class="token-balance-icon"><em class="h2 color-white fa fa-money-bill"></em></div>
-                                                                        <div class="token-balance-text">
-                                                                                <h6 class="card-sub-title">Naira Wallet Balance</h6><span class="lead"> {{$basic->currency_sym}}{{number_format($buy - $bacharge, $basic->decimal)}}</span>
-                                                                        </div>
-                                                                </div>
+                        <div class="col-lg-4">
+                                <div class="token-statistics  card card-token height-auto">
+                                        <div class="card-innr">
+                                                <div class="token-balance token-balance-with-icon">
+                                                        <div class="token-balance-icon"><em class="h2 color-white ti ti-shopping-cart"></em></div>
+                                                        <div class="token-balance-text">
+                                                                <h6 class="card-sub-title">Total Deposit</h6><span class="lead"> {{$basic->currency_sym}}{{number_format($deposit, $basic->decimal)}}</span>
                                                         </div>
                                                 </div>
-
                                                 <div class="token-balance token-balance-s2">
-                                                        <div class="row">
-                                                                @foreach($currency as $data)
-                                                                <div class="col-3">
-                                                                        <!-- {{$data}} -->
-                                                                        <h6 class="card-sub-title">{{$data->name}} Balance</h6>
-                                                                        <ul class="token-balance-list">
-                                                                                <li class="token-balance-sub">
-                                                                                        <span class="lead">
-                                                                                                <em class="pay-icon cf cf-@if($data->icon =='paypal')pivx @else{{$data->icon}}@endif"></em>
-                                                                                                {{number_format($bpend - $bcharge, $basic->decimal)}}
-                                                                                        </span>
-                                                                                </li>
-                                                                                <!-- <li class="token-balance-sub"><span class="lead">{{$basic->currency_sym}}{{number_format($bdecline - $bdeccharge, $basic->decimal)}}</span><span class="sub">Declined</span></li> -->
-                                                                        </ul>
-                                                                </div>
-                                                                @endforeach
+                                                        <h6 class="card-sub-title">Your Purchase</h6>
+                                                        <ul class="token-balance-list">
+                                                                <li class="token-balance-sub"><span class="lead pr-2">{{$basic->currency_sym}}{{number_format($deposit_pending, $basic->decimal)}}</span><span class="sub">Pending</span></li>
+                                                                <li class="token-balance-sub"><span class="lead pr-2">{{$basic->currency_sym}}{{number_format($deposit_declined, $basic->decimal)}}</span><span class="sub">Declined</span></li>
+                                                        </ul>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div><!-- .col -->
+
+                        <div class="col-lg-4">
+                                <div class="token-statistics  card card-token height-auto">
+                                        <div class="card-innr">
+                                                <div class="token-balance token-balance-with-icon">
+                                                        <div class="token-balance-icon"><em class="h2 color-white ti ti-shopping-cart"></em></div>
+                                                        <div class="token-balance-text">
+                                                                <h6 class="card-sub-title">Total Withdraw</h6><span class="lead"> {{$basic->currency_sym}}{{number_format($withdraw, $basic->decimal)}}</span>
                                                         </div>
+                                                </div>
+                                                <div class="token-balance token-balance-s2">
+                                                        <h6 class="card-sub-title">Your Purchase</h6>
+                                                        <ul class="token-balance-list">
+                                                                <li class="token-balance-sub"><span class="lead pr-2">{{$basic->currency_sym}}{{number_format($withdraw_pending, $basic->decimal)}}</span><span class="sub">Pending</span></li>
+                                                                <li class="token-balance-sub"><span class="lead pr-2">{{$basic->currency_sym}}{{number_format($withdraw_declined, $basic->decimal)}}</span><span class="sub">Declined</span></li>
+                                                        </ul>
                                                 </div>
                                         </div>
                                 </div>
@@ -94,14 +112,14 @@
                                                 <div class="token-balance token-balance-with-icon">
                                                         <div class="token-balance-icon"><em class="h2 color-white ti ti-shopping-cart"></em></div>
                                                         <div class="token-balance-text">
-                                                                <h6 class="card-sub-title">Total Crypto Purchase</h6><span class="lead"> {{$basic->currency_sym}}{{number_format($buy - $bacharge, $basic->decimal)}}</span>
+                                                                <h6 class="card-sub-title">Total Crypto Purchase</h6><span class="lead"> {{$basic->currency_sym}}{{number_format($coin_bought, $basic->decimal)}}</span>
                                                         </div>
                                                 </div>
                                                 <div class="token-balance token-balance-s2">
                                                         <h6 class="card-sub-title">Your Purchase</h6>
                                                         <ul class="token-balance-list">
-                                                                <li class="token-balance-sub"><span class="lead">{{$basic->currency_sym}}{{number_format($bpend - $bcharge, $basic->decimal)}}</span><span class="sub">Pending</span></li>
-                                                                <li class="token-balance-sub"><span class="lead">{{$basic->currency_sym}}{{number_format($bdecline - $bdeccharge, $basic->decimal)}}</span><span class="sub">Declined</span></li>
+                                                                <li class="token-balance-sub"><span class="lead pr-2">{{$basic->currency_sym}}{{number_format($buy_pending, $basic->decimal)}}</span><span class="sub">Pending</span></li>
+                                                                <li class="token-balance-sub"><span class="lead pr-2">{{$basic->currency_sym}}{{number_format($buy_declined, $basic->decimal)}}</span><span class="sub">Declined</span></li>
                                                         </ul>
                                                 </div>
                                         </div>
@@ -113,14 +131,15 @@
                                                 <div class="token-balance token-balance-with-icon">
                                                         <div class="token-balance-icon"><em class="h2 color-white ti ti-share"></em></div>
                                                         <div class="token-balance-text">
-                                                                <h6 class="card-sub-title">Total Crypto Sales</h6><span class="lead"> {{$basic->currency_sym}}{{number_format($sell, $basic->decimal)}}</span>
+                                                                <h6 class="card-sub-title">Total Crypto Sales</h6><span class="lead"> {{$basic->currency_sym}}{{number_format($coin_sales, $basic->decimal)}}</span>
                                                         </div>
                                                 </div>
                                                 <div class="token-balance token-balance-s2">
                                                         <h6 class="card-sub-title">Your Sales</h6>
                                                         <ul class="token-balance-list">
-                                                                <li class="token-balance-sub"><span class="lead">{{$basic->currency_sym}}{{number_format($spend, $basic->decimal)}}</span><span class="sub">Pending</span></li>
-                                                                <li class="token-balance-sub"><span class="lead">{{$basic->currency_sym}}{{number_format($sdecline, $basic->decimal)}}</span><span class="sub">Declined</span></li>
+                                                                <li class="token-balance-sub"><span class="lead pr-2">{{$basic->currency_sym}}{{number_format($sales_pending, $basic->decimal)}}</span><span class="sub">Pending</span></li>
+                                                                <li class="token-balance-sub"><span class="lead pr-2">{{$basic->currency_sym}}{{number_format($sales_declined, $basic->decimal)}}</span><span class="sub">Declined</span></li>
+                                                                <li class="token-balance-sub"><span class="lead pr-2">{{$basic->currency_sym}}{{number_format($sales_paid, $basic->decimal)}}</span><span class="sub">Paid</span></li>
                                                         </ul>
                                                 </div>
                                         </div>
@@ -146,12 +165,14 @@
                                                                         <th class="data-col dt-tnxno">Tranx NO</th>
                                                                         <th class="data-col dt-token">Currency</th>
                                                                         <th class="data-col dt-token">Amount</th>
-                                                                        <th class="data-col dt-usd-amount">Rate</th>
-                                                                        <th class="data-col dt-account">Payment Method</th>
-                                                                        <th class="data-col dt-type">
-                                                                                <div class="dt-type-text">Status</div>
+                                                                        <!-- <th class="data-col dt-usd-amount">Rate</th>
+                                                                        <th class="data-col dt-account">Payment Method</th> -->
+                                                                        <th class="data-col dt-type" colspan="2">
+                                                                                <div class="dt-type-text text-center">Status</div>
                                                                         </th>
-                                                                        <th class="data-col"></th>
+                                                                        <th class="data-col">
+                                                                                Action
+                                                                        </th>
                                                                 </tr>
                                                         </thead>
                                                         <tbody>
@@ -159,47 +180,48 @@
 
                                                                 @if(count($trx) >0)
                                                                 @foreach($trx as $k=>$data)
-
                                                                 <tr class="data-item">
                                                                         <td class="data-col dt-tnxno">
                                                                                 <div class="d-flex align-items-center">
-                                                                                        @if($data->status == 0)
+                                                                                        @if($data->status == "Pending")
                                                                                         <div class="data-state data-state-pending"><span class="d-none">Pending</span></div>
-                                                                                        @elseif($data->status == 1)
+                                                                                        @elseif($data->status == "Paid")
                                                                                         <div class="data-state data-state-progress"><span class="d-none">Progress</span></div>
-                                                                                        @elseif($data->status == 2)
+                                                                                        @elseif($data->status == "Confirmed")
                                                                                         <div class="data-state data-state-approved"><span class="d-none">Approved</span></div>
-                                                                                        @else
+                                                                                        @elseif($data->status == "Declined")
                                                                                         <div class="data-state data-state-canceled"><span class="d-none">Declined</span></div>
+                                                                                        @elseif($data->status == "Cancelled")
+                                                                                        <div class="data-state data-state-canceled"><span class="d-none">Cancelled</span></div>
                                                                                         @endif
+
                                                                                         <div class="fake-class"><span class="lead tnx-id">{{$data->trx}}</span><span class="sub sub-date">{{ Carbon\Carbon::parse($data->created_at)->diffForHumans() }}</span></div>
                                                                                 </div>
                                                                         </td>
-                                                                        <td class="data-col dt-token"><span class="lead token-amount">{{$data->currency->name}}</span><span class="sub sub-symbol">@if($data->type == 1) BUY @else SELL @endif</span></td>
-                                                                        <td class="data-col dt-token"><span class="lead amount-pay">{{number_format($data->amount, $basic->decimal)}}</span><span class="sub sub-symbol">USD <em class="fas fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="{{number_format($data->main_amount * $basic->rate, $basic->decimal)}}"></em></span></td>
-                                                                        <td class="data-col dt-usd-amount"><span class="lead amount-pay">
-
-
-                                                                                        {{number_format($data->rate, $basic->decimal)}}</span><span class="sub sub-symbol">{{$basic->currency}} <em class="fas fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="1 {{$data->currency->symbol}} = {{$data->rate}} USD"></em></span></td>
-                                                                        <td class="data-col dt-account"><span class="lead user-info">
-                                                                                        @if($data->type == 1)
-
-                                                                                        @if($data->gateway)
-                                                                                        {{App\Gateway::whereId($data->gateway)->first()->name}}
+                                                                        <td class="data-col dt-token"><span class="lead token-amount">
+                                                                                        @if(isset($data->currency))
+                                                                                        {{$data->currency->name}}
                                                                                         @else
-                                                                                        {{App\PaymentMethod::whereId($data->method)->first()->name}}
+                                                                                        Naira Wallet
                                                                                         @endif
+                                                                                </span><span class="sub sub-symbol">{{$data->type}}</span></td>
+                                                                        <td class="data-col dt-token"><span class="lead amount-pay">{{$basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}</span>
+                                                                                <span class="sub sub-symbol">{{$basic->currency}}
+                                                                                        <em class="fas fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="{{$basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}"></em>
+                                                                                </span>
+                                                                        </td>
 
-                                                                                        @else Wallet @endif</span><span class="sub sub-date">{{$data->created_at}}</span></td>
                                                                         <td class="data-col dt-type">
-                                                                                @if($data->status == 0)
-                                                                                <span class="dt-type-md badge badge-outline badge-warning badge-sm">Unpaid</span>
-                                                                                @elseif($data->status == 1)
+                                                                                @if($data->status == "Pending")
+                                                                                <span class="dt-type-md badge badge-outline badge-warning badge-sm">Pending</span>
+                                                                                @elseif($data->status == "Paid")
                                                                                 <span class="dt-type-md badge badge-outline badge-info badge-sm"><i class="fa fa-spinner fa-spin"></i>&nbsp;Awaiting</span>
-                                                                                @elseif($data->status == 2)
+                                                                                @elseif($data->status == "Confirmed")
                                                                                 <span class="dt-type-md badge badge-outline badge-success badge-sm">Approved</span>
-                                                                                @else
+                                                                                @elseif($data->status == "Declined")
                                                                                 <span class="dt-type-md badge badge-outline badge-danger badge-sm">Declined</span>
+                                                                                @elseif($data->status == "Cancelled")
+                                                                                <span class="dt-type-md badge badge-outline badge-danger badge-sm">Cancelled</span>
                                                                                 @endif
 
                                                                         </td>
@@ -208,33 +230,18 @@
                                                                         <td class="data-col text-right">
                                                                                 <div class="relative d-inline-block d-md-none"><a href="#" class="btn btn-light-alt btn-xs btn-icon toggle-tigger"><em class="ti ti-more-alt"></em></a>
                                                                                         <div class="toggle-class dropdown-content dropdown-content-center-left pd-2x">
-
+                                                                                                @if($data->type == "Deposit")
                                                                                                 <ul class="data-action-list">
-                                                                                                        @if($data->status == 0)
-
-                                                                                                        @if($data->type > 0)
                                                                                                         <li><a href="{{ route('ebuypost2',$data->trx) }}" class="btn btn-auto btn-primary btn-xs"><span>Pay <span class="d-none d-xl-inline-block">Now</span></span><em class="ti ti-wallet"></em></a></li>
                                                                                                         <li><a href="{{ route('ebuydel',$data->trx) }}" class="btn btn-danger-alt btn-xs btn-icon"><em class="ti ti-trash"></em></a></li>
-                                                                                                        @elseif($data->type < 1) <li><a href="{{ route('esellpost22', $data->trx) }}" class="btn btn-auto btn-primary btn-xs"><span>Pay <span class="d-none d-xl-inline-block">Now</span></span><em class="ti ti-wallet"></em></a></li>
-                                                                                                                <li><a href="{{ route('eselldel', $data->trx) }}" class="btn btn-danger-alt btn-xs btn-icon"><em class="ti ti-trash"></em></a></li>
-                                                                                                                @endif
-                                                                                                                @endif
-
-                                                                                                                <li><a href="#" data-toggle="modal" data-target="#transaction-{{$data->id}}details" class="btn btn-primary-alt btn-xs btn-icon"><em class="ti ti-eye"></em></a></li>
+                                                                                                        <li><a href="#" data-toggle="modal" data-target="#transaction-{{$data->id}}details" class="btn btn-primary-alt btn-xs btn-icon"><em class="ti ti-eye"></em></a></li>
+                                                                                                        <li><a href="{{ route('eselldel', $data->trx) }}" class="btn btn-danger-alt btn-xs btn-icon"><em class="ti ti-trash"></em></a></li>
                                                                                                 </ul>
+                                                                                                @endif
                                                                                         </div>
                                                                                 </div>
-                                                                                <ul class="data-action-list d-none d-md-inline-flex">
-                                                                                        @if($data->status == 0)
-                                                                                        @if($data->type > 0)
-                                                                                        <li><a href="{{ route('ebuypost2',$data->trx) }}" class="btn btn-auto btn-primary btn-xs"><span>Pay <span class="d-none d-xl-inline-block">Now</span></span><em class="ti ti-wallet"></em></a></li>
-                                                                                        <li><a href="{{ route('ebuydel',$data->trx) }}" class="btn btn-danger-alt btn-xs btn-icon"><em class="ti ti-trash"></em></a></li>
-                                                                                        @elseif($data->type < 1) <li><a href="{{ route('esellpost22', $data->trx) }}" class="btn btn-auto btn-primary btn-xs"><span>Pay <span class="d-none d-xl-inline-block">Now</span></span><em class="ti ti-wallet"></em></a></li>
-                                                                                                <li><a href="{{ route('eselldel', $data->trx) }}" class="btn btn-danger-alt btn-xs btn-icon"><em class="ti ti-trash"></em></a></li>
-                                                                                                @endif
-                                                                                                @endif
-                                                                                                <li><a href="#" data-toggle="modal" data-target="#transaction-{{$data->id}}details" class="btn btn-primary btn-outline btn-xs btn-icon"><em class="ti ti-eye"></em></a></li>
-                                                                                </ul>
+                                                                        </td>
+                                                                        <td><a href="#" data-toggle="modal" data-target="#transaction-{{$data->id}}details" class="btn btn-primary btn-outline btn-xs btn-icon"><em class="ti ti-eye"></em></a></li>
                                                                         </td>
                                                                 </tr>
 
@@ -355,6 +362,7 @@
                                                                                                         </ul><!-- .data-details -->
                                                                                                         <div class="gaps-3x"></div>
                                                                                                         <h6 class="card-sub-title">Currency Details</h6>
+                                                                                                        @if(isset($data->currency))
                                                                                                         <ul class="data-details-list">
                                                                                                                 <li>
                                                                                                                         <div class="data-details-head">Currency Name</div>
@@ -409,6 +417,7 @@
 
                                                                                                                 <!-- li -->
                                                                                                         </ul><!-- .data-details -->
+                                                                                                        @endif
                                                                                                 </div><!-- .card -->
                                                                                         </div>
                                                                                 </div><!-- .modal-content -->
@@ -443,8 +452,6 @@
 
                 </div><!-- .container -->
         </div><!-- .page-content -->
-        @endsection
-        @section('js')
-
-
-        @endsection
+</div>
+@endsection
+@section('js')

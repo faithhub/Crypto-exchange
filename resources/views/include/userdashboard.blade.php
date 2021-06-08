@@ -14,10 +14,7 @@
   <script src="{{asset('process/countries.js')}}"></script>
   <!-- Custom styles for this template -->
   <link rel="stylesheet" href="{{asset('dash-assets/css/')}}/{{$basic->theme}}" id="layoutstyle">
-
 </head>
-
-
 
 <body class="page-user toastr-info">
   <div class="topbar-wrap">
@@ -31,16 +28,12 @@
           </ul><!-- .topbar-nav --><a class="topbar-logo" href="{{route('home')}}"><img src="{{asset('assets/images/logo/logo.png')}}" srcset="{{asset('assets/images/logo/logo.png')}}" alt="logo"></a>
           <ul class="topbar-nav">
             <li class="topbar-nav-item relative"><span class="user-welcome d-none d-lg-inline-block">Welcome! {{Auth::user()->username}}</span>
-
-
-
               <a class="toggle-tigger user-thumb" href="#">
                 <div class="user-photo">
 
                   @if( file_exists(Auth::User()->image))
                   <img src="{{asset(Auth::user()->image)}} " width="100" alt="Profile Pic">
                   @else
-
                   <img src=" {{url('assets/user/images/user-default.png')}} " width="100" alt="Profile Pic">
                   @endif
                 </div>
@@ -49,10 +42,6 @@
                 <div class="user-status">
                   <h6 class="user-status-title">Referral Bonus</h6>
                   <div class="user-status-balance">{{number_format(Auth::user()->bonus, $basic->decimal)}} <small>{{$basic->currency}}</small></div>
-
-
-
-
                 </div>
                 <ul class="user-links">
                   <li><a href="{{route('notifications')}}"><i class="ti ti-announcement"></i>Notifications</a></li>
@@ -62,9 +51,7 @@
                 <ul class="user-links bg-light">
                   <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="ti ti-power-off"></i>Logout</a></li>
                 </ul>
-
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
-
               </div>
             </li><!-- .topbar-nav-item -->
           </ul><!-- .topbar-nav -->
@@ -75,10 +62,7 @@
       <div class="container">
         <div class="navbar-innr">
           <ul class="navbar-menu">
-
             <li><a href="{{route('home')}}"><em class="text-primary ti ti-dashboard"></em>&nbsp; Dashboard</a></li>
-
-
             <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-wallet"></em>&nbsp; Deposit</a>
               <ul class="navbar-dropdown">
                 <li><a href="{{route('make_deposit')}}"><em class="text-primary ti ti-wallet"></em>&nbsp; New Deposit</a></li>
@@ -219,13 +203,14 @@
           hideDuration: "10000",
           timeOut: "9000",
           extendedTimeOut: "1000"
-        }, toastr.success('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('success') }}')
+        }, toastr.success('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('
+          success ') }}')
       });
     }(jQuery);
   </script>
 
   @endif
-  
+
   @if(Session::has('error'))
   <script>
     ! function(t) {
@@ -243,13 +228,14 @@
           hideDuration: "10000",
           timeOut: "9000",
           extendedTimeOut: "1000"
-        }, toastr.error('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('error') }}')
+        }, toastr.error('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('
+          error ') }}')
       });
     }(jQuery);
   </script>
   @endif
 
-  
+
   @if(Session::has('warning'))
   <script>
     ! function(t) {
@@ -267,7 +253,8 @@
           hideDuration: "10000",
           timeOut: "9000",
           extendedTimeOut: "1000"
-        }, toastr.warning('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('warning') }}')
+        }, toastr.warning('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('
+          warning ') }}')
       });
     }(jQuery);
   </script>

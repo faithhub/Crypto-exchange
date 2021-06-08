@@ -87,9 +87,29 @@ class HomeController extends Controller
         $data['page_title'] = "Dashboard";
         $user = Auth::user();
         $data['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
-        $data['trx'] = Trx::whereUser_id($user->id)->latest()->get();
-        $data['approved'] = Deposit::where('user_id', Auth::id())->whereStatus(1)->select('amount')->sum('amount');;
-        $data['pending'] = Deposit::where('user_id', Auth::id())->whereStatus(0)->select('amount')->sum('amount');;
+        $data['trx'] = $t = Transaction::where('user_id', Auth::id())->whereIn('type', ['Buy', 'Sell', 'Deposit', 'Withdraw'])->with('currency:*')->latest()->get();
+        //dd($t);
+
+        $data['coin_bought'] = Transaction::where('user_id', Auth::id())->where('Status', 'Confirmed')->where('type', 'Buy')->select('amount')->sum('amount');
+        $data['buy_pending'] = Transaction::where('user_id', Auth::id())->where('Status', 'Pending')->where('type', 'Buy')->select('amount')->sum('amount');
+        $data['buy_declined'] = Transaction::where('user_id', Auth::id())->where('Status', 'Declined')->where('type', 'Buy')->select('amount')->sum('amount');
+
+        $data['coin_sales'] = Transaction::where('user_id', Auth::id())->where('Status', 'Confirmed')->where('type', 'Sell')->select('amount')->sum('amount');
+        $data['sales_pending'] = Transaction::where('user_id', Auth::id())->where('Status', 'Pending')->where('type', 'Sell')->select('amount')->sum('amount');
+        $data['sales_declined'] = Transaction::where('user_id', Auth::id())->where('Status', 'Declined')->where('type', 'Sell')->select('amount')->sum('amount');
+        $data['sales_paid'] = Transaction::where('user_id', Auth::id())->where('Status', 'Paid')->where('type', 'Sell')->select('amount')->sum('amount');
+
+
+        $data['deposit'] = Transaction::where('user_id', Auth::id())->where('Status', 'Confirmed')->where('type', 'Deposit')->select('amount')->sum('amount');
+        $data['deposit_pending'] = Transaction::where('user_id', Auth::id())->where('Status', 'Pending')->where('type', 'Deposit')->select('amount')->sum('amount');
+        $data['deposit_declined'] = Transaction::where('user_id', Auth::id())->where('Status', 'Declined')->where('type', 'Deposit')->select('amount')->sum('amount');
+
+
+        $data['withdraw'] = Transaction::where('user_id', Auth::id())->where('Status', 'Confirmed')->where('type', 'Withdraw')->select('amount')->sum('amount');
+        $data['withdraw_pending'] = Transaction::where('user_id', Auth::id())->where('Status', 'Pending')->where('type', 'Withdraw')->select('amount')->sum('amount');
+        $data['withdraw_declined'] = Transaction::where('user_id', Auth::id())->where('Status', 'Declined')->where('type', 'Withdraw')->select('amount')->sum('amount');
+
+        $data['paid'] = Transaction::where('user_id', Auth::id())->where('Status', 'Paid')->where('type', 'Deposit')->select('amount')->sum('amount');
         $data['buy'] = Trx::where('user_id', Auth::id())->whereStatus(2)->whereType(1)->select('main_amo')->sum('main_amo');;
         $data['bpend'] = Trx::where('user_id', Auth::id())->whereStatus(1)->whereType(1)->select('main_amo')->sum('main_amo');;
         $data['bcharge'] = Trx::where('user_id', Auth::id())->whereStatus(1)->whereType(1)->select('charge')->sum('charge');;
@@ -100,6 +120,7 @@ class HomeController extends Controller
         $data['spend'] = Trx::where('user_id', Auth::id())->whereStatus(1)->whereType(0)->select('main_amo')->sum('main_amo');;
         $data['sdecline'] = Trx::where('user_id', Auth::id())->whereStatus(-2)->whereType(0)->select('main_amo')->sum('main_amo');;
         $data['time'] = Carbon::now();
+
         $crypt = Currency::all();
 
         foreach ($crypt as $coin) {
@@ -739,7 +760,7 @@ class HomeController extends Controller
             return redirect('user/buy-coin');
         }
     }
-    
+
     public function cancel_sell($id)
     {
         $trans = Transaction::where('trx', $id)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
@@ -788,7 +809,7 @@ class HomeController extends Controller
                 $trans->trans_prove_num = $request->trans_number;
                 $trans->save();
 
-                
+
                 Message::create([
                     'user_id' => Auth::id(),
                     'title' => 'Sell To Naira Wallet',
