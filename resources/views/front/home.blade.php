@@ -174,7 +174,7 @@
               <div class="feature-icon feature-icon-auto"><em class="icon icon-grd icon-lg ikon ikon-wallet"></em></div>
               <div class="feature-text">
                 <h4 class="title-sm title-semibold">Multi Wallet System:</h4>
-                <p class="fw-4">We support multiple crypto wallet and payment gateways Dude</p>
+                <p class="fw-4">We support multiple crypto wallet and payment gateways</p>
               </div>
             </div>
           </div><!-- .col -->
@@ -217,7 +217,7 @@
     </div>
   </section><!-- // -->
 
-  <section lass="section bg-theme ov-h text-center tc-light" style="background-color: whitno;">
+  <section lass="section bg-theme ov-h text-center tc-light" style="background-color: white;">
     <div class="container">
       <div class="row justify-content-around">
         <div class="col-lg-5 mgb-r">
