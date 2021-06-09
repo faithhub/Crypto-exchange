@@ -52,7 +52,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0 font-bold">Wallet Address</h5><a href="#" class="link link-primary link-ucap">Copy</a>
                                 </div>
-                                <div class="copy-wrap mgb-1-5x mgt-1-5x"><span class="copy-feedback"></span> <input type="text" class="copy-address" value="{{$data->currency->payment_id}}" disabled><button class="copy-trigger copy-clipboard" data-clipboard-text="{{$data->currency->payment_id}}"><em class="ti ti-files"></em></button></div>
+                                <div class="copy-wrap mgb-1-5x mgt-1-5x">
+                                <span class="copy-feedback"></span>
+                                <input type="text" class="copy-address" value="{{$data->currency->payment_id}}" disabled>
+                                <button class="copy-trigger copy-clipboard" data-clipboard-text="{{$data->currency->payment_id}}">
+                                <em class="ti ti-files"></em></button></div>
                                 @endif
 
 

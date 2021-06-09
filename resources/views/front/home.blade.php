@@ -217,7 +217,7 @@
     </div>
   </section><!-- // -->
 
-  <section lass="section bg-theme ov-h text-center tc-light" style="background-color: white;">
+  <section lass="section bg-theme ov-h text-center tc-light" style="background-color: whitno;">
     <div class="container">
       <div class="row justify-content-around">
         <div class="col-lg-5 mgb-r">
