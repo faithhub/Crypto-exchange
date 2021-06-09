@@ -17,7 +17,7 @@
                   <h4 class="card-title" style="font-size:35px !important">Deposit</h4>
                 </div>
                 <h4 class="popup-title">Fund Your Naira Wallet</h4>
-                <p class="lead">You currently have <span><b>{{$basic->currency_sym}}{{number_format(Auth::user()->balance, $basic->decimal)}}</b></span> in your deposit wallet. Fill the form below to proceed.</p>
+                <p class="lead">You currently have <span><b>{{$basic->currency_sym}}{{number_format(Auth::user()->balance, $basic->decimal)}}</b></span> in your  Naira Wallet. Fill the form below to proceed.</p>
                 <p>You can choose any of following payment method to fund your wallet. The fund will appear in your account after successfull payment.</p>
                 <form method="POST" action="{{ route('make_deposit_now') }}">
                   @csrf

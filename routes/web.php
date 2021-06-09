@@ -127,13 +127,18 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('/sell-wallet', 'HomeController@sellwallet')->name('sell.wallet');
         Route::post('/sell-online', 'HomeController@sellonline')->name('sell.online');
 
+        //Withdraw
+        Route::get('/withdraw', 'HomeController@withdraw')->name('withdraw_fund');
+        Route::post('/withdraw', 'HomeController@withdraw')->name('withdraw_fund');
+
+
 
 
         Route::post('/crypto/payment/status', 'PaymentControlle@cryptoStatus')->name('userDepositCrypto');
 
         Route::post('/card-confirm', 'PaymentController@cardpay')->name('cardpay');
 
-        Route::get('/withdraw', 'HomeController@withdrawMoney')->name('withdraw.money');
+        Route::get('/withdraw01', 'HomeController@withdrawMoney')->name('withdraw.money');
         Route::post('/withdraw/crypto', 'HomeController@requestcrypto')->name('withdraw.crypto');
         Route::post('/withdraw/deposit', 'HomeController@requestwithdrawal')->name('withdraw.depo');
         Route::post('/withdraw-submit', 'HomeController@requestSubmit')->name('withdraw.submit');
@@ -156,6 +161,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('change-password', 'HomeController@changePassword')->name('user.change-password');
         Route::post('change-password', 'HomeController@submitPassword')->name('user.change-password');
         Route::get('edit-profile', 'HomeController@Profile')->name('profile');
+        Route::post('check_bank', 'HomeController@check_bank')->name('check_bank');
         Route::post('edit-profile', 'HomeController@submitProfile')->name('edit-profile');
         Route::get('activity-log', 'HomeController@activitylog')->name('activities');
         Route::get('referral-log', 'HomeController@referral')->name('referral');

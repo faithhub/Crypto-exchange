@@ -13,6 +13,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Auth;
 use App\GeneralSettings;
+use App\Transaction;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Hash;
 use File;
@@ -89,7 +90,7 @@ class AdminController extends Controller
 
     public function buyLog()
     {
-        $data['exchange'] = Trx::whereStatus(2)->whereType(1)->latest()->get();
+        $data['exchange'] = Transaction::where('type', 'Buy')->where('status', 'Confirmed')->latest()->get();
         $data['page_title'] = 'Processed Buy Log';
         return view('admin.currency.buy-list', $data);
     }
@@ -272,6 +273,56 @@ class AdminController extends Controller
     public function dashboard()
     {
         $data['page_title'] = 'DashBoard';
+        //dd($data);
+
+        $data['totalusers'] = \App\User::count();
+        $data['banusers'] = \App\User::where('status', 0)->count();
+        $data['verified'] = \App\User::where('verified', 2)->count();
+        $data['activeusers'] = \App\User::where('status', 1)->count();
+        $data['users'] = \App\User::where('status', 1)->take(5)->orderby('id', 'desc')->get();
+        $data['inbox'] = \App\Message::where('view', 0)->where('admin', 0)->orderby('id', 'desc')->get();
+        $data['trx'] = \App\Trx::take(3)->orderby('id', 'desc')->get();
+
+        $data['gateway'] = \App\Gateway::count();
+        $data['deposit'] = \App\Transaction::whereStatus(1)->where('type', 'Deposit')->count();
+        $data['totalDeposit'] = \App\Transaction::whereStatus(1)->where('type', 'Deposit')->sum('amount');
+        $data['totalWithdraw'] = \App\WithdrawLog::whereStatus(2)->sum('amount');
+        $data['bal'] = \App\USer::sum('balance');
+        $data['totalTransfer'] = \App\Transfer::whereStatus(1)->sum('amount');
+        $data['blog'] = \App\Post::count();
+        $data['subscribers'] = \App\Subscriber::count();
+
+
+
+        $data['dpro'] = \App\Transaction::where('type', 'Deposit')->where('status', 'Confirmed')->sum('amount');
+        $data['ddec'] = \App\Transaction::where('type', 'Deposit')->where('status', 'Declined')->sum('amount');
+        $data['dcan'] = \App\Transaction::where('type', 'Deposit')->where('status', 'Cancelled')->sum('amount');
+        $data['dpaid'] = \App\Transaction::where('type', 'Deposit')->where('status', 'Paid')->sum('amount');
+        $data['dpend'] = \App\Transaction::where('type', 'Deposit')->where('status', 'Pending')->sum('amount');
+
+
+        $data['ppro'] = \App\Transaction::where('type', 'Buy')->where('status', 'Confirmed')->sum('amount');
+        $data['pdec'] = \App\Transaction::where('type', 'Buy')->where('status', 'Declined')->sum('amount');
+        $data['pcan'] = \App\Transaction::where('type', 'Buy')->where('status', 'Cancelled')->sum('amount');
+        $data['ppaid'] = \App\Transaction::where('type', 'Buy')->where('status', 'Paid')->sum('amount');
+        $data['ppend'] = \App\Transaction::where('type', 'Buy')->where('status', 'Pending')->sum('amount');
+
+
+        $data['spro'] = \App\Transaction::where('type', 'Sell')->where('status', 'Confirmed')->sum('amount');
+        $data['sdec'] = \App\Transaction::where('type', 'Sell')->where('status', 'Declined')->sum('amount');
+        $data['scan'] = \App\Transaction::where('type', 'Sell')->where('status', 'Cancelled')->sum('amount');
+        $data['spaid'] = \App\Transaction::where('type', 'Sell')->where('status', 'Paid')->sum('amount');
+        $data['spend'] = \App\Transaction::where('type', 'Sell')->where('status', 'Pending')->sum('amount');
+
+
+        $data['wpro'] = \App\Transaction::where('type', 'Withdraw')->where('status', 'Confirmed')->sum('amount');
+        $data['wdec'] = \App\Transaction::where('type', 'Withdraw')->where('status', 'Declined')->sum('amount');
+        $data['wcan'] = \App\Transaction::where('type', 'Withdraw')->where('status', 'Cancelled')->sum('amount');
+        $data['wpaid'] = \App\Transaction::where('type', 'Withdraw')->where('status', 'Paid')->sum('amount');
+        $data['wpend'] = \App\Transaction::where('type', 'Withdraw')->where('status', 'Pending')->sum('amount');
+
+
+        $data['currency'] = \App\Currency::count();
         return view('admin.dashboard', $data);
     }
 

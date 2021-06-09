@@ -1,44 +1,6 @@
 @extends('include.admindashboard')
 
 @section('body')
-
-@php
-$totalusers = \App\User::count();
-$banusers = \App\User::where('status',0)->count();
-$verified = \App\User::where('verified',2)->count();
-$activeusers = \App\User::where('status',1)->count();
-$users = \App\User::where('status',1)->take(5)->orderby('id', 'desc')->get();
-$inbox = \App\Message::where('view',0)->where('admin',0)->orderby('id', 'desc')->get();
-$trx = \App\Trx::take(3)->orderby('id', 'desc')->get();
-
-$gateway = App\Gateway::count();
-$deposit = App\Deposit::whereStatus(1)->count();
-$totalDeposit = App\Deposit::whereStatus(1)->sum('amount');
-$totalWithdraw = App\WithdrawLog::whereStatus(2)->sum('amount');
-$bal = App\USer::sum('balance');
-$totalTransfer = App\Transfer::whereStatus(1)->sum('amount');
-$blog =App\Post::count();
-$subscribers =App\Subscriber::count();
-
-
-$ppro = App\Trx::whereStatus(2)->whereType(1)->sum('main_amo');
-$pdec = App\Trx::whereStatus(12)->whereType(1)->sum('main_amo');
-$ppend = App\Trx::whereStatus(1)->whereType(1)->sum('main_amo');
-
-
-$spro = App\Trx::whereStatus(2)->whereType(0)->sum('main_amo');
-$sdec = App\Trx::whereStatus(-2)->whereType(0)->sum('main_amo');
-$spend = App\Trx::whereStatus(1)->whereType(0)->sum('main_amo');
-
-$wpro = App\WithdrawLog::whereStatus(2)->sum('amount');
-$wdec = App\WithdrawLog::whereStatus(-2)->sum('amount');
-$wpend = App\WithdrawLog::whereStatus(1)->sum('amount');
-
-
-$currency = App\Currency::count();
-
-@endphp
-
 <div class="page-content">
     <div class="container">
         <div class="row">
@@ -65,8 +27,68 @@ $currency = App\Currency::count();
                 </div>
             </div>
 
+            <div class="col-lg-4">
+                <div class="bg-primary token-statistics card card-token height-auto">
+                    <div class="card-innr">
+                        <div class="token-balance token-balance-with-icon">
+                            <div class="token-balance-icon"><em class="h2 color-white ti ti-user"></em></div>
+                            <div class="token-balance-text">
+                                <h6 class="card-sub-title">Deposit</h6><span class="lead">{{$basic->currency_sym}}{{number_format($ppro, $basic->decimal)}}</span>
+                            </div>
+                        </div>
+                        <div class="token-balance token-balance-s2">
+                            <h6 class="card-sub-title">Summary</h6>
+                            <div class="row">
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($dpend, $basic->decimal)}} </span><span class="sub">Pending</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($dpaid, $basic->decimal)}} </span><span class="sub">Paid Not Confirmed</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($dcan, $basic->decimal)}} </span><span class="sub">Cancelled</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($ddec, $basic->decimal)}} </span><span class="sub">Declined</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="col-lg-4">
+                <div class="bg-primary token-statistics card card-token height-auto">
+                    <div class="card-innr">
+                        <div class="token-balance token-balance-with-icon">
+                            <div class="token-balance-icon"><em class="h2 color-white ti ti-user"></em></div>
+                            <div class="token-balance-text">
+                                <h6 class="card-sub-title">Withdraw</h6><span class="lead">{{$basic->currency_sym}}{{number_format($ppro, $basic->decimal)}}</span>
+                            </div>
+                        </div>
+                        <div class="token-balance token-balance-s2">
+                            <h6 class="card-sub-title">Summary</h6>
+                            <div class="row">
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($wpend, $basic->decimal)}} </span><span class="sub">Pending</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($wpaid, $basic->decimal)}} </span><span class="sub">Paid Not Confirmed</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($wcan, $basic->decimal)}} </span><span class="sub">Cancelled</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($wdec, $basic->decimal)}} </span><span class="sub">Declined</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-6">
                 <div class="bg-secondary token-statistics card card-token height-auto">
                     <div class="card-innr">
                         <div class="token-balance token-balance-with-icon">
@@ -77,9 +99,20 @@ $currency = App\Currency::count();
                         </div>
                         <div class="token-balance token-balance-s2">
                             <h6 class="card-sub-title">Summary</h6>
-                            <ul class="token-balance-list">
-                                <li class="token-balance-sub"><span class="lead">{{$basic->currency_sym}}{{number_format($ppend, $basic->decimal)}} </span><span class="sub">Pending</span></li>&nbsp;&nbsp;<li class="token-balance-sub"><span class="lead">{{$basic->currency_sym}}{{number_format($pdec, $basic->decimal)}} </span><span class="sub">Declined</span></li>
-                            </ul>
+                            <div class="row">
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($ppend, $basic->decimal)}} </span><span class="sub">Pending</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($ppaid, $basic->decimal)}} </span><span class="sub">Paid Not Confirmed</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($pcan, $basic->decimal)}} </span><span class="sub">Cancelled</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($pdec, $basic->decimal)}} </span><span class="sub">Declined</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -88,8 +121,8 @@ $currency = App\Currency::count();
 
 
 
-            <div class="col-lg-4">
-                <div class="bg-primary token-statistics card card-token height-auto">
+            <div class="col-lg-6">
+                <div class="bg-secondary token-statistics card card-token height-auto">
                     <div class="card-innr">
                         <div class="token-balance token-balance-with-icon">
                             <div class="token-balance-icon"><em class="h2 color-white ti ti-export"></em></div>
@@ -99,23 +132,24 @@ $currency = App\Currency::count();
                         </div>
                         <div class="token-balance token-balance-s2">
                             <h6 class="card-sub-title">Summary</h6>
-                            <ul class="token-balance-list">
-                                <li class="token-balance-sub"><span class="lead">{{$basic->currency_sym}}{{number_format($spend, $basic->decimal)}}</span><span class="sub">Pending</span></li>&nbsp;&nbsp;<li class="token-balance-sub"><span class="lead">{{$basic->currency_sym}}{{number_format($pdec, $basic->decimal)}}</span><span class="sub">Declined</span></li>
-                            </ul>
+                            <div class="row">
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($spend, $basic->decimal)}} </span><span class="sub">Pending</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($spaid, $basic->decimal)}} </span><span class="sub">Paid Not Confirmed</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($scan, $basic->decimal)}} </span><span class="sub">Cancelled</span>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <span class="lead" style="font-size: 20px;">{{$basic->currency_sym}}{{number_format($sdec, $basic->decimal)}} </span><span class="sub">Declined</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
             <!-- .col -->
 
             <!-- .col -->

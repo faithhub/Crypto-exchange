@@ -74,8 +74,8 @@
             </li>
             <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-wallet"></em>&nbsp; Withdraw</a>
               <ul class="navbar-dropdown">
-                <li><a href="{{route('home')}}"><em class="text-primary ti ti-wallet"></em>&nbsp; New Withdrawal</a></li>
-                <li><a href="{{route('home')}}"><em class="text-primary ti ti-server"></em>&nbsp; Withdrawals Log</a></li>
+                <li><a href="{{route('withdraw_fund')}}"><em class="text-primary ti ti-wallet"></em>&nbsp; New Withdrawal</a></li>
+                <li><a href="{{route('withdraw_fund')}}"><em class="text-primary ti ti-server"></em>&nbsp; Withdrawals Log</a></li>
               </ul>
             </li>
             <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-user"></em>&nbsp; Trade</a>
@@ -183,8 +183,7 @@
           hideDuration: "10000",
           timeOut: "9000",
           extendedTimeOut: "1000"
-        }, toastr.error('<em class="ti ti-na toast-message-icon"></em> {{ session('
-          alert ') }}')
+        }, toastr.error('<em class="ti ti-na toast-message-icon"></em> {{ session("alert") }}')
       });
     }(jQuery);
   </script>
@@ -206,8 +205,7 @@
           hideDuration: "10000",
           timeOut: "9000",
           extendedTimeOut: "1000"
-        }, toastr.success('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('
-          success ') }}')
+        }, toastr.success("<em class='ti ti-check toast-message-icon'></em> {{ Session::get('success') }}")
       });
     }(jQuery);
   </script>
@@ -256,8 +254,7 @@
           hideDuration: "10000",
           timeOut: "9000",
           extendedTimeOut: "1000"
-        }, toastr.warning('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('
-          warning ') }}')
+        }, toastr.warning("<em class='ti ti-check toast-message-icon'></em> {{ Session::get('warning') }}")
       });
     }(jQuery);
   </script>
@@ -280,8 +277,7 @@
           hideDuration: "10000",
           timeOut: "9000",
           extendedTimeOut: "1000"
-        }, toastr.success('<em class="ti ti-check toast-message-icon"></em> {{ session('
-          message ') }}')
+        }, toastr.success('<em class="ti ti-check toast-message-icon"></em> {{ session("message") }}')
       });
     }(jQuery);
   </script>
@@ -303,8 +299,7 @@
           hideDuration: "10000",
           timeOut: "9000",
           extendedTimeOut: "1000"
-        }, toastr.error('<em class="ti ti-na toast-message-icon"></em> {{ session('
-          danger ') }}')
+        }, toastr.error('<em class="ti ti-na toast-message-icon"></em> {{ session("danger") }}')
       });
     }(jQuery);
   </script>
@@ -328,8 +323,7 @@
           hideDuration: "10000",
           timeOut: "9000",
           extendedTimeOut: "1000"
-        }, toastr.error('<em class="ti ti-na toast-message-icon"></em> {{ $errors->first('
-          fname ') }}')
+        }, toastr.error('<em class="ti ti-na toast-message-icon"></em> {{ $errors->first("fname") }}')
       });
     }(jQuery);
   </script>
@@ -352,8 +346,7 @@
           hideDuration: "10000",
           timeOut: "9000",
           extendedTimeOut: "1000"
-        }, toastr.error('<em class="ti ti-na toast-message-icon"></em> {{ $errors->first('
-          lname ') }}')
+        }, toastr.error('<em class="ti ti-na toast-message-icon"></em> {{ $errors->first("lname") }}')
       });
     }(jQuery);
   </script>

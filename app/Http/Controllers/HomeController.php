@@ -270,6 +270,7 @@ class HomeController extends Controller
     {
         $auth = Auth::user();
         $data['page_title'] = "Profile";
+        $data['banks'] = DB::table('localbanks')->orderBy('bank', 'asc')->get();
         $data['user'] = User::findOrFail($auth->id);
         return view('user.profile', $data);
     }
@@ -346,7 +347,7 @@ class HomeController extends Controller
             return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
         }
         $data['basic'] = GeneralSettings::first();
-        $data['page_title'] = " Payment Methods";
+        $data['page_title'] = "Payment Methods";
         $data['gates'] = Gateway::whereStatus(1)->get();
         return view('user.deposit', $data);
     }
@@ -621,8 +622,8 @@ class HomeController extends Controller
         }
     }
 
-    //Buy
 
+    //Buy
     public function buycoin()
     {
         if (Auth::user()->verified != 2) {
@@ -883,6 +884,91 @@ class HomeController extends Controller
             return redirect()->route('sell');
         }
     }
+
+    //Withdraw
+    public function withdraw(Request $request)
+    {
+        if (Auth::user()->verified != 2) {
+            return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+        }
+        if ($_POST) {
+            $this->validate($request, [
+                'amount' => 'required',
+                'terms' => 'required',
+                'confirm' => 'required',
+            ], [
+                'amount.required' => 'The Amount to withdraw is required',
+                'terms.required' => 'Terms and Agreement is required',
+                'confirm.required' => 'Confirm Details is required',
+            ]);
+            if($request->amount > Auth::user()->balance){
+                return back()->with('warning', 'You do not have upto the requested amount in Naira Wallet');
+                        }
+            $user = User::find(Auth::user()->id);
+        } else {
+            $data['gates'] = $g = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
+            $data['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
+            $data['method'] = PaymentMethod::whereStatus(1)->orderBy('name', 'asc')->get();
+            $data['bank'] = Bank::whereStatus(1)->orderBy('name', 'asc')->get();
+            return view('user.withdraw.index', $data);
+        }
+    }
+
+    public function check_bank(Request $request)
+    {
+        $this->validate($request, [
+            'bank' => 'required',
+            'acctnumber' => 'required',
+        ], [
+            'bank.required' => 'Select your bank',
+            'acctnumber.required' => 'Account Number is required',
+        ]);
+        $user = User::findOrFail(Auth::user()->id);
+        $gate = Gateway::whereId(107)->first();
+        $bankCode = $request->bank;
+        $bank = Banky::whereCode($request->bank)->first();
+        $bankname = $bank->bank;
+
+        $AccountID = "$request->acctnumber";
+        $baseUrl = "https://api.paystack.co";
+        $endpoint = "/bank/resolve?account_number=" . $AccountID . "&bank_code=" . $bankCode;
+        $httpVerb = "GET";
+        $contentType = "application/json"; //e.g charset=utf-8
+        $authorization = "$gate->val2"; //gotten from paystack dashboard
+
+
+        $headers = array(
+            "Content-Type: $contentType",
+            "Authorization: Bearer $authorization"
+        );
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_URL, $baseUrl . $endpoint);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $content = json_decode(curl_exec($ch), true);
+        $err     = curl_errno($ch);
+        $errmsg  = curl_error($ch);
+
+        curl_close($ch);
+
+        if ($content['status']) {
+            $response['account_name'] = $content['data']['account_name'];
+            $bname =  $response['account_name'];
+            $user->bank = $bank->bank;
+            $user->accountno = $AccountID;
+            $user->accountname = $bname;
+            $user->save();
+            return back()->with('success', 'Account Details Verified and saved Successfully');
+        } else {
+            return back()->with('danger', 'Account Number Not Registered With ' . $bankname . '');
+        }
+    }
+
+
 
     public function activitylog()
     {

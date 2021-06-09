@@ -306,47 +306,6 @@
   </section>
 
 
-
-
-  <section class="section bg-white ov-h text-center" id="works">
-    <div class="section-head section-head-s7 wide-auto-xs">
-      <h2 class="title title-thin animated" data-animate="fadeInUp" data-delay=".1">How it works</h2>
-      <p class="lead animated" data-animate="fadeInUp" data-delay=".2">We have made trading on {{$basic->sitename}} easy as ABC</p>
-    </div>
-    <div class="container">
-      <!-- Block @s -->
-      <div class="nk-block nk-block-text-wrap">
-        <div class="row justify-content-center">
-          <div class="col-lg-8">
-            <div class="feature-slider-dots  animated" data-animate="fadeInUp" data-delay=".3"><button class="feature-slider-dot owl-dots"><em class="ikon ikon-lock"></em></button><button class="feature-slider-dot owl-dots"><em class="ikon ikon-user-setting"></em></button><button class="feature-slider-dot owl-dots"><em class="ikon ikon-clip-board"></em></button><button class="feature-slider-dot owl-dots"><em class="ikon ikon-user-chat"></em></button><button class="feature-slider-dot owl-dots"><em class="ikon ikon-wallet"></em></button></div>
-            <div class="feature-slider-pane has-carousel owl-carousel" data-items="1" data-dots="true" data-custom-dots="feature-slider-dots" data-animate-out="fadeOut">
-              <div class="ft-slider-pane-item pane-item-1">
-                <h5 class="animate-up delay-5ms">Step 1</h5>
-                <p class="animate-up delay-6ms">{{$basic->step1}}</p>
-                <p class="animate-up delay-7ms"></p>
-              </div>
-              <div class="ft-slider-pane-item pane-item-2">
-                <h5 class="animate-up delay-5ms">Step 2.</h5>
-                <p class="animate-up delay-6ms">{{$basic->step2}}</p>
-              </div>
-              <div class="ft-slider-pane-item pane-item-3">
-                <h5 class="animate-up delay-5ms">Step 3</h5>
-                <p class="animate-up delay-6ms">{{$basic->step3}}</p>
-              </div>
-              <div class="ft-slider-pane-item pane-item-4">
-                <h5 class="animate-up delay-5ms">Step 4</h5>
-                <p class="animate-up delay-6ms">{{$basic->step4}}</p>
-              </div>
-              <div class="ft-slider-pane-item pane-item-5">
-                <h5 class="animate-up delay-5ms">Step 5.</h5>
-                <p class="animate-up delay-6ms">{{$basic->step5}}</p>
-              </div>
-            </div>
-          </div><!-- .col -->
-        </div><!-- .row -->
-      </div><!-- .block @e -->
-    </div>
-  </section><!-- // -->
   <section class="section bg-light">
     <div class="container">
       <!-- Block @s -->
@@ -393,32 +352,6 @@
     </div>
   </section><!-- // -->
   <!-- .block @s -->
-
-
-  <section class="section bg-light" id="document">
-    <div class="nk-block nk-block-download">
-      <div class="container">
-        <div class="row align-items-center gutter-vr-30px justify-content-between">
-          <div class="col-md-5 col-mb-8 m-auto order-last order-md-first">
-            <div class="nk-block-img"><img src="{{asset('front-assets/images/down.png')}}" alt="app')}}"></div>
-          </div>
-          <div class="col-md-7 col-lg-6">
-            <div class="nk-block-text pb-md-5 text-center text-md-left">
-              <h2 class="title title-thin title-dark">Go mobile and <strong class="text-primary-alt">Download</strong> <br>{{$basic->sitename}} App</h2>
-              <p>We have many more feature that impress you.</p>
-              <ul class="btn-grp btn-grp-s2">
-                <li><a href="#" class="btn-download google-play"><img src="{{asset('front-assets/images/google-play.png')}}" alt="img"></a></li>
-                <li><a href="#" class="btn-download app-store"><img src="{{asset('front-assets/images/apps-store.png')}}" alt="img"></a></li>
-                <li class="qr-code"><img src="{{asset('front-assets/images/icon-wallet.png')}}" alt="img"><span class="qr-list"><img src="{{asset('front-assets/images/qr-apple.png')}}" alt="img"><img src="{{asset('front-assets/images/qr-android.png')}}" alt="img"></span></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section><!-- .block @e -->
-
-
 
   <section class="section bg-light-alt" id="faq">
     <div class="container">
