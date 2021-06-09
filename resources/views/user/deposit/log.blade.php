@@ -50,12 +50,12 @@
                 <span class="sub sub-symbol">{!! $basic->currency !!}</span>
               </td>
               <td class="data-col dt-amount"><span class="lead amount-pay"> {{isset($data->payment_method_id) ? $data->payment_method_id : 'N/A'}}</span>
-              @if($data->payment_method_id == "Bank Transfer")
+                @if($data->payment_method_id == "Bank Transfer")
                 <span>{{isset($data->method->name) ? $data->method->name : 'N/A'}}</span>
-              @endif
-              @if($data->payment_method_id == "Online Payment")
+                @endif
+                @if($data->payment_method_id == "Online Payment")
                 <span>{{isset($data->gateway_id) ? $data->gateway->name : 'N/A'}}</span>
-              @endif
+                @endif
               </td>
               <td class="data-col dt-usd-amount"><span class="lead amount-pay"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}}</b></span>
                 <span class="sub sub-symbol">{{$basic->currency}} <em class="fas fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}} of {{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}"></em></span>
@@ -105,8 +105,8 @@
                       </div>
                       <div class="gaps-1-5x"></div>
                       <div class="data-details d-md-flex">
-                        <div class="fake-class"><span class="data-details-title">Tranx Date</span><span class="data-details-info">{!! date(' D, d/M/Y', strtotime($data->created_at)) !!}</span></div>
-                        <div class="fake-class"><span class="data-details-title">Tranx Status</span>
+                        <div class="fake-class"><span class="data-details-title">Transaction Date</span><span class="data-details-info">{!! date(' D, d/M/Y', strtotime($data->created_at)) !!}</span></div>
+                        <div class="fake-class"><span class="data-details-title">Transaction Status</span>
 
                           @if($data->status == "Confirmed")
                           <span class="badge badge-success ucap">Approved</span>
@@ -150,9 +150,9 @@
                         <li>
                           <div class="data-details-head">Payment Prove</div>
                           <div class="data-details-des">
-                          <a href="{{asset('transaction_proves/'.$data->image)}}" download="">
-                            <img class="img-fluid" src="{{asset('transaction_proves/'.$data->image)}}" style="width:50px">
-                          </a>
+                            <a href="{{asset('transaction_proves/'.$data->image)}}" download="">
+                              <img class="img-fluid" src="{{asset('transaction_proves/'.$data->image)}}" style="width:50px">
+                            </a>
                           </div>
                         </li>
                         @endif

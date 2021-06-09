@@ -30,7 +30,6 @@
             <li class="topbar-nav-item relative"><span class="user-welcome d-none d-lg-inline-block">Welcome! {{Auth::user()->username}}</span>
               <a class="toggle-tigger user-thumb" href="#">
                 <div class="user-photo">
-
                   @if( file_exists(Auth::User()->image))
                   <img src="{{asset(Auth::user()->image)}} " width="100" alt="Profile Pic">
                   @else
@@ -39,6 +38,10 @@
                 </div>
               </a>
               <div class="toggle-class dropdown-content dropdown-content-right dropdown-arrow-right user-dropdown">
+                <div class="user-status">
+                  <h6 class="user-status-title">Balance</h6>
+                  <div class="user-status-balance">{{$basic->currency_sym}}{{number_format(Auth::user()->balance, $basic->decimal)}} <small>{{$basic->currency}}</small></div>
+                </div>
                 <div class="user-status">
                   <h6 class="user-status-title">Referral Bonus</h6>
                   <div class="user-status-balance">{{number_format(Auth::user()->bonus, $basic->decimal)}} <small>{{$basic->currency}}</small></div>
@@ -71,8 +74,8 @@
             </li>
             <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-wallet"></em>&nbsp; Withdraw</a>
               <ul class="navbar-dropdown">
-                <li><a href="{{route('deposit')}}"><em class="text-primary ti ti-wallet"></em>&nbsp; New Withdrawal</a></li>
-                <li><a href="{{route('deposit')}}"><em class="text-primary ti ti-server"></em>&nbsp; Withdrawals Log</a></li>
+                <li><a href="{{route('home')}}"><em class="text-primary ti ti-wallet"></em>&nbsp; New Withdrawal</a></li>
+                <li><a href="{{route('home')}}"><em class="text-primary ti ti-server"></em>&nbsp; Withdrawals Log</a></li>
               </ul>
             </li>
             <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-user"></em>&nbsp; Trade</a>
@@ -218,18 +221,18 @@
       var c = t(".toastr-info");
       c.length > 0 && c.ready(function() {
         toastr.clear(), toastr.options = {
-          closeButton: !0,
-          debug: !1,
-          newestOnTop: !0,
-          progressBar: !1,
-          positionClass: "toast-top-center",
-          preventDuplicates: !0,
-          showDuration: "1000",
-          hideDuration: "10000",
-          timeOut: "9000",
-          extendedTimeOut: "1000"
-        }, toastr.error('<em class="ti ti-check toast-message-icon"></em> {{ Session::get('
-          error ') }}')
+            closeButton: !0,
+            debug: !1,
+            newestOnTop: !0,
+            progressBar: !1,
+            positionClass: "toast-top-center",
+            preventDuplicates: !0,
+            showDuration: "1000",
+            hideDuration: "10000",
+            timeOut: "9000",
+            extendedTimeOut: "1000"
+          },
+          toastr.error("<em class='ti ti-check toast-message-icon'></em> {{ Session::get('error') }}")
       });
     }(jQuery);
   </script>

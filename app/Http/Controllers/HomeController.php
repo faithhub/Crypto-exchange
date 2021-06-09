@@ -87,7 +87,7 @@ class HomeController extends Controller
         $data['page_title'] = "Dashboard";
         $user = Auth::user();
         $data['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
-        $data['trx'] = $t = Transaction::where('user_id', Auth::id())->whereIn('type', ['Buy', 'Sell', 'Deposit', 'Withdraw'])->with('currency:*')->latest()->get();
+        $data['trx'] = $t = Transaction::where('user_id', Auth::id())->whereIn('type', ['Buy', 'Sell', 'Deposit', 'Withdraw'])->with('currency:*')->with('method:*')->with('gateway:*')->latest()->get();
         //dd($t);
 
         $data['coin_bought'] = Transaction::where('user_id', Auth::id())->where('Status', 'Confirmed')->where('type', 'Buy')->select('amount')->sum('amount');
@@ -342,6 +342,9 @@ class HomeController extends Controller
     //Deposit Section
     public function deposit()
     {
+        if (Auth::user()->verified != 2) {
+            return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+        }
         $data['basic'] = GeneralSettings::first();
         $data['page_title'] = " Payment Methods";
         $data['gates'] = Gateway::whereStatus(1)->get();
@@ -350,16 +353,20 @@ class HomeController extends Controller
 
     public function depositLog()
     {
+        if (Auth::user()->verified != 2) {
+            return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+        }
         $user = Auth::user();
         $data['page_title'] = "Deposit Log";
         $data['invests'] = $d = Transaction::where('user_id', Auth::user()->id)->with('method:*')->with('gateway:*')->latest()->get();
-        //dd($d);
-        // $data['invests'] = Deposit::whereUser_id($user->id)->where('status', '!=', 0)->latest()->get();
         return view('user.deposit.log', $data);
     }
 
     public function create_deposit(Request $request)
     {
+        if (Auth::user()->verified != 2) {
+            return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+        }
         if ($_POST) {
             $this->validate($request, [
                 'amount' => 'required|numeric|min:500',
@@ -451,6 +458,9 @@ class HomeController extends Controller
 
     public function deposit_preview()
     {
+        if (Auth::user()->verified != 2) {
+            return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+        }
         $data['basic'] = GeneralSettings::first();
         $data['page_title'] = "Preview Deposit Transaction";
         $data['data'] = $trans = Transaction::where('trx', Session::get('Track'))->where('user_id', Auth::user()->id)->where('status', 'Pending')->with('method:*')->with('gateway:*')->first();
@@ -465,6 +475,9 @@ class HomeController extends Controller
 
     public function cancel_deposit($id)
     {
+        if (Auth::user()->verified != 2) {
+            return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+        }
         $trans = Transaction::where('trx', $id)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
         if ($trans != null) {
             $trans['status'] = 'Cancelled';
@@ -478,6 +491,9 @@ class HomeController extends Controller
 
     public function confirm_deposit($id)
     {
+        if (Auth::user()->verified != 2) {
+            return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+        }
         $data['basic'] = GeneralSettings::first();
         $data['page_title'] = "Confirm Deposit Transaction";
         $data['data'] = $trans = Transaction::where('trx', $id)->where('status', 'Pending')->where('user_id', Auth::user()->id)->with('method:*')->first();
@@ -500,6 +516,9 @@ class HomeController extends Controller
 
     public function confirm_deposit_save(Request $request)
     {
+        if (Auth::user()->verified != 2) {
+            return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+        }
         $basic = GeneralSettings::first();
         $this->validate($request, [
             'trans_number' => 'required',
@@ -540,6 +559,9 @@ class HomeController extends Controller
 
     public function paystack_save(Request $request)
     {
+        if (Auth::user()->verified != 2) {
+            return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+        }
         $basic = GeneralSettings::first();
         if ($request->trx != null) {
             $trans = Transaction::where('trx', $request->trx)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
@@ -569,6 +591,9 @@ class HomeController extends Controller
 
     public function rave_save(Request $request)
     {
+        if (Auth::user()->verified != 2) {
+            return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+        }
         $basic = GeneralSettings::first();
         if ($request->trx != null) {
             $trans = Transaction::where('trx', $request->trx)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
@@ -600,10 +625,10 @@ class HomeController extends Controller
 
     public function buycoin()
     {
-        $auth = Auth::user();
-        // if ($auth->verified != 2) {
-        //     return back()->withAlert('You are not eligible to buy cryptocurrency. Please verify your account first');
-        // }
+        if (Auth::user()->verified != 2) {
+            session()->flash('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+            return redirect()->route('verification');
+        }
         $get['gates'] = $g = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
         $get['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
         $get['method'] = PaymentMethod::whereStatus(1)->orderBy('name', 'asc')->get();
@@ -614,6 +639,10 @@ class HomeController extends Controller
 
     public function confirm_buy_first($id)
     {
+        if (Auth::user()->verified != 2) {
+            session()->flash('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+            return redirect()->route('verification');
+        }
         $get['basic'] = $basic = GeneralSettings::first();
         if ($id != null) {
             $get['currency'] = $g = Currency::whereStatus(1)->where('id', $id)->first();
@@ -626,6 +655,10 @@ class HomeController extends Controller
 
     public function confirm_buy(Request $request)
     {
+        if (Auth::user()->verified != 2) {
+            session()->flash('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+            return redirect()->route('verification');
+        }
         $get['basic'] = $basic = GeneralSettings::first();
         $coin = $g = Currency::whereStatus(1)->where('id', $request->coin)->first();
         //dd($g);
@@ -699,6 +732,9 @@ class HomeController extends Controller
 
     public function sellcoin()
     {
+        if (Auth::user()->verified != 2) {
+            return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+        }
         $get['localbanks'] = DB::table('localbanks')->get();
         $get['page_title'] = "Sell Currency";
         $get['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
@@ -711,6 +747,10 @@ class HomeController extends Controller
 
     public function sell_form($id)
     {
+        if (Auth::user()->verified != 2) {
+            session()->flash('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+            return redirect()->route('verification');
+        }
         $data['currency'] = $coin = Currency::whereStatus(1)->where('id', $id)->first();
         if ($coin != null) {
             return view('user.sell.form', $data);
@@ -722,6 +762,10 @@ class HomeController extends Controller
 
     public function confirm_sell(Request $request)
     {
+        if (Auth::user()->verified != 2) {
+            session()->flash('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+            return redirect()->route('verification');
+        }
         $get['basic'] = $basic = GeneralSettings::first();
         $coin = $g = Currency::whereStatus(1)->where('id', $request->coin)->first();
         //dd($g);
@@ -763,6 +807,10 @@ class HomeController extends Controller
 
     public function cancel_sell($id)
     {
+        if (Auth::user()->verified != 2) {
+            session()->flash('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+            return redirect()->route('verification');
+        }
         $trans = Transaction::where('trx', $id)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
         if ($trans != null) {
             $trans['status'] = 'Cancelled';
@@ -776,6 +824,10 @@ class HomeController extends Controller
 
     public function sell_get($id)
     {
+        if (Auth::user()->verified != 2) {
+            session()->flash('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+            return redirect()->route('verification');
+        }
         $data['basic'] = $basic = GeneralSettings::first();
         $data['data'] = $data = Transaction::where('user_id', Auth::user()->id)->where('status', 'Pending')->where('trx', $id)->with('currency:*')->first();
         if ($data != null) {
@@ -787,6 +839,10 @@ class HomeController extends Controller
 
     public function save_sell(Request $request)
     {
+        if (Auth::user()->verified != 2) {
+            session()->flash('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+            return redirect()->route('verification');
+        }
         $g = Transaction::where('trx', $request->id)->where('status', 'Pending')->where('user_id', Auth::user()->id)->first();
         //dd($request->all());        
         $basic = GeneralSettings::first();

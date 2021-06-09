@@ -167,7 +167,7 @@
                                                                         <th class="data-col dt-token">Amount</th>
                                                                         <!-- <th class="data-col dt-usd-amount">Rate</th>
                                                                         <th class="data-col dt-account">Payment Method</th> -->
-                                                                        <th class="data-col dt-type" colspan="2">
+                                                                        <th class="data-col dt-type" colspan="1">
                                                                                 <div class="dt-type-text text-center">Status</div>
                                                                         </th>
                                                                         <th class="data-col">
@@ -211,11 +211,13 @@
                                                                                 </span>
                                                                         </td>
 
-                                                                        <td class="data-col dt-type">
+                                                                        <td class="data-col dt-type" style="display: inline-flex;">
                                                                                 @if($data->status == "Pending")
                                                                                 <span class="dt-type-md badge badge-outline badge-warning badge-sm">Pending</span>
                                                                                 @elseif($data->status == "Paid")
-                                                                                <span class="dt-type-md badge badge-outline badge-info badge-sm"><i class="fa fa-spinner fa-spin"></i>&nbsp;Awaiting</span>
+                                                                                <span class="dt-type-md badge badge-outline badge-warning badge-md">Paid</span>
+                                                                                &nbsp;&nbsp
+                                                                                <span class="dt-type-md badge badge-outline badge-success badge-sm"><i class="fa fa-spinner fa-spin"></i>&nbsp;Awaiting Approve</span>
                                                                                 @elseif($data->status == "Confirmed")
                                                                                 <span class="dt-type-md badge badge-outline badge-success badge-sm">Approved</span>
                                                                                 @elseif($data->status == "Declined")
@@ -223,30 +225,34 @@
                                                                                 @elseif($data->status == "Cancelled")
                                                                                 <span class="dt-type-md badge badge-outline badge-danger badge-sm">Cancelled</span>
                                                                                 @endif
+                                                                                &nbsp;&nbsp
 
+                                                                                @if($data->type == "Deposit")
+                                                                                @if($data->status == "Pending")
+                                                                                <ul class="data-action-list">
+                                                                                        <li><a href="{{ route('confirm_deposit',$data->trx) }}" class="btn btn-auto btn-primary btn-xs"><span>Pay <span class="d-none d-xl-inline-block">Now</span></span><em class="ti ti-wallet"></em></a></li>
+                                                                                        <!-- <li><a href="{{ route('eselldel', $data->trx) }}" class="btn btn-danger-alt btn-xs btn-icon"><em class="ti ti-trash"></em></a></li> -->
+                                                                                </ul>
+                                                                                @endif
+                                                                                @endif
+
+                                                                                @if($data->type == "Sell")
+                                                                                @if($data->status == "Pending")
+                                                                                <ul class="data-action-list">
+                                                                                        <li><a href="{{ route('sell_get',$data->trx) }}" class="btn btn-auto btn-primary btn-xs"><span>Sell <span class="d-none d-xl-inline-block">Now</span></span><em class="ti ti-wallet"></em></a></li>
+                                                                                        <!-- <li><a href="{{ route('eselldel', $data->trx) }}" class="btn btn-danger-alt btn-xs btn-icon"><em class="ti ti-trash"></em></a></li> -->
+                                                                                </ul>
+                                                                                @endif
+                                                                                @endif
                                                                         </td>
 
-
-                                                                        <td class="data-col text-right">
-                                                                                <div class="relative d-inline-block d-md-none"><a href="#" class="btn btn-light-alt btn-xs btn-icon toggle-tigger"><em class="ti ti-more-alt"></em></a>
-                                                                                        <div class="toggle-class dropdown-content dropdown-content-center-left pd-2x">
-                                                                                                @if($data->type == "Deposit")
-                                                                                                <ul class="data-action-list">
-                                                                                                        <li><a href="{{ route('ebuypost2',$data->trx) }}" class="btn btn-auto btn-primary btn-xs"><span>Pay <span class="d-none d-xl-inline-block">Now</span></span><em class="ti ti-wallet"></em></a></li>
-                                                                                                        <li><a href="{{ route('ebuydel',$data->trx) }}" class="btn btn-danger-alt btn-xs btn-icon"><em class="ti ti-trash"></em></a></li>
-                                                                                                        <li><a href="#" data-toggle="modal" data-target="#transaction-{{$data->id}}details" class="btn btn-primary-alt btn-xs btn-icon"><em class="ti ti-eye"></em></a></li>
-                                                                                                        <li><a href="{{ route('eselldel', $data->trx) }}" class="btn btn-danger-alt btn-xs btn-icon"><em class="ti ti-trash"></em></a></li>
-                                                                                                </ul>
-                                                                                                @endif
-                                                                                        </div>
-                                                                                </div>
-                                                                        </td>
-                                                                        <td><a href="#" data-toggle="modal" data-target="#transaction-{{$data->id}}details" class="btn btn-primary btn-outline btn-xs btn-icon"><em class="ti ti-eye"></em></a></li>
+                                                                        <td>
+                                                                                <ul class="data-action-list">
+                                                                                        <li><a href="#" data-toggle="modal" data-target="#transaction-{{$data->id}}details" class="btn btn-primary-alt btn-xs btn-icon"><em class="ti ti-eye"></em></a></li>
+                                                                                </ul>
+                                                                                </ul>
                                                                         </td>
                                                                 </tr>
-
-
-
 
 
                                                                 <!-- Modal Large -->
@@ -260,19 +266,21 @@
                                                                                                         </div>
                                                                                                         <div class="gaps-1-5x"></div>
                                                                                                         <div class="data-details d-md-flex">
-                                                                                                                <div class="fake-class"><span class="data-details-title">Tranx Date</span><span class="data-details-info">{!! date(' D-d-M-Y', strtotime($data->created_at)) !!}</span></div>
-                                                                                                                <div class="fake-class"><span class="data-details-title">Tranx Status</span>
-                                                                                                                        @if($data->status == 0)
-                                                                                                                        <span class="badge badge-warning ucap">Unpaid</span>
-                                                                                                                        @elseif($data->status == 1)
+                                                                                                                <div class="fake-class"><span class="data-details-title">Transaction Date</span><span class="data-details-info">{!! date(' D-d-M-Y', strtotime($data->created_at)) !!}</span></div>
+                                                                                                                <div class="fake-class"><span class="data-details-title">Transaction Status</span>
+                                                                                                                        @if($data->status == "Pending")
+                                                                                                                        <span class="badge badge-warning ucap">Pending</span>
+                                                                                                                        @elseif($data->status == "Paid")
                                                                                                                         <span class="badge badge-info ucap">Awaiting</span>
-                                                                                                                        @elseif($data->status == 2)
+                                                                                                                        @elseif($data->status == "Confirmed")
                                                                                                                         <span class="badge badge-success ucap">Approved</span>
-                                                                                                                        @else
+                                                                                                                        @elseif($data->status == "Declined")
                                                                                                                         <span class="badge badge-danger ucap">Declined</span>
+                                                                                                                        @elseif($data->status == "Cancelled")
+                                                                                                                        <span class="badge badge-danger ucap">Cancelled</span>
                                                                                                                         @endif
                                                                                                                 </div>
-                                                                                                                <div class="fake-class"><span class="data-details-title">Tranx Code</span><span class="data-details-info">{{$data->trx}}</span></div>
+                                                                                                                <div class="fake-class"><span class="data-details-title">Transaction Number</span><span class="data-details-info">{{$data->trx}}</span></div>
                                                                                                         </div>
                                                                                                         <div class="gaps-3x"></div>
                                                                                                         <h6 class="card-sub-title">Transaction Info</h6>
@@ -280,134 +288,141 @@
                                                                                                                 <li>
                                                                                                                         <div class="data-details-head">Transaction Type</div>
                                                                                                                         <div class="data-details-des">
-
-                                                                                                                                @if($data->type == 1)
-                                                                                                                                <strong>Purchase</strong>
-                                                                                                                                @else
-
-                                                                                                                                <strong>Sales</strong>
-                                                                                                                                @endif
+                                                                                                                                <strong>{{$data->type}}</strong>
                                                                                                                         </div>
                                                                                                                 </li><!-- li -->
+                                                                                                                @if($data->type == "Deposit")
                                                                                                                 <li>
                                                                                                                         <div class="data-details-head">Payment Method</div>
                                                                                                                         <div class="data-details-des"><strong>
-
-                                                                                                                                        @if($data->type == 1)
-                                                                                                                                        @if($data->gateway)
-                                                                                                                                        {{App\Gateway::whereId($data->gateway)->first()->name}}
-                                                                                                                                        @else
-                                                                                                                                        {{App\PaymentMethod::whereId($data->method)->first()->name}}
+                                                                                                                                        @if($data->payment_method_id == "Bank Transfer")
+                                                                                                                                        <span>{{isset($data->method->name) ? $data->method->name : 'N/A'}}</span>
                                                                                                                                         @endif
-                                                                                                                                        @else Online Payment @endif<small>- Online Payment</small></strong></div>
-                                                                                                                </li><!-- li -->
+                                                                                                                                        @if($data->payment_method_id == "Online Payment")
+                                                                                                                                        <span>{{isset($data->gateway_id) ? $data->gateway->name : 'N/A'}}</span>
+                                                                                                                                        @endif
+                                                                                                                                        <small>- {{isset($data->payment_method_id) ? $data->payment_method_id : 'N/A'}}</small></strong>
+                                                                                                                        </div>
+                                                                                                                </li>
 
-                                                                                                                @if($data->type == 1)
+                                                                                                                @if($data->status == "Paid")
+                                                                                                                @if(isset($data->trans_prove_num))
                                                                                                                 <li>
-                                                                                                                        <div class="data-details-head">Payment Method</div>
-                                                                                                                        <div class="data-details-des"><strong>
+                                                                                                                        <div class="data-details-head">Payment Number</div>
+                                                                                                                        <div class="data-details-des"><span>{{$data->trans_prove_num}}</span> <span></span></div>
+                                                                                                                </li>
+                                                                                                                @endif
+                                                                                                                @if(isset($data->image))
+                                                                                                                <li>
+                                                                                                                        <div class="data-details-head">Payment Prove</div>
+                                                                                                                        <div class="data-details-des">
+                                                                                                                                <a href="{{asset('transaction_proves/'.$data->image)}}" download="">
+                                                                                                                                        <img class="img-fluid" src="{{asset('transaction_proves/'.$data->image)}}" style="width:50px">
+                                                                                                                                </a>
+                                                                                                                        </div>
+                                                                                                                </li>
+                                                                                                                @endif
+                                                                                                                @endif
 
-                                                                                                                                        @if($data->gateway)
-                                                                                                                                        {{App\Gateway::whereId($data->gateway)->first()->name}}
-                                                                                                                                        @else
-                                                                                                                                        {{App\Bank::whereId($data->bank)->first()->name}}
-                                                                                                                                        @endif
-                                                                                                                                </strong></div>
-                                                                                                                </li>@endif
-                                                                                                                <!-- li -->
+                                                                                                                <li>
+                                                                                                                        <div class="data-details-head">Amount</div>
+                                                                                                                        <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}</b></div>
+                                                                                                                </li>
+
+                                                                                                                <li>
+                                                                                                                        <div class="data-details-head">Charge</div>
+                                                                                                                        <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}}</b></div>
+                                                                                                                </li>
+                                                                                                                @endif
                                                                                                                 <li>
                                                                                                                         <div class="data-details-head">Amount Paid</div>
-                                                                                                                        <div class="data-details-des"><span>
-                                                                                                                                        @if($data->type == 1)
-                                                                                                                                        @if($data->amountpaid)
-                                                                                                                                        {{$basic->currency_sym}}{{number_format($data->amountpaid, $basic->decimal)}}
-                                                                                                                                        @else
-
-                                                                                                                                        {{$basic->currency_sym}}{{number_format($data->main_amo, $basic->decimal)}}
-                                                                                                                                        @endif
-                                                                                                                                        @else
-                                                                                                                                        USD {{number_format($data->amount, $basic->decimal)}}
-                                                                                                                                        @endif
-
-                                                                                                                                </span> <span></span></div>
-                                                                                                                </li><!-- li -->
-
-                                                                                                                @if($data->type == 1)
-                                                                                                                @if($data->depositor)
-                                                                                                                <li>
-                                                                                                                        <div class="data-details-head">Depositor's Name</div>
-                                                                                                                        <div class="data-details-des"><span>{{$data->depositor}}</span> <span></span></div>
-                                                                                                                </li>
-                                                                                                                @endif
-                                                                                                                @endif
-                                                                                                                @if($data->tnum)
-                                                                                                                <!-- li -->
-                                                                                                                <li>
-                                                                                                                        <div class="data-details-head">Transaction Number</div>
-                                                                                                                        <div class="data-details-des">{{$data->tnum}}</div>
-                                                                                                                </li>
-                                                                                                                @endif
-                                                                                                                @if($data->image)
-                                                                                                                <li><br>
-                                                                                                                        <div class="data-details-head">Payment Screenshot</div>&nbsp;&nbsp;&nbsp;<div class="data-doc-item data-doc-item-lg">
-                                                                                                                                <div class="data-doc-image"><img src="{{asset('uploads/payments/'.$data->image)}}" alt="passport"></div>
-                                                                                                                                <ul class="data-doc-actions">
-                                                                                                                                        <li><a href="{{asset('uploads/payments/'.$data->image)}}" download><em class="ti ti-import"></em></a></li>
-                                                                                                                                </ul>
+                                                                                                                        <div class="data-details-des">
+                                                                                                                                <span>
+                                                                                                                                        <b style="color:#21a184">
+                                                                                                                                                {{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}
+                                                                                                                                        </b>
+                                                                                                                                </span>
                                                                                                                         </div>
                                                                                                                 </li>
-                                                                                                                @endif
-
-                                                                                                                <!-- li -->
                                                                                                         </ul><!-- .data-details -->
+
+
+
+                                                                                                        @if($data->payment_method_id == "Bank Transfer")
+
+                                                                                                        @if(isset($data->bank))
                                                                                                         <div class="gaps-3x"></div>
-                                                                                                        <h6 class="card-sub-title">Currency Details</h6>
+                                                                                                        <h6 class="card-sub-title">Bank Account Details</h6>
+                                                                                                        <ul class="data-details-list">
+                                                                                                                <li>
+                                                                                                                        <div class="data-details-head">Bank Name</div>
+                                                                                                                        <div class="data-details-des"><span>{{$data->bank}}</span></div>
+                                                                                                                </li>
+                                                                                                                <li>
+                                                                                                                        <div class="data-details-head">Account Name</div>
+                                                                                                                        <div class="data-details-des"><span>{{$data->acc_name}}</span></div>
+                                                                                                                </li>
+                                                                                                                <li>
+                                                                                                                        <div class="data-details-head">Account Number</div>
+                                                                                                                        <div class="data-details-des"><span>{{$data->acc_num}}</span></div>
+                                                                                                                </li>
+                                                                                                                <!-- li -->
+                                                                                                        </ul>
+                                                                                                        @endif
+                                                                                                        @endif
+                                                                                                        <div class="gaps-3x"></div>
                                                                                                         @if(isset($data->currency))
+                                                                                                        <h6 class="card-sub-title">Currency Details</h6>
                                                                                                         <ul class="data-details-list">
                                                                                                                 <li>
                                                                                                                         <div class="data-details-head">Currency Name</div>
                                                                                                                         <div class="data-details-des"><strong>{{$data->currency->name}}</strong></div>
-                                                                                                                </li><!-- li -->
+                                                                                                                </li>
                                                                                                                 <li>
                                                                                                                         <div class="data-details-head">Rate</div>
-                                                                                                                        <div class="data-details-des"><span><strong>
-
-                                                                                                                                                @if($data->type == 1)
-                                                                                                                                                {{$data->currency->buy}}
-                                                                                                                                                @else
-                                                                                                                                                {{$data->currency->sell}}
-                                                                                                                                                @endif
-
-                                                                                                                                                {{$basic->currency}}</strong> <em class="fas fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="1 USD = {{$data->currency->buy}}{{$basic->currency}}"></em></span><span><em class="fas fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="1 USD = {{$data->currency->buy}}{{$basic->currency}}"></em> 1 USD = {{$data->currency->buy}}{{$basic->currency}}</span></div>
-                                                                                                                </li><!-- li -->
-
-                                                                                                                <li>
-                                                                                                                        <div class="data-details-head">Amount Payable</div>
-                                                                                                                        <div class="data-details-des"><span>{{number_format($data->main_amo, $basic->decimal)}}{{$basic->currency}} </span><span>@if($data->type == 1 )(including charges) @endif</span></div>
+                                                                                                                        <div class="data-details-des">
+                                                                                                                                <span>
+                                                                                                                                        <strong>
+                                                                                                                                                <b style="color:#21a184">
+                                                                                                                                                        {{ $basic->currency_sym}}{{number_format($data->currency_rate, $basic->decimal)}} {{$basic->currency}}
+                                                                                                                                                </b>
+                                                                                                                                        </strong>
+                                                                                                                                </span>
+                                                                                                                                <span>
+                                                                                                                                        <em class="fas fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="1 USD = {{ $basic->currency_sym}}{{number_format($data->currency_rate, $basic->decimal)}}"></em>
+                                                                                                                                        1 USD = {{ $basic->currency_sym}}{{number_format($data->currency_rate, $basic->decimal)}}
+                                                                                                                                </span>
+                                                                                                                        </div>
                                                                                                                 </li>
                                                                                                                 <li>
                                                                                                                         <div class="data-details-head">Amount In Dollars</div>
-                                                                                                                        <div class="data-details-des"><strong>{{number_format($data->amount, $basic->decimal)}} USD<small></small></strong></div>
-                                                                                                                </li><!-- li -->
-                                                                                                                <!-- li -->
+                                                                                                                        <div class="data-details-des">
+                                                                                                                                <strong>
+                                                                                                                                        <b style="color:#21a184">
+                                                                                                                                                ${{number_format($data->currency_amount_usd, $basic->decimal)}} USD
+                                                                                                                                        </b>
+                                                                                                                                </strong>
+                                                                                                                        </div>
+                                                                                                                </li>
                                                                                                                 <li>
                                                                                                                         <div class="data-details-head">Amount in {{$basic->currency}}</div>
-                                                                                                                        <div class="data-details-des"><strong>{{number_format($data->main_amo, $basic->decimal)}}{{$basic->currency}} <small>- @if($data->type == 1 )(including charges) @endif</small></strong></div>
+                                                                                                                        <div class="data-details-des">
+                                                                                                                                <strong>
+                                                                                                                                        <b style="color:#21a184">
+                                                                                                                                                {{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}
+                                                                                                                                        </b>
+                                                                                                                                </strong>
+                                                                                                                        </div>
                                                                                                                 </li>
-
-                                                                                                                @if($data->type == 1)
+                                                                                                                @if($data->type == "Buy")
+                                                                                                                @if(isset($data->wallet))
                                                                                                                 <li>
-                                                                                                                        <div class="data-details-head">Amount Paid</div>
-                                                                                                                        <div class="data-details-des"><strong>{{number_format($data->amountpaid, $basic->decimal)}}{{$basic->currency}} <small>- Amount You Paid</small></strong></div>
+                                                                                                                        <div class="data-details-head">{{$data->currency->name}} Wallet</div>
+                                                                                                                        <div class="data-details-des"><span>{{$data->wallet}}</span></div>
                                                                                                                 </li>
-
-                                                                                                                <!-- li -->
-                                                                                                                <!-- li -->
-                                                                                                                <li>
-                                                                                                                        <div class="data-details-head">Value</div>
-                                                                                                                        <div class="data-details-des"><span>{{$data->currency->symbol}}{{number_format($data->getamo, 8)}}</span> </div>
-                                                                                                                </li><!-- li -->
                                                                                                                 @endif
+                                                                                                                @endif
+
                                                                                                                 @if($data->type == 1)
                                                                                                                 <li>
                                                                                                                         <div class="data-details-head">Wallet Address</div>

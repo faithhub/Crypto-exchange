@@ -209,7 +209,7 @@
                     @if($data->status == "Pending")
                     <span class="dt-type-md badge badge-outline badge-warning badge-md">Pending</span>
                     &nbsp;&nbsp;
-                    <a href="{{ route('sell_get', $data->trx) }}" class="btn btn-auto btn-primary btn-xs"><span>Pay <span class="d-none d-xl-inline-block">Now</span></span><em class="ti ti-wallet"></em></a>
+                    <a href="{{ route('sell_get', $data->trx) }}" class="btn btn-auto btn-primary btn-xs"><span>Sell <span class="d-none d-xl-inline-block">Now</span></span><em class="ti ti-wallet"></em></a>
                     @elseif($data->status == "Declined")
                     <span class="dt-type-md badge badge-outline badge-danger badge-md">Declined</span>
                     @elseif($data->status == "Confirmed")
