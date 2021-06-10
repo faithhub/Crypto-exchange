@@ -75,7 +75,7 @@
             <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-wallet"></em>&nbsp; Withdraw</a>
               <ul class="navbar-dropdown">
                 <li><a href="{{route('withdraw_fund')}}"><em class="text-primary ti ti-wallet"></em>&nbsp; New Withdrawal</a></li>
-                <li><a href="{{route('withdraw_fund')}}"><em class="text-primary ti ti-server"></em>&nbsp; Withdrawals Log</a></li>
+                <li><a href="{{url('user/withdraw-history')}}"><em class="text-primary ti ti-server"></em>&nbsp; Withdrawals Log</a></li>
               </ul>
             </li>
             <li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-user"></em>&nbsp; Trade</a>

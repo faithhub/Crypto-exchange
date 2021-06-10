@@ -359,7 +359,7 @@ class HomeController extends Controller
         }
         $user = Auth::user();
         $data['page_title'] = "Deposit Log";
-        $data['invests'] = $d = Transaction::where('user_id', Auth::user()->id)->with('method:*')->with('gateway:*')->latest()->get();
+        $data['invests'] = $d = Transaction::where('user_id', Auth::user()->id)->where('type', 'Deposit')->with('method:*')->with('gateway:*')->latest()->get();
         return view('user.deposit.log', $data);
     }
 
@@ -888,6 +888,7 @@ class HomeController extends Controller
     //Withdraw
     public function withdraw(Request $request)
     {
+        //dd($request->all());
         if (Auth::user()->verified != 2) {
             return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
         }
@@ -901,10 +902,28 @@ class HomeController extends Controller
                 'terms.required' => 'Terms and Agreement is required',
                 'confirm.required' => 'Confirm Details is required',
             ]);
-            if($request->amount > Auth::user()->balance){
+            if ($request->amount > Auth::user()->balance) {
                 return back()->with('warning', 'You do not have upto the requested amount in Naira Wallet');
-                        }
+            }
             $user = User::find(Auth::user()->id);
+            $user->balance = $user->balance - $request->amount;
+            $user->save();
+
+
+            $trx = strtoupper(str_random(16));
+            $depo['user_id'] = Auth::id();
+            $depo['type'] = "Withdraw";
+            $depo['trx'] = $trx;
+            $depo['amount'] = $request->amount;
+            $depo['bank'] = Auth::user()->bank;
+            $depo['acc_name'] = Auth::user()->accountname;
+            $depo['acc_num'] = Auth::user()->accountno;
+            $depo['currency_amount_usd'] = $request->usd;
+            $depo['status'] = "Pending";
+
+            Transaction::create($depo);
+
+            return redirect('user/withdraw-history')->with('success', 'Your Withdraw request has been placed, Your request will be processed, Thank you.');
         } else {
             $data['gates'] = $g = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
             $data['currency'] = Currency::whereStatus(1)->orderBy('name', 'asc')->get();
@@ -912,6 +931,17 @@ class HomeController extends Controller
             $data['bank'] = Bank::whereStatus(1)->orderBy('name', 'asc')->get();
             return view('user.withdraw.index', $data);
         }
+    }
+
+    public function withdraw_log()
+    {
+        if (Auth::user()->verified != 2) {
+            return redirect()->route('verification')->with('error', 'You are not eligible to buy cryptocurrency. Please verify your account first');
+        }
+        $user = Auth::user();
+        $data['page_title'] = "Withdraw Log";
+        $data['invests'] = $d = Transaction::where('user_id', Auth::user()->id)->where('type', 'Withdraw')->latest()->get();
+        return view('user.withdraw.log', $data);
     }
 
     public function check_bank(Request $request)

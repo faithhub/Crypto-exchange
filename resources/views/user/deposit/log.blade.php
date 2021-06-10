@@ -130,7 +130,7 @@
                       <ul class="data-details-list">
                         <li>
                           <div class="data-details-head">Transaction Type</div>
-                          <div class="data-details-des"><strong>Deposit</strong></div>
+                          <div class="data-details-des"><strong>{{$data->type}}</strong></div>
                         </li>
                         <!-- li --
 

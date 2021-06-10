@@ -26,7 +26,7 @@
                                                                 <div class="token-balance token-balance-with-icon mb-3">
                                                                         <div class="token-balance-icon"><em class="h2 color-white fa fa-money-bill"></em></div>
                                                                         <div class="token-balance-text">
-                                                                                <h6 class="card-sub-title">Naira Wallet Balance</h6><span class="lead"> {{$basic->currency_sym}}{{number_format($buy - $bacharge, $basic->decimal)}}</span>
+                                                                                <h6 class="card-sub-title">Naira Wallet Balance</h6><span class="lead"> {{$basic->currency_sym}}{{number_format(Auth::user()->balance, $basic->decimal)}}</span>
                                                                         </div>
                                                                 </div>
                                                         </div>
@@ -323,6 +323,8 @@
                                                                                                                 </li>
                                                                                                                 @endif
                                                                                                                 @endif
+                                                                                                                @endif
+
 
                                                                                                                 <li>
                                                                                                                         <div class="data-details-head">Amount</div>
@@ -333,7 +335,8 @@
                                                                                                                         <div class="data-details-head">Charge</div>
                                                                                                                         <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}}</b></div>
                                                                                                                 </li>
-                                                                                                                @endif
+
+                                                                                                                @if($data->type == "Deposit" || $data->type == "Buy")
                                                                                                                 <li>
                                                                                                                         <div class="data-details-head">Amount Paid</div>
                                                                                                                         <div class="data-details-des">
@@ -344,6 +347,7 @@
                                                                                                                                 </span>
                                                                                                                         </div>
                                                                                                                 </li>
+                                                                                                                @endif
                                                                                                         </ul><!-- .data-details -->
 
 
@@ -370,6 +374,30 @@
                                                                                                         </ul>
                                                                                                         @endif
                                                                                                         @endif
+
+                                                                                                        @if($data->type == "Withdraw")
+
+                                                                                                        @if(isset($data->bank))
+                                                                                                        <div class="gaps-3x"></div>
+                                                                                                        <h6 class="card-sub-title">Bank Account Details</h6>
+                                                                                                        <ul class="data-details-list">
+                                                                                                                <li>
+                                                                                                                        <div class="data-details-head">Bank Name</div>
+                                                                                                                        <div class="data-details-des"><span>{{$data->bank}}</span></div>
+                                                                                                                </li>
+                                                                                                                <li>
+                                                                                                                        <div class="data-details-head">Account Name</div>
+                                                                                                                        <div class="data-details-des"><span>{{$data->acc_name}}</span></div>
+                                                                                                                </li>
+                                                                                                                <li>
+                                                                                                                        <div class="data-details-head">Account Number</div>
+                                                                                                                        <div class="data-details-des"><span>{{$data->acc_num}}</span></div>
+                                                                                                                </li>
+                                                                                                                <!-- li -->
+                                                                                                        </ul>
+                                                                                                        @endif
+                                                                                                        @endif
+
                                                                                                         <div class="gaps-3x"></div>
                                                                                                         @if(isset($data->currency))
                                                                                                         <h6 class="card-sub-title">Currency Details</h6>

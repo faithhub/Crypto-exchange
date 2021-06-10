@@ -130,6 +130,7 @@ Route::group(['prefix' => 'user'], function () {
         //Withdraw
         Route::get('/withdraw', 'HomeController@withdraw')->name('withdraw_fund');
         Route::post('/withdraw', 'HomeController@withdraw')->name('withdraw_fund');
+        Route::get('/withdraw-history', 'HomeController@withdraw_log')->name('withdraw_log');
 
 
 
