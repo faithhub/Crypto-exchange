@@ -88,10 +88,10 @@
 								<li class="has-dropdown"><a class="drop-toggle" href="#">Deposits</a>
 									<ul class="navbar-dropdown">
 										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Confirmed Deposits</a></lii>
-										<lii class=" "><a class=" " href="{{route('pendingdeposit-currency')}}">Paid Deposits </a></lii>
-										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Pending Deposits </a></lii>
-										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Declined Deposits </a></lii>
-										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Cancelled Deposits </a></lii>
+										<lii class=" "><a class=" " href="{{route('paiddeposit-currency')}}">Paid Deposits </a></lii>
+										<lii class=" "><a class=" " href="{{route('pendingdeposit-currency')}}">Pending Deposits </a></lii>
+										<lii class=" "><a class=" " href="{{route('declineddeposit-currency')}}">Declined Deposits </a></lii>
+										<lii class=" "><a class=" " href="{{route('cancelledbuy-currency')}}">Cancelled Deposits </a></lii>
 									</ul>
 								</li>
 							</ul>

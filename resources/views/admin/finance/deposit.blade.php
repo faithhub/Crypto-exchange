@@ -34,7 +34,9 @@
                   @if( $data->status == "Confirmed" )
                   <div class="data-state data-state-approved"><span class="d-none">Approved</span></div>
                   @elseif( $data->status == "Declined" )
-                  <div class="data-state data-state-canceled"><span class="d-none">Rejected</span></div>
+                  <div class="data-state data-state-canceled"><span class="d-none">Declined</span></div>
+                  @elseif( $data->status == "Cancelled" )
+                  <div class="data-state data-state-canceled"><span class="d-none">Cancelled</span></div>
                   @elseif( $data->status == "Pending" )
                   <div class="data-state data-state-pending"><span class="d-none">Pending</span></div>
                   @elseif( $data->status == "Paid" )
@@ -68,6 +70,10 @@
                 <span class="dt-type-md badge badge-outline badge-warning badge-md">Pending</span><span class="dt-type-sm badge badge-sq badge-outline badge-warning badge-md">P</span>
                 @elseif( $data->status == "Paid" )
                 <span class="dt-type-md badge badge-outline badge-warning badge-md">Paid</span><span class="dt-type-sm badge badge-sq badge-outline badge-warning badge-md">P</span>
+                &nbsp;&nbsp
+                <span class="dt-type-md badge badge-outline badge-success badge-sm"><i class="fa fa-spinner fa-spin"></i>&nbsp;Awaiting Approve</span>
+                @elseif( $data->status == "Cancelled" )
+                <span class="dt-type-md badge badge-outline badge-danger badge-md">Cancelled</span><span class="dt-type-sm badge badge-sq badge-outline badge-danger badge-md">C</span>
                 @endif
               </td>
 
@@ -75,11 +81,11 @@
                 <div class="relative d-inline-block"><a href="#" class="btn btn-light-alt btn-xs btn-icon toggle-tigger"><em class="ti ti-more-alt"></em></a>
                   <div class="toggle-class dropdown-content dropdown-content-top-left">
                     <ul class="dropdown-list">
-                      <li><a href="{{route('buy-info',$data->id)}}"><em class="ti ti-eye"></em> View Details</a></li>
+                      <li><a href="{{route('deposit-info',$data->id)}}"><em class="ti ti-eye"></em> View Details</a></li>
 
-                      @if($data->status == "Pending")
-                      <li><a href="{{route('buy.approve',$data->id)}}"><em class="ti ti-check-box"></em> Approve</a></li>
-                      <li><a href="{{route('buy.reject',$data->id)}}"><em class="ti ti-na"></em> Decline</a></li>
+                      @if($data->status == "Paid")
+                      <li><a href="{{route('deposit_approve_admin',$data->id)}}"><em class="ti ti-check-box"></em> Approve</a></li>
+                      <li><a href="{{route('deposit.reject',$data->id)}}"><em class="ti ti-na"></em> Decline</a></li>
                       @endif
 
                     </ul>

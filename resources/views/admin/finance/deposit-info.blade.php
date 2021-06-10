@@ -39,43 +39,80 @@
         <ul class="data-details-list">
           <li>
             <div class="data-details-head">Transaction Type</div>
-            <div class="data-details-des"><strong>Sale</strong></div>
+            <div class="data-details-des"><strong>{{$exchange->type}}</strong></div>
           </li><!-- li -->
           <li>
             <div class="data-details-head">Transaction ID</div>
             <div class="data-details-des"><span>{{$exchange->trx}} </span> <span></span></div>
           </li><!-- li -->
+
           <li>
-            <div class="data-details-head">Amount {{$basic->currency}}</div>
-            <div class="data-details-des"><strong>{{$basic->currency_sym}}{{number_format($exchange->amount, $basic->decimal)}}</strong>
-            </div>
-          </li><!-- li -->
+            <div class="data-details-head">Amount</div>
+            <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($exchange->amount, $basic->decimal)}}</b></div>
+          </li>
+
           <li>
-            <div class="data-details-head">Transaction Charge</div>
-            <div class="data-details-des"><strong>{{$basic->currency_sym}}{{number_format($exchange->charge, $basic->decimal)}} <small></small></strong></div>
-          </li><!-- li -->
+            <div class="data-details-head">Charge</div>
+            <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($exchange->charge, $basic->decimal)}}</b></div>
+          </li>
+
           <li>
-            <div class="data-details-head">Sell Rate</div>
-            <div class="data-details-des"><strong>{{$basic->currency_sym}}{{number_format($exchange->currency_rate, $basic->decimal)}} <small></small></strong>
-              <span>({{$basic->currency_sym}}{{number_format($exchange->currency_rate, $basic->decimal)}} {{$basic->currency}} / $1)</span>
-            </div>
-          </li><!-- li -->
+            <div class="data-details-head">Total Amount</div>
+            <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($exchange->amount + $exchange->charge, $basic->decimal)}}</b></div>
+          </li>
+          @if(isset($exchange->currency_amount_usd))
           <li>
             <div class="data-details-head">Amount In USD</div>
-            <div class="data-details-des"><span>${{number_format($exchange->currency_amount_usd, $basic->decimal)}}</span> <span></span></div>
+            <div class="data-details-des"><b style="color:#21a184">${{number_format($exchange->currency_amount_usd, $basic->decimal)}}</b></div>
           </li>
+          @endif
         </ul><!-- .data-details -->
+
+        @if(isset($exchange->bank))
+        <div class="gaps-3x"></div>
+        <h6 class="card-sub-title">Bank Account Details</h6>
+        <ul class="data-details-list">
+          <li>
+            <div class="data-details-head">Bank Name</div>
+            <div class="data-details-des"><span>{{$exchange->bank}}</span></div>
+          </li>
+          <li>
+            <div class="data-details-head">Account Name</div>
+            <div class="data-details-des"><span>{{$exchange->acc_name}}</span></div>
+          </li>
+          <li>
+            <div class="data-details-head">Account Number</div>
+            <div class="data-details-des"><span>{{$exchange->acc_num}}</span></div>
+          </li>
+          <!-- li -->
+        </ul>
+
+        @endif
         <div class="gaps-3x"></div>
         <h6 class="card-sub-title">Transaction Details</h6>
         <ul class="data-details-list">
-
           <li>
-            <div class="data-details-head">Cryptocurrency</div>
-            <div class="data-details-des"><strong>{{$exchange->currency->name}}</strong></div>
-          </li><!-- li -->
+            <div class="data-details-head">Gateway</div>
+            <div class="data-details-des">
+              {{$exchange->payment_method_id}}
+            </div>
+          </li>
+          <li>
+            <div class="data-details-head">Payment Method</div>
+            <div class="data-details-des">
+              @if($exchange->payment_method_id == "Bank Transfer")
+              <span>{{isset($exchange->method->name) ? $exchange->method->name : 'N/A'}}</span>
+              @endif
+              @if($exchange->payment_method_id == "Online Payment")
+              <span>{{isset($exchange->gateway_id) ? $exchange->gateway->name : 'N/A'}}</span>
+              @endif
+            </div>
+          </li>
           <li>
             <div class="data-details-head">Amount Paid</div>
-            <div class="data-details-des"><span><strong>{{$basic->currency_sym}}{{number_format($exchange->amount, $basic->decimal)}}</strong> </span> </div>
+            <div class="data-details-des">
+              <b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($exchange->amount + $exchange->charge, $basic->decimal)}}</b>
+            </div>
           </li><!-- li -->
           @if(isset($exchange->trans_prove_num))
           <li>

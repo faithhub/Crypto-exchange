@@ -262,17 +262,19 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('/buy-log', 'AdminController@buyLog')->name('buy-currency');
     Route::get('/pending-buy-log', 'AdminController@pendingbuyLog')->name('pendingbuy-currency');
     Route::get('/declined-buy-log', 'AdminController@declinedbuyLog')->name('declinedbuy-currency');
-    Route::get('/buy-log/{id}', 'AdminController@buyInfo')->name('buy-info');
-    Route::get('/buy-app/{id}', 'AdminController@buyapprove')->name('buy.approve');
-    Route::get('/buy-rej/{id}', 'AdminController@buyreject')->name('buy.reject');
+    Route::get('/cancelled-buy-log', 'AdminController@cancelleddepositLog')->name('cancelledbuy-currency');
+    Route::get('/deposit-log/{id}', 'AdminController@depositInfo')->name('deposit-info');
+    Route::get('/deposit-app/{id}', 'AdminController@depositapprove')->name('deposit.approve');
+    Route::get('/deposit-rej/{id}', 'AdminController@depositreject')->name('deposit.reject');
 
     //Deposit    
     Route::get('/deposit-log', 'AdminController@depositLog')->name('deposit-currency');
+    Route::get('/paid-deposit-log', 'AdminController@paiddepositLog')->name('paiddeposit-currency');
     Route::get('/pending-deposit-log', 'AdminController@pendingdepositLog')->name('pendingdeposit-currency');
-    Route::get('/declined-buy-log', 'AdminController@declinedbuyLog')->name('declinedbuy-currency');
-    Route::get('/buy-log/{id}', 'AdminController@buyInfo')->name('buy-info');
-    Route::get('/buy-app/{id}', 'AdminController@buyapprove')->name('buy.approve');
-    Route::get('/buy-rej/{id}', 'AdminController@buyreject')->name('buy.reject');
+    Route::get('/declined-deposit-log', 'AdminController@declineddepositLog')->name('declineddeposit-currency');
+    Route::get('/deposit-info/{id}', 'AdminController@depositInfo')->name('deposit-info');
+    Route::get('/deposit-app/{id}', 'AdminController@depositapprove')->name('deposit_approve_admin');
+    Route::get('/deposit-rej/{id}', 'AdminController@depositreject')->name('deposit.reject');
 
 
     // General Settings

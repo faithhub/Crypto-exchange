@@ -281,37 +281,37 @@ class AdminController extends Controller
     {
         $data['status'] = "Paid";
         $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Paid')->with('method:*')->with('gateway:*')->latest()->get();
-        $data['page_title'] = 'Pending Deposit Log';
+        $data['page_title'] = 'Paid Deposit Log';
         return view('admin.finance.deposit', $data);
     }
     public function pendingdepositLog()
     {
         $data['status'] = "Pending";
-        $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Pending')->latest()->get();
+        $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Pending')->with('method:*')->with('gateway:*')->latest()->get();
         $data['page_title'] = 'Pending Deposit Log';
         return view('admin.finance.deposit', $data);
     }
     public function declineddepositLog()
     {
         $data['status'] = "Declined";
-        $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Declined')->latest()->get();
+        $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Declined')->with('method:*')->with('gateway:*')->latest()->get();
         $data['page_title'] = 'Declined Deposit Log';
         return view('admin.finance.deposit', $data);
     }
     public function cancelleddepositLog()
     {
         $data['status'] = "User Cancelled";
-        $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Cancelled')->latest()->get();
+        $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Cancelled')->with('method:*')->with('gateway:*')->latest()->get();
         $data['page_title'] = 'Cancelled Deposit Log';
         return view('admin.finance.deposit', $data);
     }
     public function depositInfo($id)
     {
-        $get = Transaction::where('type', 'Deposit')->where('id', $id)->first();
+        $get = Transaction::where('type', 'Deposit')->with('method:*')->with('gateway:*')->where('id', $id)->first();
         if ($get) {
             $data['exchange'] = $get;
             $data['page_title'] = 'Deposit Log Details';
-            return view('admin.currency.sell-info', $data);
+            return view('admin.finance.deposit-info', $data);
         }
         abort(404);
     }
@@ -319,7 +319,7 @@ class AdminController extends Controller
     public function depositapprove($id)
     {
 
-        $data = Transaction::where('type', 'Deposit')->where('id', $id)->where('status', '!=', 'Confirmed')->first();
+        $data = Transaction::where('type', 'Deposit')->where('id', $id)->where('status', 'Paid')->first();
         $basic = GeneralSettings::first();
         $data->status = "Confirmed";
 
@@ -330,7 +330,7 @@ class AdminController extends Controller
         Message::create([
             'user_id' => $data->user_id,
             'title' => 'Deposit Approved',
-            'details' => 'Your cryptocurrency sales with transaction number ' . $data->trx . ' has been approved. You fund has been credited to your account as required. Thank you for choosing us',
+            'details' => 'Your cryptocurrency sales with transaction number ' . $data->trx . ' has been approved. You fund has been credited to your Naira Wallet Account as required. Thank you for choosing us',
             'admin' => 1,
             'status' =>  0
         ]);
