@@ -39,6 +39,8 @@
                                     <div class="data-state data-state-canceled"><span class="d-none">Rejected</span></div>
                                     @elseif( $data->status == "Pending" )
                                     <div class="data-state data-state-pending"><span class="d-none">Pending</span></div>
+                                    @elseif( $data->status == "Paid" )
+                                    <div class="data-state data-state-progress"><span class="d-none">Paid</span></div>
                                     @endif
 
 
@@ -61,6 +63,8 @@
                                 <span class="dt-type-md badge badge-outline badge-danger badge-md">Declined</span><span class="dt-type-sm badge badge-sq badge-outline badge-danger badge-md">P</span>
                                 @elseif( $data->status == "Pending" )
                                 <span class="dt-type-md badge badge-outline badge-warning badge-md">Pending</span><span class="dt-type-sm badge badge-sq badge-outline badge-warning badge-md">P</span>
+                                @elseif( $data->status == "Paid" )
+                                <span class="dt-type-md badge badge-outline badge-warning badge-md">Paid</span><span class="dt-type-sm badge badge-sq badge-outline badge-warning badge-md">P</span>
                                 @endif
                             </td>
 

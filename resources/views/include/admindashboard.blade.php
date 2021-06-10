@@ -67,8 +67,10 @@
 						<li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-server"></em>&nbsp; Sales Log</a>
 							<ul class="navbar-dropdown">
 								<li class=" "><a class=" " href="{{route('sell-currency')}}">Confirmed Sales </a></li>
+								<li class=" "><a class=" " href="{{route('paidsell-currency')}}">Paid Sales</a></li>
 								<li class=" "><a class=" " href="{{route('pendingsell-currency')}}">Pending Sales</a></li>
 								<li class=" "><a class=" " href="{{route('declinedsell-currency')}}">Declined Sales</a></li>
+								<li class=" "><a class=" " href="{{route('cancelledsell-currency')}}">Cancelled Sales</a></li>
 
 							</ul>
 						</li>
@@ -78,16 +80,18 @@
 
 								<li class="has-dropdown"><a class="drop-toggle" href="#">Withdrawals</a>
 									<ul class="navbar-dropdown">
-										<li><a href="https://dmexchangepro.coderite.com.ng/admin/withdraw/requests">Pending Withdrawal</a></li>
-										<li><a href="https://dmexchangepro.coderite.com.ng/admin/withdraw/approved">Processed Withdrawal </a></li>
-										<li><a href="https://dmexchangepro.coderite.com.ng/admin/withdraw/refunded">Declined Withdrawal </a></li>
+										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Pending Withdrawal</a></lii>
+										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Processed Withdrawal </a></lii>
+										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Declined Withdrawal </a></lii>
 									</ul>
 								</li>
 								<li class="has-dropdown"><a class="drop-toggle" href="#">Deposits</a>
 									<ul class="navbar-dropdown">
-										<li><a href="https://dmexchangepro.coderite.com.ng/admin/deposits">Processed Deposits</a></li>
-										<li><a href="https://dmexchangepro.coderite.com.ng/admin/deposits/requests">Unprocessed Deposits </a></li>
-										<li><a href="https://dmexchangepro.coderite.com.ng/admin/deposits/declined">Declined Deposits </a></li>
+										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Confirmed Deposits</a></lii>
+										<lii class=" "><a class=" " href="{{route('pendingdeposit-currency')}}">Paid Deposits </a></lii>
+										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Pending Deposits </a></lii>
+										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Declined Deposits </a></lii>
+										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Cancelled Deposits </a></lii>
 									</ul>
 								</li>
 							</ul>

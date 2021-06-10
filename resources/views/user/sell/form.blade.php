@@ -11,10 +11,10 @@
                 <h3 class="popup-title" style="font-size: 30px;">Sell <a id="name">{{$currency->name}}</a><a></a></h3>
                 <!-- <p class="lead text-primary"><a>1USD = {{$basic->currency_sym}}{{$currency->buy}}</p> -->
                 <div class="note note-plane note-light mgb-1x"><em class="fas fa-info-circle"></em>
-                <p>Note: Find below the summary of your Bitcoin purchase. {{$basic->sitename}} will not be liable to any loss arising from wrong wallet address, or reduction in Bitcoin price rate</p>
-                </div>                
+                  <p>Note: Find below the summary of your Bitcoin purchase. {{$basic->sitename}} will not be liable to any loss arising from wrong wallet address, or reduction in Bitcoin price rate</p>
+                </div>
                 <div class="note note-plane note-light mgb-1x"><em class="fas fa-info-circle"></em>
-                <p>Note: The purchased will appear in your <a id="currency2">{{$currency->name}}</a> Wallet only after you transaction has been confirmed and approved on our server.</p>
+                  <p>Note: The purchased will appear in your <a id="currency2">{{$currency->name}}</a> Wallet only after you transaction has been confirmed and approved on our server.</p>
                 </div>
                 <!-- <div class="note note-plane note-danger"><em class="fas fa-info-circle"></em>
                   <p>Ensure you enter a <strong>valid <b>{{$currency->name}}</b> wallet address</strong> not be liable for any loss arising from you entering a wrong <b>{{$currency->name}}</b> wallet address.</p>
@@ -143,7 +143,7 @@
       document.getElementById("amount_ng").textContent = "{{$basic->currency_sym}}" + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
       document.getElementById("naira").value = "{{$basic->currency_sym}}" + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
-    console.log(balance)
+    // console.log(balance)
     checkAmount()
   };
 
@@ -153,18 +153,24 @@
     var usd = $('#usd').val();
     var balance = $('#balance').val();
     var amount = rate * usd;
-    if (amount >= 500) {
-      if (amount > balance) {
-        div.style.display = 'none';
-        document.getElementById("amount_error").textContent = "* Not enough balance in your Naira Wallet, fund it and try again";
-      } else {
-        div.style.display = 'block';
-        document.getElementById("amount_error").textContent = "";
-      }
-    } else {
+    // console.log(rate)
+    // console.log(usd)
+    // console.log(amount)
+    if (amount < 500) {
       div.style.display = 'none';
       document.getElementById("amount_error").textContent = "The Mininmum Amount is ₦500";
     }
+    if (amount >= 500) {
+      div.style.display = 'block';
+      document.getElementById("amount_error").textContent = "";
+    }
+    // if (amount > balance) {
+    //   div.style.display = 'none';
+    //   document.getElementById("amount_error").textContent = "* Not enough balance in your Naira Wallet, fund it and try again";
+    // } else {
+    //   div.style.display = 'block';
+    //   document.getElementById("amount_error").textContent = "";
+    // }
   }
 
   window.onload = checkAmount();

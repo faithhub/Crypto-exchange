@@ -90,18 +90,23 @@ class AdminController extends Controller
 
     public function buyLog()
     {
+        $data['status'] = "Confirmed";
         $data['exchange'] = Transaction::where('type', 'Buy')->where('status', 'Confirmed')->latest()->get();
         $data['page_title'] = 'Processed Buy Log';
         return view('admin.currency.buy-list', $data);
     }
+
     public function pendingbuyLog()
     {
+        $data['status'] = "Pending";
         $data['exchange'] = Transaction::where('type', 'Buy')->where('status', 'Pending')->latest()->get();
         $data['page_title'] = 'Pending Buy Log';
         return view('admin.currency.buy-list', $data);
     }
+
     public function declinedbuyLog()
     {
+        $data['status'] = "Declined";
         $data['exchange'] = Transaction::where('type', 'Buy')->where('status', 'Declined')->latest()->get();
         $data['page_title'] = 'Declined Buy Log';
         return view('admin.currency.buy-list', $data);
@@ -163,34 +168,51 @@ class AdminController extends Controller
         $user->balance = $user->balance + $data->amount;
         $user->save();
 
-        $notification =  array('message' => 'Cryptocurrency Purchase Was Declined Successfully !!', 'alert-type' => 'success');
+        $notification =  array('message' => 'Purchase Was Declined Successfully !!', 'alert-type' => 'success');
         return back()->with($notification);
     }
 
     public function sellLog()
     {
-        $data['exchange'] = Trx::whereStatus(2)->whereType(0)->latest()->get();
+        $data['status'] = "Confirmed";
+        $data['exchange'] = Transaction::where('type', 'Sell')->where('status', 'Confirmed')->latest()->get();
         $data['page_title'] = 'Processed Sell Log';
+        return view('admin.currency.sell-list', $data);
+    }
+    public function paidsellLog()
+    {
+        $data['status'] = "Paid";
+        $data['exchange'] = Transaction::where('type', 'Sell')->where('status', 'Paid')->latest()->get();
+        $data['page_title'] = 'Pending Sell Log';
         return view('admin.currency.sell-list', $data);
     }
     public function pendingsellLog()
     {
-        $data['exchange'] = Trx::whereStatus(1)->whereType(0)->latest()->get();
+        $data['status'] = "Pending";
+        $data['exchange'] = Transaction::where('type', 'Sell')->where('status', 'Pending')->latest()->get();
         $data['page_title'] = 'Pending Sell Log';
         return view('admin.currency.sell-list', $data);
     }
     public function declinedsellLog()
     {
-        $data['exchange'] = Trx::whereStatus(-2)->whereType(0)->latest()->get();
+        $data['status'] = "Declined";
+        $data['exchange'] = Transaction::where('type', 'Sell')->where('status', 'Declined')->latest()->get();
         $data['page_title'] = 'Declined Sell Log';
+        return view('admin.currency.sell-list', $data);
+    }
+    public function cancelledsellLog()
+    {
+        $data['status'] = "User Cancelled";
+        $data['exchange'] = Transaction::where('type', 'Sell')->where('status', 'Cancelled')->latest()->get();
+        $data['page_title'] = 'Cancelled Sell Log';
         return view('admin.currency.sell-list', $data);
     }
     public function sellInfo($id)
     {
-        $get = Trx::where('id', $id)->where('status', '!=', 0)->first();
+        $get = Transaction::where('type', 'Sell')->where('id', $id)->first();
         if ($get) {
             $data['exchange'] = $get;
-            $data['page_title'] = ' Sell Log Details';
+            $data['page_title'] = 'Sell Log Details';
             return view('admin.currency.sell-info', $data);
         }
         abort(404);
@@ -199,16 +221,13 @@ class AdminController extends Controller
     public function sellapprove($id)
     {
 
-        $data = Trx::find($id);
+        $data = Transaction::where('type', 'Sell')->where('id', $id)->where('status', '!=', 'Confirmed')->first();
         $basic = GeneralSettings::first();
-        $data->status = 2;
-        if ($data->payout == 1) {
+        $data->status = "Confirmed";
 
-            $user = User::find($data->user_id);
-            $user->balance += $data->get_amount;
-            $user->save();
-        }
         $user = User::find($data->user_id);
+        $user->balance = $user->balance + $data->amount;
+        $user->save();
 
         Message::create([
             'user_id' => $data->user_id,
@@ -224,7 +243,7 @@ class AdminController extends Controller
 
         $data->save();
 
-        $notification =  array('message' => 'Sales Approved Successfully !!', 'alert-type' => 'success');
+        $notification =  array('message' => 'Sales Approved Successfully !', 'alert-type' => 'success');
         return back()->with($notification);
     }
 
@@ -232,24 +251,121 @@ class AdminController extends Controller
     public function sellreject($id)
     {
 
-        $data = Trx::find($id);
+        $data = Transaction::where('type', 'Sell')->where('id', $id)->where('status', '!=', 'Confirmed')->first();
         $basic = GeneralSettings::first();
 
         Message::create([
             'user_id' => $data->user_id,
             'title' => 'Sale Rejected',
-            'details' => 'Your cryptocurrency sales was rejected. Please send us a message to facilitate a refund if your money is not refunded in 24hours',
+            'details' => 'Your cryptocurrency sales was rejected. Please send us a message for any complain, thanks',
             'admin' => 1,
             'status' =>  0
         ]);
 
-        $data->status = -2;
+        $data->status = "Declined";
         $data->save();
 
-        $notification =  array('message' => 'Rejected Successfully !!', 'alert-type' => 'success');
+        $notification =  array('message' => 'Declined Successfully !', 'alert-type' => 'success');
         return back()->with($notification);
     }
 
+    public function depositLog()
+    {
+        $data['status'] = "Confirmed";
+        $data['exchange'] = $t = Transaction::where('type', 'Deposit')->where('status', 'Confirmed')->with('method:*')->with('gateway:*')->latest()->get();
+        //dd($t);
+        $data['page_title'] = 'Confirmed Deposit Log';
+        return view('admin.finance.deposit', $data);
+    }
+    public function paiddepositLog()
+    {
+        $data['status'] = "Paid";
+        $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Paid')->with('method:*')->with('gateway:*')->latest()->get();
+        $data['page_title'] = 'Pending Deposit Log';
+        return view('admin.finance.deposit', $data);
+    }
+    public function pendingdepositLog()
+    {
+        $data['status'] = "Pending";
+        $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Pending')->latest()->get();
+        $data['page_title'] = 'Pending Deposit Log';
+        return view('admin.finance.deposit', $data);
+    }
+    public function declineddepositLog()
+    {
+        $data['status'] = "Declined";
+        $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Declined')->latest()->get();
+        $data['page_title'] = 'Declined Deposit Log';
+        return view('admin.finance.deposit', $data);
+    }
+    public function cancelleddepositLog()
+    {
+        $data['status'] = "User Cancelled";
+        $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Cancelled')->latest()->get();
+        $data['page_title'] = 'Cancelled Deposit Log';
+        return view('admin.finance.deposit', $data);
+    }
+    public function depositInfo($id)
+    {
+        $get = Transaction::where('type', 'Deposit')->where('id', $id)->first();
+        if ($get) {
+            $data['exchange'] = $get;
+            $data['page_title'] = 'Deposit Log Details';
+            return view('admin.currency.sell-info', $data);
+        }
+        abort(404);
+    }
+
+    public function depositapprove($id)
+    {
+
+        $data = Transaction::where('type', 'Deposit')->where('id', $id)->where('status', '!=', 'Confirmed')->first();
+        $basic = GeneralSettings::first();
+        $data->status = "Confirmed";
+
+        $user = User::find($data->user_id);
+        $user->balance = $user->balance + $data->amount;
+        $user->save();
+
+        Message::create([
+            'user_id' => $data->user_id,
+            'title' => 'Deposit Approved',
+            'details' => 'Your cryptocurrency sales with transaction number ' . $data->trx . ' has been approved. You fund has been credited to your account as required. Thank you for choosing us',
+            'admin' => 1,
+            'status' =>  0
+        ]);
+
+
+        $msg =  ' Deposit Amount  ' . $data->get_amount . ' ' . $basic->currency;
+        //send_email($user->email, $user->username, 'Sell Amount  ', $msg);
+
+        $data->save();
+
+        $notification =  array('message' => 'Deposit Approved Successfully !', 'alert-type' => 'success');
+        return back()->with($notification);
+    }
+
+
+    public function depositreject($id)
+    {
+
+        $data = Transaction::where('type', 'Deposit')->where('id', $id)->where('status', '!=', 'Confirmed')->first();
+        $basic = GeneralSettings::first();
+
+        Message::create([
+            'user_id' => $data->user_id,
+            'title' => 'Deposit Rejected',
+            'details' => 'Your cryptocurrency sales was rejected. Please send us a message for any complain, thanks',
+            'admin' => 1,
+            'status' =>  0
+        ]);
+
+        $data->status = "Declined";
+        $data->save();
+
+        $notification =  array('message' => 'Declined Successfully !', 'alert-type' => 'success');
+        return back()->with($notification);
+    }
 
 
     public function socialLogin()

@@ -251,6 +251,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::post('/exchange-action', 'AdminController@exchangeAction')->name('exchange-action');
 
     Route::get('/sell-log', 'AdminController@sellLog')->name('sell-currency');
+    Route::get('/paid-sell-log', 'AdminController@paidsellLog')->name('paidsell-currency');
+    Route::get('/cancelled-sell-log', 'AdminController@cancelledsellLog')->name('cancelledsell-currency');
     Route::get('/pending-sell-log', 'AdminController@pendingsellLog')->name('pendingsell-currency');
     Route::get('/declined-sell-log', 'AdminController@declinedsellLog')->name('declinedsell-currency');
     Route::get('/sell-log/{id}', 'AdminController@sellInfo')->name('sell-info');
@@ -259,6 +261,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     Route::get('/buy-log', 'AdminController@buyLog')->name('buy-currency');
     Route::get('/pending-buy-log', 'AdminController@pendingbuyLog')->name('pendingbuy-currency');
+    Route::get('/declined-buy-log', 'AdminController@declinedbuyLog')->name('declinedbuy-currency');
+    Route::get('/buy-log/{id}', 'AdminController@buyInfo')->name('buy-info');
+    Route::get('/buy-app/{id}', 'AdminController@buyapprove')->name('buy.approve');
+    Route::get('/buy-rej/{id}', 'AdminController@buyreject')->name('buy.reject');
+
+    //Deposit    
+    Route::get('/deposit-log', 'AdminController@depositLog')->name('deposit-currency');
+    Route::get('/pending-deposit-log', 'AdminController@pendingdepositLog')->name('pendingdeposit-currency');
     Route::get('/declined-buy-log', 'AdminController@declinedbuyLog')->name('declinedbuy-currency');
     Route::get('/buy-log/{id}', 'AdminController@buyInfo')->name('buy-info');
     Route::get('/buy-app/{id}', 'AdminController@buyapprove')->name('buy.approve');

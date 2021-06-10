@@ -21,7 +21,7 @@
           <div class="tab-pane fade active show" id="tab-item-4">
             <h4>My Purchase History</h4>
 
-            <table class="data-table dt-init user-tnx">
+            <table class="data-table dt-init user-tnx table-responsive">
               <thead>
                 <tr class="data-item data-head">
                   <th class="data-col dt-tnxno">Tranx NO</th>
@@ -157,8 +157,7 @@
           </div>
           <div class="tab-pane fade" id="tab-item-5">
             <h4>My Sales History</h4>
-
-            <table class="data-table dt-init user-tnx">
+            <table class="data-table dt-init user-tnx table-responsive">
               <thead>
                 <tr class="data-item data-head">
                   <th class="data-col dt-tnxno">Tranx NO</th>
@@ -194,6 +193,10 @@
                       <div class="data-state data-state-canceled">
                         <span class="d-none">Declined</span>
                       </div>
+                      @elseif($data->status == "Cancelled")
+                      <div class="data-state data-state-canceled">
+                        <span class="d-none">Cancelled</span>
+                      </div>
                       @endif
                       <div class="fake-class">
                         <span class="lead tnx-id">{{$data->trx}}</span><span class="sub sub-date"> {!! date(' d/M/Y ', strtotime($data->created_at)) !!} </span>
@@ -212,6 +215,8 @@
                     <a href="{{ route('sell_get', $data->trx) }}" class="btn btn-auto btn-primary btn-xs"><span>Sell <span class="d-none d-xl-inline-block">Now</span></span><em class="ti ti-wallet"></em></a>
                     @elseif($data->status == "Declined")
                     <span class="dt-type-md badge badge-outline badge-danger badge-md">Declined</span>
+                    @elseif($data->status == "Cancelled")
+                    <span class="dt-type-md badge badge-outline badge-danger badge-md">Cancelled</span>
                     @elseif($data->status == "Confirmed")
                     <span class="dt-type-md badge badge-outline badge-success badge-md">Successful</span>
                     @elseif($data->status == "Paid")
@@ -224,10 +229,6 @@
                   </td>
                   <td class="data-col text-right"><a href="#" data-toggle="modal" data-target="#transaction{{$data->id}}details" class="btn btn-light-alt btn-xs btn-icon"><em class="ti ti-eye"></em></a></td>
                 </tr>
-
-
-
-
 
                 <!-- Modal Large -->
                 <div class="modal fade" id="transaction{{$data->id}}details" tabindex="-1">
@@ -250,7 +251,7 @@
                               @elseif($data->status == "Paid")
                               <span class="dt-type-md badge badge-outline badge-process badge-md">Paid</span>
                               @elseif($data->status == "Confirmed")
-                              <span class="dt-type-md badge badge-outline badge-success badge-md">Successful</span>
+                              <span class="dt-type-md badge badge-outline badge-success badge-md">Confirmed</span>
                               @else
                               <span class="dt-type-md badge badge-outline badge-danger badge-md">Declined</span>
                               @endif
@@ -263,7 +264,7 @@
                           <ul class="data-details-list">
                             <li>
                               <div class="data-details-head">Transaction Type</div>
-                              <div class="data-details-des"><strong>Purchase</strong></div>
+                              <div class="data-details-des"><strong>{{$data->type}}</strong></div>
                             </li><!-- li -->
                             <li>
                               <div class="data-details-head">Transaction Number</div>
