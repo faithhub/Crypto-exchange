@@ -96,19 +96,19 @@ class AdminController extends Controller
     }
     public function pendingbuyLog()
     {
-        $data['exchange'] = Trx::whereStatus(1)->whereType(1)->latest()->get();
+        $data['exchange'] = Transaction::where('type', 'Buy')->where('status', 'Pending')->latest()->get();
         $data['page_title'] = 'Pending Buy Log';
         return view('admin.currency.buy-list', $data);
     }
     public function declinedbuyLog()
     {
-        $data['exchange'] = Trx::whereStatus(-2)->whereType(1)->latest()->get();
+        $data['exchange'] = Transaction::where('type', 'Buy')->where('status', 'Declined')->latest()->get();
         $data['page_title'] = 'Declined Buy Log';
         return view('admin.currency.buy-list', $data);
     }
     public function buyInfo($id)
     {
-        $get = Trx::where('id', $id)->where('status', '!=', 0)->first();
+        $get = Transaction::where('id', $id)->where('type', 'Buy')->first();
         if ($get) {
             $data['exchange'] = $get;
             $data['page_title'] = ' Buy Log Details';
@@ -119,29 +119,27 @@ class AdminController extends Controller
 
     public function buyapprove($id)
     {
-        $data = Trx::find($id);
+        $data = Transaction::where('type', 'Buy')->where('id', $id)->where('status', '!=', 'Confirmed')->first();
         $basic = GeneralSettings::first();
-        $data->status = 2;
-
+        $data->status = "Confirmed";
         $data->save();
         Message::create([
             'user_id' => $data->user_id,
-            'title' => 'Coin Purchase Approved',
-            'details' => 'Your cryptocurrency purchase with transaction number ' . $data->trx . '  was approved. Your account has been credited as required, Thank you for choosing ' . $basic->sitename . '',
+            'title' => 'Coin Purchase Confirmed',
+            'details' => 'Your cryptocurrency purchase with transaction number ' . $data->trx . '  was Confirmed. Your account has been credited as required, Thank you for choosing ' . $basic->sitename . '',
             'admin' => 1,
             'status' =>  0
         ]);
 
 
 
-        $notification =  array('message' => 'Approved Successfully !!', 'alert-type' => 'success');
+        $notification =  array('message' => 'Confirmed Successfully !!', 'alert-type' => 'success');
         return back()->with($notification);
     }
 
-    public function buyreject(Request $request)
+    public function buyreject($id)
     {
-
-        $data = Trx::find($request->id);
+        $data = Transaction::where('type', 'Buy')->where('id', $id)->where('status', '!=', 'Declined')->first();
         $basic = GeneralSettings::first();
         $user = User::findOrFail($data->user_id);
 
@@ -150,19 +148,22 @@ class AdminController extends Controller
         Message::create([
             'user_id' => $data->user_id,
             'title' => 'Purchase Rejected',
-            'details' => 'Your cryptocurrency purchase with transaction number ' . $data->trx . ' was rejected. Please send us a message for complaints or clarifications on purchase rejection',
+            'details' => 'Your cryptocurrency purchase with transaction number ' . $data->trx . ' was Declined. Please send us a message for complaints or clarifications on purchase rejection',
             'admin' => 1,
             'status' =>  0
         ]);
 
-        $msg =  ' Buy Declined ' . $data->main_amo . ' ' . $basic->currency;
-        send_email($user->email, $user->username, 'Buy Amount return ', $msg);
+        $msg =  ' Buy Declined ' . $basic->currency_sym . number_format($data->amount, $basic->decimal) . ' ' . $basic->currency;
+        send_email($user->email, $user->username, 'Buy Amount returned to your Naira Wallet ', $msg);
 
-        $data->status = -2;
+        $data->status = "Declined";
 
         $data->save();
 
-        $notification =  array('message' => 'Cryptocurrency Purchase Was Rejected Successfully !!', 'alert-type' => 'success');
+        $user->balance = $user->balance + $data->amount;
+        $user->save();
+
+        $notification =  array('message' => 'Cryptocurrency Purchase Was Declined Successfully !!', 'alert-type' => 'success');
         return back()->with($notification);
     }
 

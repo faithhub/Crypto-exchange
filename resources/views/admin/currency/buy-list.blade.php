@@ -33,11 +33,11 @@
                                 <div class="d-flex align-items-center">
 
 
-                                    @if( $data->status ==2 )
+                                    @if( $data->status == "Confirmed" )
                                     <div class="data-state data-state-approved"><span class="d-none">Approved</span></div>
-                                    @elseif( $data->status == -2 )
+                                    @elseif( $data->status == "Declined" )
                                     <div class="data-state data-state-canceled"><span class="d-none">Rejected</span></div>
-                                    @else
+                                    @elseif( $data->status == "Pending" )
                                     <div class="data-state data-state-pending"><span class="d-none">Pending</span></div>
                                     @endif
 
@@ -49,17 +49,17 @@
                                             </a></span><span class="sub sub-date">{{$data->created_at}}</span></div>
                                 </div>
                             </td>
-                            <td class="data-col dt-token"><span class="lead token-amount">{{number_format($data->main_amo-$data->charge, $basic->decimal)}}</span><span class="sub sub-symbol">{{$basic->currency}}</span></td>
-                            <td class="data-col dt-token"><span class="lead amount-pay">{{number_format($data->amount, $basic->decimal)}}</span><span class="sub sub-symbol">USD <em class="fas fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="{{$data->currency->name}}"></em></span></td>
+                            <td class="data-col dt-token"><span class="lead token-amount">{{$basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}</span><span class="sub sub-symbol">{{$basic->currency}}</span></td>
+                            <td class="data-col dt-token"><span class="lead amount-pay">${{number_format($data->currency_amount_usd, $basic->decimal)}}</span><span class="sub sub-symbol">USD <em class="fas fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="${{number_format($data->currency_amount_usd, $basic->decimal)}} of {{$data->currency->name}}"></em></span></td>
                             <td class="data-col dt-account"><span class="lead user-info">{{$data->currency->name}}</span> </td>
 
 
                             <td class="data-col dt-type">
-                                @if( $data->status ==2 )
+                                @if( $data->status == "Confirmed" )
                                 <span class="dt-type-md badge badge-outline badge-success badge-md">Approved</span><span class="dt-type-sm badge badge-sq badge-outline badge-success badge-md">A</span>
-                                @elseif( $data->status == -2 )
+                                @elseif( $data->status == "Declined" )
                                 <span class="dt-type-md badge badge-outline badge-danger badge-md">Declined</span><span class="dt-type-sm badge badge-sq badge-outline badge-danger badge-md">P</span>
-                                @else
+                                @elseif( $data->status == "Pending" )
                                 <span class="dt-type-md badge badge-outline badge-warning badge-md">Pending</span><span class="dt-type-sm badge badge-sq badge-outline badge-warning badge-md">P</span>
                                 @endif
                             </td>
@@ -70,12 +70,10 @@
                                         <ul class="dropdown-list">
                                             <li><a href="{{route('buy-info',$data->id)}}"><em class="ti ti-eye"></em> View Details</a></li>
 
-                                            @if($data->status == 1)
+                                            @if($data->status == "Pending")
                                             <li><a href="{{route('buy.approve',$data->id)}}"><em class="ti ti-check-box"></em> Approve</a></li>
                                             <li><a href="{{route('buy.reject',$data->id)}}"><em class="ti ti-na"></em> Decline</a></li>
-
                                             @endif
-
 
                                         </ul>
                                     </div>
