@@ -262,10 +262,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('/buy-log', 'AdminController@buyLog')->name('buy-currency');
     Route::get('/pending-buy-log', 'AdminController@pendingbuyLog')->name('pendingbuy-currency');
     Route::get('/declined-buy-log', 'AdminController@declinedbuyLog')->name('declinedbuy-currency');
-    Route::get('/cancelled-buy-log', 'AdminController@cancelleddepositLog')->name('cancelledbuy-currency');
-    Route::get('/deposit-log/{id}', 'AdminController@depositInfo')->name('deposit-info');
-    Route::get('/deposit-app/{id}', 'AdminController@depositapprove')->name('deposit.approve');
-    Route::get('/deposit-rej/{id}', 'AdminController@depositreject')->name('deposit.reject');
+    Route::get('/cancelled-buy-log', 'AdminController@cancelledbuyLog')->name('cancelledbuy-currency');
+    Route::get('/buy-log/{id}', 'AdminController@buyInfo')->name('buy-info');
+    Route::get('/buy-app/{id}', 'AdminController@buyapprove')->name('buy.approve');
+    Route::get('/buy-rej/{id}', 'AdminController@buyreject')->name('buy.reject');
 
     //Deposit    
     Route::get('/deposit-log', 'AdminController@depositLog')->name('deposit-currency');
@@ -276,6 +276,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('/deposit-app/{id}', 'AdminController@depositapprove')->name('deposit_approve_admin');
     Route::get('/deposit-rej/{id}', 'AdminController@depositreject')->name('deposit.reject');
 
+    //Withdraw    
+    Route::get('/withdraw-log', 'AdminController@withdrawLog')->name('withdraw-currency');
+    Route::get('/paid-withdraw-log', 'AdminController@paidwithdrawLog')->name('paidwithdraw-currency');
+    Route::get('/pending-withdraw-log', 'AdminController@pendingwithdrawLog')->name('pendingwithdraw-currency');
+    Route::get('/declined-withdraw-log', 'AdminController@declinedwithdrawLog')->name('declinedwithdraw-currency');
+    Route::get('/withdraw-info/{id}', 'AdminController@withdrawInfo')->name('withdraw-info');
+    Route::get('/withdraw-app/{id}', 'AdminController@withdrawapprove')->name('withdraw_approve_admin');
+    Route::get('/withdraw-rej/{id}', 'AdminController@withdrawreject')->name('withdraw_admin_reject');
 
     // General Settings
     Route::get('/general-settings', 'GeneralSettingController@GenSetting')->name('admin.GenSetting');

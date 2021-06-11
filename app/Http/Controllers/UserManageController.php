@@ -15,6 +15,7 @@ use App\UserLogin;
 use App\Cryptowallet;
 use App\Testimonial;
 use App\Message;
+use App\Transaction;
 use App\WithdrawLog;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
@@ -530,7 +531,7 @@ class UserManageController extends Controller
     {
         $user = User::find($id);
         $page_title = "$user->username - All Transaction";
-        $deposits = Trx::whereUser_id($id)->orderBy('id', 'DESC')->get();
+        $deposits = Transaction::whereUser_id($id)->with('method:*')->with('gateway:*')->orderBy('id', 'DESC')->get();
         return view('admin.users.user-trans', compact('deposits', 'page_title'));
     }
     public function userDeposit($id)

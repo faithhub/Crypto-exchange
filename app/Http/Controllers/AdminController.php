@@ -268,7 +268,6 @@ class AdminController extends Controller
         $notification =  array('message' => 'Declined Successfully !', 'alert-type' => 'success');
         return back()->with($notification);
     }
-
     public function depositLog()
     {
         $data['status'] = "Confirmed";
@@ -315,7 +314,6 @@ class AdminController extends Controller
         }
         abort(404);
     }
-
     public function depositapprove($id)
     {
 
@@ -344,8 +342,6 @@ class AdminController extends Controller
         $notification =  array('message' => 'Deposit Approved Successfully !', 'alert-type' => 'success');
         return back()->with($notification);
     }
-
-
     public function depositreject($id)
     {
 
@@ -356,6 +352,89 @@ class AdminController extends Controller
             'user_id' => $data->user_id,
             'title' => 'Deposit Rejected',
             'details' => 'Your cryptocurrency sales was rejected. Please send us a message for any complain, thanks',
+            'admin' => 1,
+            'status' =>  0
+        ]);
+
+        $data->status = "Declined";
+        $data->save();
+
+        $notification =  array('message' => 'Declined Successfully !', 'alert-type' => 'success');
+        return back()->with($notification);
+    }
+
+    //Withdraw
+    public function withdrawLog()
+    {
+        $data['status'] = "Confirmed";
+        $data['exchange'] = $t = Transaction::where('type', 'Withdraw')->where('status', 'Confirmed')->with('method:*')->with('gateway:*')->latest()->get();
+        //dd($t);
+        $data['page_title'] = 'Confirmed Withdraw Log';
+        return view('admin.finance.withdraw', $data);
+    }
+    public function pendingwithdrawLog()
+    {
+        $data['status'] = "Pending";
+        $data['exchange'] = Transaction::where('type', 'Withdraw')->where('status', 'Pending')->with('method:*')->with('gateway:*')->latest()->get();
+        $data['page_title'] = 'Pending Withdraw Log';
+        return view('admin.finance.withdraw', $data);
+    }
+    public function declinedwithdrawLog()
+    {
+        $data['status'] = "Declined";
+        $data['exchange'] = Transaction::where('type', 'Withdraw')->where('status', 'Declined')->with('method:*')->with('gateway:*')->latest()->get();
+        $data['page_title'] = 'Declined Withdraw Log';
+        return view('admin.finance.withdraw', $data);
+    }
+    public function withdrawInfo($id)
+    {
+        $get = Transaction::where('type', 'Withdraw')->with('method:*')->with('gateway:*')->where('id', $id)->first();
+        if ($get) {
+            $data['exchange'] = $get;
+            $data['page_title'] = 'Withdraw Log Details';
+            return view('admin.finance.withdraw-info', $data);
+        }
+        abort(404);
+    }
+    public function withdrawapprove($id)
+    {
+        $data = Transaction::where('type', 'Withdraw')->where('id', $id)->where('status', 'Pending')->first();
+        $basic = GeneralSettings::first();
+        $data->status = "Confirmed";
+
+        $user = User::find($data->user_id);
+        Message::create([
+            'user_id' => $data->user_id,
+            'title' => 'Withdraw Approved',
+            'details' => 'Your withdraw request with transaction number ' . $data->trx . ' has been approved. You fund has been credited to your Naira Wallet Account as required. Thank you for choosing us',
+            'admin' => 1,
+            'status' =>  0
+        ]);
+
+
+        $msg =  ' Withdraw Amount  ' . $data->get_amount . ' ' . $basic->currency;
+        send_email($user->email, $user->username, 'Withdraw Amount  ', $msg);
+
+        $data->save();
+
+        $notification =  array('message' => 'Withdraw Approved Successfully !', 'alert-type' => 'success');
+        return back()->with($notification);
+    }
+
+    public function withdrawreject($id)
+    {
+
+        $data = Transaction::where('type', 'Withdraw')->where('id', $id)->where('status', '!=', 'Confirmed')->first();
+        $basic = GeneralSettings::first();
+
+        $user = User::find($data->user_id);
+        $user->balance = $user->balance + $data->amount;
+        $user->save();
+
+        Message::create([
+            'user_id' => $data->user_id,
+            'title' => 'Withdraw Rejected',
+            'details' => 'Your fund Withdraw was rejected. and your fund has been refunded, Please send us a message for any complain, thanks',
             'admin' => 1,
             'status' =>  0
         ]);

@@ -80,9 +80,9 @@
 
 								<li class="has-dropdown"><a class="drop-toggle" href="#">Withdrawals</a>
 									<ul class="navbar-dropdown">
-										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Pending Withdrawal</a></lii>
-										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Processed Withdrawal </a></lii>
-										<lii class=" "><a class=" " href="{{route('deposit-currency')}}">Declined Withdrawal </a></lii>
+										<lii class=" "><a class=" " href="{{route('withdraw-currency')}}">Confirmed Withdrawal</a></lii>
+										<lii class=" "><a class=" " href="{{route('pendingwithdraw-currency')}}">Pending Withdrawal </a></lii>
+										<lii class=" "><a class=" " href="{{route('declinedwithdraw-currency')}}">Declined Withdrawal </a></lii>
 									</ul>
 								</li>
 								<li class="has-dropdown"><a class="drop-toggle" href="#">Deposits</a>
