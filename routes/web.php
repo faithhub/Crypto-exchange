@@ -314,11 +314,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::post('/gateway', 'GatewayController@update')->name('update.gateway');
 
     //Deposit
-    Route::get('/deposits', 'DepositController@index')->name('deposits');
-    Route::get('/deposits/requests', 'DepositController@requests')->name('deposits.requests');
-    Route::get('/deposit/approve/{id}', 'DepositController@approve')->name('deposit.approve');
-    Route::get('/deposit/view/{id}', 'DepositController@view')->name('deposit.view');
-    Route::get('/deposit/{deposit}/delete', 'DepositController@destroy')->name('deposit.destroy');
+    // Route::get('/deposits', 'DepositController@index')->name('deposits');
+    // Route::get('/deposits/requests', 'DepositController@requests')->name('deposits.requests');
+    // Route::get('/deposit/approve/{id}', 'DepositController@approve')->name('deposit.approve');
+    // Route::get('/deposit/view/{id}', 'DepositController@view')->name('deposit.view');
+    // Route::get('/deposit/{deposit}/delete', 'DepositController@destroy')->name('deposit.destroy');
 
     //Transfer
     Route::get('/transfer/requests', 'DepositController@transfer')->name('transfer.log');
@@ -326,18 +326,18 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('/transfer/{id}', 'DepositController@transferview')->name('transfer.view');
 
     //withdraw
-    Route::get('/withdraw', 'WithdrawController@index')->name('withdraw');
-    Route::post('/withdraw', 'WithdrawController@delete')->name('add.withdraw.method');
-    Route::post('/withdraw-update', 'WithdrawController@withdrawUpdateSettings')->name('update.wsettings');
+    // Route::get('/withdraw', 'WithdrawController@index')->name('withdraw');
+    // Route::post('/withdraw', 'WithdrawController@delete')->name('add.withdraw.method');
+    // Route::post('/withdraw-update', 'WithdrawController@withdrawUpdateSettings')->name('update.wsettings');
 
-    Route::get('/withdraw/requests', 'WithdrawController@requests')->name('withdraw.requests');
-    Route::get('/withdraw/approved', 'WithdrawController@requestsApprove')->name('withdraw.approved');
-    Route::get('/withdraw/refunded', 'WithdrawController@requestsRefunded')->name('withdraw.refunded');
+    // Route::get('/withdraw/requests', 'WithdrawController@requests')->name('withdraw.requests');
+    // Route::get('/withdraw/approved', 'WithdrawController@requestsApprove')->name('withdraw.approved');
+    // Route::get('/withdraw/refunded', 'WithdrawController@requestsRefunded')->name('withdraw.refunded');
 
-    Route::get('/withdraw/view/{id}', 'WithdrawController@view')->name('withdraw.view');
-    Route::get('/withdraw/approve/{id}', 'WithdrawController@approve')->name('withdraw.approve');
-    Route::get('/withdraw/refund/{id}', 'WithdrawController@refundAmount')->name('withdraw.reject');
-    Route::get('/withdraw/delete/{id}', 'WithdrawController@deleteAmount')->name('withdraw.delete');
+    // Route::get('/withdraw/view/{id}', 'WithdrawController@view')->name('withdraw.view');
+    // Route::get('/withdraw/approve/{id}', 'WithdrawController@approve')->name('withdraw.approve');
+    // Route::get('/withdraw/refund/{id}', 'WithdrawController@refundAmount')->name('withdraw.reject');
+    // Route::get('/withdraw/delete/{id}', 'WithdrawController@deleteAmount')->name('withdraw.delete');
 
 
     //    Blog Controller

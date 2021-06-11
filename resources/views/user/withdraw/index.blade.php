@@ -26,21 +26,21 @@
                     <div class="col-md-4">
                       <div class="input-item input-with-label">
                         <h5 class="mgt-1-5x font-mid">Account Bank</h5>
-                        <h3><b>{{Auth::user()->bank}}</b></h3>
+                        <h3><b>@isset(Auth::user()->bank){{Auth::user()->bank}} @else Not Set @endisset</b></h3>
                       </div>
                     </div>
 
                     <div class="col-md-4">
                       <div class="input-item input-with-label">
                         <h5 class="mgt-1-5x font-mid">Account Number</h5>
-                        <h3><b>{{Auth::user()->accountname}}</b></h3>
+                        <h3><b>@isset(Auth::user()->accountno){{Auth::user()->accountno}} @else Not Set @endisset</b></h3>
                       </div>
                     </div>
 
                     <div class="col-md-4">
                       <div class="input-item input-with-label">
                         <h5 class="mgt-1-5x font-mid">Account Name</h5>
-                        <h3><b>{{Auth::user()->accountno}}</b></h3>
+                        <h3><b>@isset(Auth::user()->accountname){{Auth::user()->accountname}} @else Not Set @endisset</b></h3>
                       </div>
                     </div>
 
@@ -93,14 +93,18 @@
                       </div>
                     </div>
                   </div>
-                    <ul class="d-flex flex-wrap align-items-center guttar-30px">
-                      <li><button type="submit" class="btn btn-primary">Confirm &amp; Withdraw</button></li>
-                    </ul>
-                    <div class="gaps-2x"></div>
-                    <div class="gaps-1x d-none d-sm-block"></div>
-                    <div class="note note-plane note-light mgb-1x"><em class="fas fa-info-circle"></em>
-                      <p class="text-light">You fund will appear in your account after it has been confirmed.</p>
-                    </div>
+                  @if(Auth::user()->bank == "Not Set" || Auth::user()->accountno == "Not Set" || Auth::user()->accountname == "Not Set")
+                  <h2>Go and update your bank account details to continue <a href="{{ route('profile') }}" class="btn btn-warning">Click Here to update</a></h2>
+                  @else
+                  <ul class="d-flex flex-wrap align-items-center guttar-30px">
+                    <li><button type="submit" class="btn btn-primary">Confirm &amp; Withdraw</button></li>
+                  </ul>
+                  @endif
+                  <div class="gaps-2x"></div>
+                  <div class="gaps-1x d-none d-sm-block"></div>
+                  <div class="note note-plane note-light mgb-1x"><em class="fas fa-info-circle"></em>
+                    <p class="text-light">You fund will appear in your account after it has been confirmed.</p>
+                  </div>
                 </form>
               </div>
             </div>
@@ -120,9 +124,9 @@
               document.getElementById("naira").value = "{{$basic->currency_sym}}" + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
             }
 
-            if(amount > balance){
+            if (amount > balance) {
               document.getElementById("bal_error").textContent = "* You do not have upto the requested amount in your Naira Wallte";
-            }else{
+            } else {
               document.getElementById("bal_error").textContent = "";
             }
           };

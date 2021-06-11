@@ -461,9 +461,6 @@
 
                             <div class="form-group col-md-12 ">
                                 <label><strong>Country</strong></label>
-
-
-
                                 <select name="country" class="input-bordered" id="country">
                                     <option value="">Select Country</option>
                                     <option value="United States">United States</option>
