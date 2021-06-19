@@ -303,6 +303,7 @@ class UserManageController extends Controller
         $kyc = Verification::orderBy('status', 'DESC')->get();
         $page_title = 'User Verification';
         $user = '';
+        dd($kyc);
         return view('admin.kyc.verification', compact('kyc', 'page_title', 'user'));
     }
     public function delkyc($id)

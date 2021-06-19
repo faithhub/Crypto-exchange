@@ -520,14 +520,20 @@
       <div class="referral-info card">
         <div class="card-innr">
           <h6 class="card-title card-title-sm">Earn with Referral</h6>
-          <p class=" pdb-0-5x">Invite your friends &amp; family and receive a <strong><span class="text-primary">bonus of {{$basic->currency_sym}}{{$basic->ref}}</span> when they get verified.</strong></p>
-          <div class="copy-wrap mgb-0-5x"><span class="copy-feedback"></span><input type="text" class="copy-address" value="{{ route('refer.register',auth::user()->username) }}" disabled><button class="copy-trigger copy-clipboard" data-clipboard-text="{{ route('refer.register',auth::user()->username) }}"><em class="ti ti-files"></em></button></div><!-- .copy-wrap -->
+          <p class=" pdb-0-5x">Invite your friends &amp; family and receive a <strong><span class="text-primary">bonus of {{$basic->currency_sym}}{{$basic->ref}}</span> when they get verified and complete a transaction</strong></p>
+          <div class="copy-wrap mgb-0-5x">
+            <span class="copy-feedback">
+            </span>
+            <input type="text" class="copy-address" value="{{ route('refer.register',auth::user()->username) }}" disabled>
+            <button class="copy-trigger copy-clipboard" data-clipboard-text="{{ route('refer.register',auth::user()->username) }}"><em class="ti ti-files"></em></button>
+          </div>
         </div>
       </div>
       <div class="kyc-info card">
         <div class="card-innr">
           <h6 class="card-title card-title-sm">Identity Verification - KYC</h6>
-          <p>To comply with regulation and be eligible for daily bonus and cryptocurrency purchase , customers will have to go through indentity verification.</p>
+          <!-- <p>To comply with regulation and be eligible for daily bonus and cryptocurrency purchase , customers will have to go through indentity verification.</p> -->
+          <p>In compliance with regulations and be eligible for transactions, every customers must be verified.</p>
 
           @if(Auth::user()->verified == 1)
           <p class="lead text-light pdb-0-5x">Your have submitted your KYC request. You will be notified once approved.</p>
