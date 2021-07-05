@@ -68,15 +68,15 @@
             </div><!-- .step-head -->
             <div class="form-step-fields card-innr">
               <div class="note note-plane note-light-alt note-md pdb-0-5x"><em class="fas fa-info-circle"></em>
-                <p>In order to complete, please upload any of the following personal document.</p>
+                <p>To inititae verification, kindly upload anyof the following personal document.</p>
               </div>
               <div class="gaps-2x"></div>
               <ul class="nav nav-tabs nav-tabs-bordered row flex-wrap guttar-20px" role="tablist">
                 <li class="nav-item flex-grow-0"><a class="nav-link d-flex align-items-center active" data-toggle="tab" href="#passport">
-                    <div class="nav-tabs-icon"><img src="{{asset('dash-assets/images/icon-passport.png')}}" alt="icon"><img src="{{asset('dash-assets/images/icon-passport-color.png')}}" alt="icon"></div><span>Passport</span>
+                    <div class="nav-tabs-icon"><img src="{{asset('dash-assets/images/icon-passport.png')}}" alt="icon"><img src="{{asset('dash-assets/images/icon-passport-color.png')}}" alt="icon"></div><span>Int'l Passport</span>
                   </a></li>
                 <li class="nav-item flex-grow-0"><a class="nav-link d-flex align-items-center active" data-toggle="tab" href="#national-card">
-                    <div class="nav-tabs-icon"><img src="{{asset('dash-assets/images/icon-national-id.png')}}" alt="icon"><img src="{{asset('dash-assets/images/icon-national-id-color.png')}}" alt="icon"></div><span>National Card</span>
+                    <div class="nav-tabs-icon"><img src="{{asset('dash-assets/images/icon-national-id.png')}}" alt="icon"><img src="{{asset('dash-assets/images/icon-national-id-color.png')}}" alt="icon"></div><span>NIN Card</span>
                   </a></li>
                 <li class="nav-item flex-grow-0"><a class="nav-link d-flex align-items-center active" data-toggle="tab" href="#driver-licence">
                     <div class="nav-tabs-icon"><img src="{{asset('dash-assets/images/icon-licence.png')}}" alt="icon"><img src="{{asset('dash-assets/images/icon-licence-color.png')}}" alt="icon"></div><span>Drivers License</span>
@@ -148,8 +148,9 @@
                       <div class="col-sm-8">
                         <div class="input-item input-with-label"><label class="input-item-label">File Upload</label>
                           <div class="relative"><em class="input-file-icon fas fa-upload"></em>
-                          <input type="file" name="photo" class="input-file" id="file-01" accept="image/*">
-                          <label for="file-01">Choose a file</label></div>
+                            <input type="file" name="photo" class="input-file" id="file-01" accept="image/*">
+                            <label for="file-01">Choose a file</label>
+                          </div>
                         </div>
                         @if ($errors->has('photo'))
                         <span class="error">
@@ -167,8 +168,9 @@
                       <div class="col-sm-8">
                         <div class="input-item input-with-label"><label class="input-item-label">File Upload</label>
                           <div class="relative"><em class="input-file-icon fas fa-upload"></em>
-                          <input type="file" name="photo2" class="input-file" id="file-02" accept="image/*">
-                          <label for="file-02">Choose a file</label></div>
+                            <input type="file" name="photo2" class="input-file" id="file-02" accept="image/*">
+                            <label for="file-02">Choose a file</label>
+                          </div>
                         </div>
                         @if ($errors->has('photo2'))
                         <span class="error">
@@ -205,7 +207,7 @@
                       <option value="International Passport">International Passport</option>
                       <option value="National ID Card">National ID Card</option>
                       <option value="Voters' Card">Voters' Card</option>
-                    </select>                    
+                    </select>
                     @if ($errors->has('type'))
                     <span class="error">
                       {{ $errors->first('type') }}
@@ -262,10 +264,10 @@
         <h4 class="popup-title">Account Verification Documents</h4>
 
         <p>You Have Successfully Uploaded Documents For Your Verification Process</p>
-        
+
         <h5 class="mgt-1-5x font-mid">Your Selfie:</h5>
         <div class="row-col-12">
-              <img src="{{ $docs->selfie }}" alt="pay-logo">
+          <img src="{{ $docs->selfie }}" alt="pay-logo">
         </div>
         <h5 class="mgt-1-5x font-mid">Your Uploaded Documments:</h5>
 

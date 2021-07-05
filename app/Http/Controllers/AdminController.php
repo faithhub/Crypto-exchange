@@ -286,14 +286,14 @@ class AdminController extends Controller
     public function pendingdepositLog()
     {
         $data['status'] = "Pending";
-        $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Pending')->with('method:*')->with('gateway:*')->latest()->get();
+        $data['exchange'] = Transaction::where('type', 'Deposit')->whereIn('status', ['Pending', 'Paid'])->with('method:*')->with('gateway:*')->latest()->get();
         $data['page_title'] = 'Pending Deposit Log';
         return view('admin.finance.deposit', $data);
     }
     public function declineddepositLog()
     {
         $data['status'] = "Declined";
-        $data['exchange'] = Transaction::where('type', 'Deposit')->where('status', 'Declined')->with('method:*')->with('gateway:*')->latest()->get();
+        $data['exchange'] = Transaction::where('type', 'Deposit')->whereIn('status', ['Declined', 'Cancelled'])->with('method:*')->with('gateway:*')->latest()->get();
         $data['page_title'] = 'Declined Deposit Log';
         return view('admin.finance.deposit', $data);
     }
