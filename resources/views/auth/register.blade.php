@@ -156,8 +156,9 @@
 									<div class="field-wrap"><textarea type="text" name="address" required value="{{ old('address') }}" class="input-bordered" placeholder="Home Address"></textarea></div>
 								</div>
 
-
+								@if(isset($reference))
 								<input name="referBy" readonly @if(isset($reference)) value="{{$reference}}" @endif class="input-bordered" placeholder="Enter Referal Username">
+								@endif
 
 								<hr>
 								<div class="field-item"><input class="input-checkbox" id="agree-term-4" type="checkbox"><label for="agree-term-4">I agree to {{$basic->sitename}} <a href="{{url('/privacy')}}">Privacy Policy</a> &amp; <a href="{{url('/privacy')}}">Terms</a>.</label></div>
