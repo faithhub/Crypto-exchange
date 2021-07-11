@@ -22,7 +22,7 @@
           <div class="kyc-status card mx-lg-4">
             <div class="fcard-innr">
               <div class="status status-thank px-md-5">
-                <div class="status-icon"><em class="ti ti-info"></em></div><span class="status-text large text-dark">Verification Pendimg</span>
+                <div class="status-icon"><em class="ti ti-info"></em></div><span class="status-text large text-dark">Verification Pending</span>
                 <p class="px-md-5">We are still processing your identity verification. Once our team verified your indentity, you will be notified by email. You can also check your verification compliance status from this page.</p><a href="#" data-toggle="modal" data-target="#pay-online" class="btn btn-primary">View Upload</a>
               </div>
             </div>
@@ -83,10 +83,10 @@
 
                 <!-- .tab-pane -->
                 <div class="tab-pane fade show active" id="national-card">
-                  <h5 class="text-secondary font-bold">To avoid delays when verifying account, Please make sure below:</h5>
+                  <h5 class="text-secondary font-bold">To avoid delays when verifying account, Please make sure that the:</h5>
                   <ul class="list-check">
-                    <li>Chosen credential must not be expaired.</li>
-                    <li>Document should be good condition and clearly visible.</li>
+                    <li>Chosen credential must not be expired.</li>
+                    <li>Document should be in good condition and clearly visible.</li>
                     <li>Make sure that there is no light glare on the card.</li>
                   </ul>
                   <div class="gaps-2x"></div>
