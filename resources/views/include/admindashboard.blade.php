@@ -67,10 +67,10 @@
 						<li class="has-dropdown page-links-all"><a class="drop-toggle" href="#"><em class="text-primary ti ti-server"></em>&nbsp; Sales Log</a>
 							<ul class="navbar-dropdown">
 								<li class=" "><a class=" " href="{{route('sell-currency')}}">Confirmed Sales </a></li>
-								<li class=" "><a class=" " href="{{route('paidsell-currency')}}">Paid Sales</a></li>
+								<!-- <li class=" "><a class=" " href="{{route('paidsell-currency')}}">Paid Sales</a></li> -->
 								<li class=" "><a class=" " href="{{route('pendingsell-currency')}}">Pending Sales</a></li>
 								<li class=" "><a class=" " href="{{route('declinedsell-currency')}}">Declined Sales</a></li>
-								<li class=" "><a class=" " href="{{route('cancelledsell-currency')}}">Cancelled Sales</a></li>
+								<!-- <li class=" "><a class=" " href="{{route('cancelledsell-currency')}}">Cancelled Sales</a></li> -->
 
 							</ul>
 						</li>
