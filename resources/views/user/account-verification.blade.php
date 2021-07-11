@@ -68,7 +68,7 @@
             </div><!-- .step-head -->
             <div class="form-step-fields card-innr">
               <div class="note note-plane note-light-alt note-md pdb-0-5x"><em class="fas fa-info-circle"></em>
-                <p>To inititae verification, kindly upload anyof the following personal document.</p>
+                <p>To initiate verification, kindly upload any of the following personal documents.</p>
               </div>
               <div class="gaps-2x"></div>
               <ul class="nav nav-tabs nav-tabs-bordered row flex-wrap guttar-20px" role="tablist">
