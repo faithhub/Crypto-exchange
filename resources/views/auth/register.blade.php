@@ -115,6 +115,8 @@
 									<div class="field-wrap"><input required type="date" name="dob" class="input-bordered" placeholder="Date Of Birth"><small>Date of Birth</small></div>
 								</div>
 
+								<br>
+								<h6 class="ath-heading tsitle">Gender</h6>
 								<div class="field-item">
 									<div class="field-wrap">
 										<div class="field-wrap"><select name="gender" class="select" data-select2-theme="bordered" required>
@@ -152,6 +154,8 @@
 									</div>
 								</div> -->
 
+								<br>
+								<h6 class="ath-heading tsitle">Home Address</h6>
 								<div class="field-item">
 									<div class="field-wrap"><textarea type="text" name="address" required value="{{ old('address') }}" class="input-bordered" placeholder="Home Address"></textarea></div>
 								</div>

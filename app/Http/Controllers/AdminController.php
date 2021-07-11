@@ -175,7 +175,7 @@ class AdminController extends Controller
     public function sellLog()
     {
         $data['status'] = "Confirmed";
-        $data['exchange'] = Transaction::where('type', 'Sell')->where('status', 'Confirmed')->latest()->get();
+        $data['exchange'] = Transaction::where('type', 'Sell')->whereIn('status', ['Confirmed', 'Paid'])->latest()->get();
         $data['page_title'] = 'Processed Sell Log';
         return view('admin.currency.sell-list', $data);
     }
@@ -196,7 +196,7 @@ class AdminController extends Controller
     public function declinedsellLog()
     {
         $data['status'] = "Declined";
-        $data['exchange'] = Transaction::where('type', 'Sell')->where('status', 'Declined')->latest()->get();
+        $data['exchange'] = Transaction::where('type', 'Sell')->whereIn('status', ['Declined', 'Cancelled'])->latest()->get();
         $data['page_title'] = 'Declined Sell Log';
         return view('admin.currency.sell-list', $data);
     }
