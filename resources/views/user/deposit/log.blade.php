@@ -13,7 +13,7 @@
               <th class="data-col dt-tnxno">Tranx NO</th>
               <th class="data-col dt-token">Amount</th>
               <th class="data-col dt-amount">Gateway</th>
-              <th class="data-col dt-usd-amount">Charge</th>
+              <!-- <th class="data-col dt-usd-amount">Charge</th> -->
               <th class="data-col dt-type">
                 <div class="dt-type-text">Status</div>
               </th>
@@ -57,9 +57,9 @@
                 <span>{{isset($data->gateway_id) ? $data->gateway->name : 'N/A'}}</span>
                 @endif
               </td>
-              <td class="data-col dt-usd-amount"><span class="lead amount-pay"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}}</b></span>
+              <!-- <td class="data-col dt-usd-amount"><span class="lead amount-pay"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}}</b></span>
                 <span class="sub sub-symbol">{{$basic->currency}} <em class="fas fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}} of {{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}"></em></span>
-              </td>
+              </td> -->
               <td class="data-col dt-type">
                 @if($data->status == "Confirmed")
                 <span class="dt-type-md badge badge-outline badge-success badge-md">Successful</span><span class="dt-type-sm badge badge-sq badge-outline badge-success badge-md">S</span>
@@ -162,15 +162,15 @@
                           <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}</b></div>
                         </li>
 
-                        <li>
+                        <!-- <li>
                           <div class="data-details-head">Charge</div>
                           <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}}</b></div>
-                        </li>
+                        </li> -->
 
-                        <li>
+                        <!-- <li>
                           <div class="data-details-head">Total Amount</div>
                           <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($data->amount + $data->charge, $basic->decimal)}}</b></div>
-                        </li>
+                        </li> -->
 
 
 

@@ -17,7 +17,7 @@
             <tr class="data-item data-head">
               <th class="data-col dt-tnxno">User</th>
               <th class="data-col dt-token">Amount</th>
-              <th class="data-col dt-token">Charges</th>
+              <!-- <th class="data-col dt-token">Charges</th> -->
               <th class="data-col dt-type">
                 <div class="dt-type-text">Status</div>
               </th>
@@ -45,9 +45,9 @@
               <td class="data-col dt-token">
                 <span class="lead token-amount">{{$basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}</span><span class="sub sub-symbol">{{$basic->currency}}</span>
               </td>
-              <td class="data-col dt-token">
+              <!-- <td class="data-col dt-token">
                 <span class="lead token-amount">{{$basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}}</span><span class="sub sub-symbol">{{$basic->currency}}</span>
-              </td>
+              </td> -->
               <td class="data-col dt-type">
                 @if( $data->status == "Confirmed" )
                 <span class="dt-type-md badge badge-outline badge-success badge-md">Approved</span><span class="dt-type-sm badge badge-sq badge-outline badge-success badge-md">A</span>

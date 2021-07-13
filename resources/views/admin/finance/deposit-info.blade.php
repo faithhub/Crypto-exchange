@@ -50,16 +50,16 @@
             <div class="data-details-head">Amount</div>
             <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($exchange->amount, $basic->decimal)}}</b></div>
           </li>
-
+          <!-- 
           <li>
             <div class="data-details-head">Charge</div>
             <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($exchange->charge, $basic->decimal)}}</b></div>
-          </li>
+          </li> -->
 
-          <li>
+          <!-- <li>
             <div class="data-details-head">Total Amount</div>
             <div class="data-details-des"><b style="color:#21a184">{{ $basic->currency_sym}}{{number_format($exchange->amount + $exchange->charge, $basic->decimal)}}</b></div>
-          </li>
+          </li> -->
           @if(isset($exchange->currency_amount_usd))
           <li>
             <div class="data-details-head">Amount In USD</div>
