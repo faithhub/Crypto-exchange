@@ -222,7 +222,7 @@
                     @elseif($data->status == "Paid")
                     <span class="dt-type-md badge badge-outline badge-warning badge-md">Paid</span>
                     &nbsp;&nbsp
-                    <span class="dt-type-md badge badge-outline badge-success badge-sm"><i class="fa fa-spinner fa-spin"></i>&nbsp;Awaiting Approve</span>
+                    <span class="dt-type-md badge badge-outline badge-success badge-sm"><i class="fa fa-spinner fa-spin"></i>&nbsp;Awaiting Approval</span>
                     @endif
 
                     <span class="dt-type-sm badge badge-sq badge-outline badge-success badge-md">P</span>

@@ -71,7 +71,7 @@
                 @elseif( $data->status == "Paid" )
                 <span class="dt-type-md badge badge-outline badge-warning badge-md">Paid</span><span class="dt-type-sm badge badge-sq badge-outline badge-warning badge-md">P</span>
                 &nbsp;&nbsp
-                <span class="dt-type-md badge badge-outline badge-success badge-sm"><i class="fa fa-spinner fa-spin"></i>&nbsp;Awaiting Approve</span>
+                <span class="dt-type-md badge badge-outline badge-success badge-sm"><i class="fa fa-spinner fa-spin"></i>&nbsp;Awaiting Approval</span>
                 @elseif( $data->status == "Cancelled" )
                 <span class="dt-type-md badge badge-outline badge-danger badge-md">Cancelled</span><span class="dt-type-sm badge badge-sq badge-outline badge-danger badge-md">C</span>
                 @endif
