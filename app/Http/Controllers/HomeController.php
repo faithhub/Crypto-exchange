@@ -401,7 +401,7 @@ class HomeController extends Controller
                 $depo['method_id'] = $request->method;
                 $depo['gateway_id'] = 0;
                 $depo['amount'] = $request->amount;
-                $depo['charge'] = round($methods->percent / 100 * $request->amount, 2);
+                $depo['charge'] = 0;
                 $depo['status'] = "Pending";
                 $depo['bank'] = $acc_details->name;
                 $depo['acc_num'] = $acc_details->account;
@@ -419,7 +419,7 @@ class HomeController extends Controller
 
                 if (isset($gate)) {
                     if ($gate->minamo <= $request->amount && $gate->maxamo >= $request->amount) {
-                        $charge = $request->amount * $gate->percent_charge / 100;
+                        $charge = 0;
                         //dd($gate);
                         $trx = strtoupper(str_random(16));
                         $depo['user_id'] = Auth::id();
@@ -1248,7 +1248,7 @@ class HomeController extends Controller
 
             if (isset($gate)) {
                 if ($gate->minamo <= $request->amount && $gate->maxamo >= $request->amount) {
-                    $charge = $gate->fixed_charge + ($request->amount * $gate->percent_charge / 100);
+                    $charge = 0;
                     $usdamo = ($request->amount + $charge) / $basic->rate;
 
 
@@ -1443,7 +1443,7 @@ class HomeController extends Controller
 
         $method = WithdrawMethod::findOrFail($request->method_id);
         $currency = Currency::findOrFail($wallet->coin_id);
-        $ch = $method->fix + round(($request->amount * $method->percent) / 100, $basic->decimal);
+        $ch = 0;
         $reAmo = $request->amount + $ch;
         if ($wallet->address == 0) {
             return back()->with('alert', 'You need to update your ' . $wallet->name . ' wallet details before you can withdraw from your ' . $wallet->name . ' wallet.');
@@ -1491,7 +1491,7 @@ class HomeController extends Controller
         $basic = GeneralSettings::first();
         $user = Auth::user();
         $method = WithdrawMethod::findOrFail($request->method_id);
-        $ch = $method->fix + round(($request->amount * $method->percent) / 100, $basic->decimal);
+        $ch = 0;
         $reAmo = $request->amount + $ch;
 
         if ($request->method_id == 2) {
@@ -1556,7 +1556,7 @@ class HomeController extends Controller
             'user_id' => $user->id,
             'amount' => $ww->amount,
             'main_amo' => round($user->balance, $basic->decimal),
-            'charge' => $ww->charge,
+            'charge' => 0,
             'type' => '-',
             'action' => 'Withdraw',
             'title' => 'Withdraw Via ' . $ww->method->name,
@@ -1619,7 +1619,7 @@ class HomeController extends Controller
         $buy['currency_id'] = $currency->id;
         $buy['enter_amount'] =  round($request->amount, $basic->decimal);
         $buy['get_amount'] = $request->unit;
-        $buy['buy_charge'] = round($request->charge, $basic->decimal);
+        $buy['buy_charge'] = 0;
         $buy['buy_price'] = $currency->price;
         $buy['user_id'] = Auth::id();
         $buy['type'] = 0;
@@ -1633,7 +1633,7 @@ class HomeController extends Controller
             'user_id' => $auth->id,
             'amount' => $request->amount,
             'main_amo' => round($auth->balance, $basic->decimal),
-            'charge' => $request->charge,
+            'charge' => 0,
             'type' => '-',
             'action' => 'Purchase',
             'title' => ' Bought ' . $request->unit . ' ' . $currency->symbol,
@@ -1678,7 +1678,7 @@ class HomeController extends Controller
         if ($request->payment == 2) {
 
 
-            $charge = $basic->transcharge;
+            $charge = 0;
             $usd = $request->usd * $currency->buy;
             $topay = $usd + $charge;
             $get = $request->usd / $currency->price;
@@ -1720,7 +1720,7 @@ class HomeController extends Controller
             }
             //dd($request->gateway);
 
-            $charge = $basic->transcharge;
+            $charge = 0;
             $usd = $request->usd * $currency->buy;
             $topay = $usd + $charge;
             $get = $request->usd / $currency->price;
@@ -1901,7 +1901,7 @@ class HomeController extends Controller
         }
 
 
-        $charge = $basic->transcharge;
+        $charge = 0;
         $usd = $request->usd * $currency->buy;
         $topay = $usd + $charge;
 
@@ -2066,7 +2066,7 @@ class HomeController extends Controller
         $buy['currency_id'] = $currency->id;
         $buy['enter_amount'] =  round($request->amount, $basic->decimal);
         $buy['get_amount'] = $request->unit;
-        $buy['buy_charge'] = round($request->charge, $basic->decimal);
+        $buy['buy_charge'] = 0;
         $buy['buy_price'] = $currency->price;
         $buy['user_id'] = Auth::id();
         $buy['type'] = 1;
@@ -2132,7 +2132,7 @@ class HomeController extends Controller
         $buy['currency_id'] = $currency->id;
         $buy['enter_amount'] =  round($request->amount, $basic->decimal);
         $buy['get_amount'] = $request->unit;
-        $buy['sell_charge'] = round($request->charge, $basic->decimal);
+        $buy['sell_charge'] = 0;
         $buy['sell_price'] = $currency->price;
         $buy['user_id'] = Auth::id();
         $buy['type'] = 0;
@@ -2148,7 +2148,7 @@ class HomeController extends Controller
             'user_id' => $auth->id,
             'amount' => $request->amount,
             'main_amo' => round($auth->balance, $basic->decimal),
-            'charge' => $request->charge,
+            'charge' => 0,
             'type' => '-',
             'action' => 'Sales',
             'title' => ' Sold ' . $request->unit . ' ' . $currency->symbol,
@@ -2158,7 +2158,7 @@ class HomeController extends Controller
         Message::create([
             'user_id' => $auth->id,
             'title' => 'Coin Sold',
-            'details' => 'Your ' . $request->unit . '' . $currency->symbol . ' cryptocurrency sales valued at ' . $basic->currency . '' . round($request->amount - $request->charge, $basic->decimal) . ' was successful. ' . $request->unit . '' . $currency->symbol . ' was debited from your ' . $basic->sitename . '  ' . $currency->name . ' wallet. Please wait while our server verifies your sale. Your account will be credited once coin is confirmed by our server, Thank you for choosing ' . $basic->sitename . '',
+            'details' => 'Your ' . $request->unit . '' . $currency->symbol . ' cryptocurrency sales valued at ' . $basic->currency . '' . round($request->amount - 0, $basic->decimal) . ' was successful. ' . $request->unit . '' . $currency->symbol . ' was debited from your ' . $basic->sitename . '  ' . $currency->name . ' wallet. Please wait while our server verifies your sale. Your account will be credited once coin is confirmed by our server, Thank you for choosing ' . $basic->sitename . '',
             'admin' => 1,
             'status' =>  0
         ]);
@@ -2184,7 +2184,7 @@ class HomeController extends Controller
         $sell['currency_id'] = $currency->id;
         $sell['enter_amount'] =  round($request->amount, $basic->decimal);
         $sell['get_amount'] = $request->unit;
-        $sell['sell_charge'] = round($request->charge, $basic->decimal);
+        $sell['sell_charge'] = 0;
         $sell['sell_price'] = $currency->price;
         $sell['user_id'] = Auth::id();
         $sell['type'] = 1;
@@ -2202,7 +2202,7 @@ class HomeController extends Controller
             'user_id' => $auth->id,
             'amount' => $request->amount,
             'main_amo' => round($auth->balance, $basic->decimal),
-            'charge' => $request->charge,
+            'charge' => 0,
             'type' => '-',
             'action' => 'Sales',
             'title' => ' Sold ' . $request->unit . ' ' . $currency->symbol,
@@ -2217,7 +2217,7 @@ class HomeController extends Controller
         Message::create([
             'user_id' => $auth->id,
             'title' => 'Coin Sold',
-            'details' => 'Your ' . $request->unit . '' . $currency->symbol . ' cryptocurrency sales valued at ' . $basic->currency . '' . round($request->amount - $request->charge, $basic->decimal) . ' was successful. Please wait while our server verifies your sale. Your account will be credited once coin is confirmed by our server, Thank you for choosing ' . $basic->sitename . '',
+            'details' => 'Your ' . $request->unit . '' . $currency->symbol . ' cryptocurrency sales valued at ' . $basic->currency . '' . round($request->amount - 0, $basic->decimal) . ' was successful. Please wait while our server verifies your sale. Your account will be credited once coin is confirmed by our server, Thank you for choosing ' . $basic->sitename . '',
             'admin' => 1,
             'status' =>  0
         ]);
@@ -2301,7 +2301,7 @@ class HomeController extends Controller
         }
 
         $data['from_amount'] = round($request->hhave, 6);
-        $data['from_amount_charge'] = $request->charge;
+        $data['from_amount_charge'] = 0;
         $data['from_currency_id'] = $request->hcoin;
         $data['receive_amount'] = round($request->gget, 6);
         $data['receive_currency_id'] = $request->gcoin;
@@ -2314,7 +2314,7 @@ class HomeController extends Controller
             'user_id' => $auth->id,
             'amount' => $request->hamount,
             'main_amo' => round($auth->balance, $basic->decimal),
-            'charge' => $request->charge,
+            'charge' => 0,
             'type' => '-',
             'action' => 'Exchange',
             'title' => ' Exchange ' . $request->unithave . ' ' . $hwallet->name,
@@ -2379,7 +2379,7 @@ class HomeController extends Controller
 
         $data['type'] = 1;
         $data['from_amount'] = round($request->hhave, 6);
-        $data['from_amount_charge'] = $request->charge;
+        $data['from_amount_charge'] = 0;
         $data['from_currency_id'] = $request->hcoin;
         $data['receive_amount'] = round($request->gget, 6);
         $data['receive_currency_id'] = $request->gcoin;
@@ -2397,7 +2397,7 @@ class HomeController extends Controller
             'user_id' => $auth->id,
             'amount' => $request->hamount,
             'main_amo' => round($auth->balance, $basic->decimal),
-            'charge' => $request->charge,
+            'charge' => 0,
             'type' => '-',
             'action' => 'Exchange',
             'title' => ' Exchange ' . $request->unithave . ' ' . $hwallet->name,

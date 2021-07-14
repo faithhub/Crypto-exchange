@@ -38,13 +38,13 @@
               <div class="token-overview-wrap">
                 <div class="token-overview">
                   <div class="row">
-                    <div class="col-md-4 col-sm-6">
+                    <div class="col-md-6 col-sm-6">
                       <div class="token-bonus token-bonus-sale"><span class="token-overview-title">Amount</span><span class="token-overview-value bonus-on-sale">{{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}</span></div>
                     </div>
-                    <div class="col-md-4 col-sm-6">
+                    <!-- <div class="col-md-4 col-sm-6">
                       <div class="token-bonus token-bonus-amount"><span class="token-overview-title">Deposit Charge</span><span class="token-overview-value bonus-on-amount">{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}}</span></div>
-                    </div>
-                    <div class="col-md-4">
+                    </div> -->
+                    <div class="col-md-6">
                       <div class="token-total"><span class="token-overview-title font-bold">Total Amount</span><span class="token-overview-value token-total-amount text-primary">{{ $basic->currency_sym}}{{number_format($data->amount + $data->charge, $basic->decimal)}}</span></div>
                     </div>
 
@@ -166,13 +166,13 @@
               <div class="token-overview-wrap">
                 <div class="token-overview">
                   <div class="row">
-                    <div class="col-md-4 col-sm-6">
+                    <div class="col-md-6 col-sm-6">
                       <div class="token-bonus token-bonus-sale"><span class="token-overview-title">Amount</span><span class="token-overview-value bonus-on-sale">{{ $basic->currency_sym}}{{number_format($data->amount, $basic->decimal)}}</span></div>
                     </div>
-                    <div class="col-md-4 col-sm-6">
+                    <!-- <div class="col-md-4 col-sm-6">
                       <div class="token-bonus token-bonus-amount"><span class="token-overview-title">Deposit Charge</span><span class="token-overview-value bonus-on-amount">{{ $basic->currency_sym}}{{number_format($data->charge, $basic->decimal)}}</span></div>
-                    </div>
-                    <div class="col-md-4">
+                    </div> -->
+                    <div class="col-md-6">
                       <div class="token-total"><span class="token-overview-title font-bold">Total Amount</span><span class="token-overview-value token-total-amount text-primary">{{ $basic->currency_sym}}{{number_format($data->amount + $data->charge, $basic->decimal)}}</span></div>
                     </div>
 
