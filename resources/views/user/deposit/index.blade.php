@@ -17,8 +17,9 @@
                   <h4 class="card-title" style="font-size:35px !important">Deposit</h4>
                 </div>
                 <h4 class="popup-title">Fund Your Naira Wallet</h4>
-                <p class="lead">You currently have <span><b>{{$basic->currency_sym}}{{number_format(Auth::user()->balance, $basic->decimal)}}</b></span> in your  Naira Wallet. Fill the form below to proceed.</p>
+                <p class="lead">You currently have <span><b>{{$basic->currency_sym}}{{number_format(Auth::user()->balance, $basic->decimal)}}</b></span> in your Naira Wallet. Fill the form below to proceed.</p>
                 <p>You can choose any of following payment method to fund your wallet. The fund will appear in your account after successfull payment.</p>
+                <p><span><b>Note: The minimum amount you can deposit is ₦20,000</b></span></p>
                 <form method="POST" action="{{ route('make_deposit_now') }}">
                   @csrf
                   <div class="row">
@@ -96,20 +97,19 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-6">
+                    <!-- <div class="col-6">
                       <h5 class="mgt-1-5x font-mid">Amount IN USD ($):</h5>
                       <div class="copy-wrap mgb-0-5x">
-                        <input type="number" name="usd" id="usd" class="copy-address" onkeyup="myFunction()" value="{{ old('usd') }}" placeholder="$20">
+                        <input type="number" name="usd" id="usd" class="copy-address" onkeyup="" value="{{ old('usd') }}" placeholder="$20">
                         <buttonn class="copy-trigger"><em class="ti ti-wallet"></em></buttonn>
                       </div>
-                      <!-- <span class="text-light font-italic mgb-2x"><small>* Payment gateway company may charge you a processing fee.</small></span> -->
-                    </div>
-                    <div class="col-6">
+                    </div> -->
+                    <div class="col-12">
                       <h5 class="mgt-1-5x font-mid">Amount IN {{$basic->currency}} ({{$basic->currency_sym}}):</h5>
                       <div class="copy-wrap mgb-0-5x">
                         <input value="{{$basic->rate}}" type="hidden" id="rate">
-                        <input required="" type="" name="yoo_amount" id="naira" class="copy-address" value="{{ old('yoo_amount') }}" placeholder="{{$basic->currency_sym}}0.00" readonly>
-                        <input type="hidden" name="amount" id="naira_amount" value="{{ old('amount') }}" readonly>
+                        <input required="" type="" name="amount" id="naira" class="copy-address" value="{{ old('amount') }}" placeholder="{{$basic->currency_sym}}0.00">
+                        <!-- <input type="hidden" name="amount" id="naira_amount" value="{{ old('amount') }}" readonly> -->
                         <buttonn class="copy-trigger"><em class="ti ti-wallet"></em></buttonn>
                       </div>
                       @if ($errors->has('amount'))

@@ -46,20 +46,20 @@
 
                   </div>
                   <div class="row">
-                    <div class="col-6">
+                    <!-- <div class="col-6">
                       <h5 class="mgt-1-5x font-mid">Amount IN USD ($):</h5>
                       <div class="copy-wrap mgb-0-5x">
                         <input type="number" name="usd" id="usd" class="copy-address" onkeyup="myFunction()" value="{{ old('usd') }}" placeholder="$20">
                         <buttonn class="copy-trigger"><em class="ti ti-wallet"></em></buttonn>
                       </div>
                       <span class="text-danger font-italic mgb-2x"><small id="bal_error"></small></span>
-                    </div>
-                    <div class="col-6">
+                    </div> -->
+                    <div class="col-12">
                       <h5 class="mgt-1-5x font-mid">Amount IN {{$basic->currency}} ({{$basic->currency_sym}}):</h5>
                       <div class="copy-wrap mgb-0-5x">
                         <input value="{{$basic->rate}}" type="hidden" id="rate">
-                        <input required="" type="" name="yoo_amount" id="naira" class="copy-address" value="{{ old('yoo_amount') }}" placeholder="{{$basic->currency_sym}}0.00" readonly>
-                        <input type="hidden" name="amount" id="naira_amount" value="{{ old('amount') }}" readonly>
+                        <input type="number" name="amount" id="naira" class="copy-address" value="{{ old('amount') }}" placeholder="{{$basic->currency_sym}}0.00">
+                        <!-- <input type="hidden" name="amount" id="naira_amount" value="{{ old('amount') }}" readonly> -->
                         <buttonn class="copy-trigger"><em class="ti ti-wallet"></em></buttonn>
                       </div>
                       @if ($errors->has('amount'))
@@ -82,29 +82,40 @@
                     </div>
 
                     <div class="pdb-2-5x pdt-1-5x">
-                      <input type="checkbox" name="terms" class="input-checkbox input-checkbox-md" id="agree-term-3" @if (old('terms')=='on' ) checked @endif>
-                      <label for="agree-term-3">I hereby agree to the <strong>BMY GUIDE agreement &amp; deposit terms term</strong>.</label>
+                      <input type="checkbox" name="confirm_fee" class="input-checkbox input-checkbox-md" id="agree-term-5" @if (old('confirm_fee')=='on' ) checked @endif>
+                      <label for="agree-term-5">I hereby confirm Transaction fee</label>
                       <div class="p">
-                        @if ($errors->has('terms'))
+                        @if ($errors->has('confirm_fee'))
                         <span class="error">
-                          {{ $errors->first('terms') }}
+                          {{ $errors->first('confirm_fee') }}
                         </span><br>
                         @endif
                       </div>
-                    </div>
-                  </div>
-                  @if(Auth::user()->bank == "Not Set" || Auth::user()->accountno == "Not Set" || Auth::user()->accountname == "Not Set")
-                  <h2>Go and update your bank account details to continue <a href="{{ route('profile') }}" class="btn btn-warning">Click Here to update</a></h2>
-                  @else
-                  <ul class="d-flex flex-wrap align-items-center guttar-30px">
-                    <li><button type="submit" class="btn btn-primary">Confirm &amp; Withdraw</button></li>
-                  </ul>
-                  @endif
-                  <div class="gaps-2x"></div>
-                  <div class="gaps-1x d-none d-sm-block"></div>
-                  <div class="note note-plane note-light mgb-1x"><em class="fas fa-info-circle"></em>
-                    <p class="text-light">You fund will appear in your account after it has been confirmed.</p>
-                  </div>
+
+                      <div class="pdb-2-5x pdt-1-5x">
+                        <input type="checkbox" name="terms" class="input-checkbox input-checkbox-md" id="agree-term-3" @if (old('terms')=='on' ) checked @endif>
+                        <label for="agree-term-3">I hereby agree to the <strong>BMY GUIDE agreement &amp; deposit terms term</strong>.</label>
+                        <div class="p">
+                          @if ($errors->has('terms'))
+                          <span class="error">
+                            {{ $errors->first('terms') }}
+                          </span><br>
+                          @endif
+                        </div>
+
+                      </div>
+                      @if(Auth::user()->bank == "Not Set" || Auth::user()->accountno == "Not Set" || Auth::user()->accountname == "Not Set")
+                      <h2>Go and update your bank account details to continue <a href="{{ route('profile') }}" class="btn btn-warning">Click Here to update</a></h2>
+                      @else
+                      <ul class="d-flex flex-wrap align-items-center guttar-30px">
+                        <li><button type="submit" class="btn btn-primary">Confirm &amp; Withdraw</button></li>
+                      </ul>
+                      @endif
+                      <div class="gaps-2x"></div>
+                      <div class="gaps-1x d-none d-sm-block"></div>
+                      <div class="note note-plane note-light mgb-1x"><em class="fas fa-info-circle"></em>
+                        <p class="text-light">You fund will appear in your account after it has been confirmed.</p>
+                      </div>
                 </form>
               </div>
             </div>

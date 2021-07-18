@@ -370,14 +370,14 @@ class HomeController extends Controller
         }
         if ($_POST) {
             $this->validate($request, [
-                'amount' => 'required|numeric|min:500',
+                'amount' => 'required|numeric|min:20000',
                 'payment_method' => 'required',
                 'terms' => 'required',
                 'method' => 'required_if:payment_method,==,2',
                 'bank' => 'required_if:payment_method,==,2',
                 'gateway' => 'required_if:payment_method,==,3',
             ], [
-                'amount.min' => 'The minimum amount you can deposit is ₦500.00',
+                'amount.min' => 'The minimum amount you can deposit is ₦20,000.00',
                 'amount.required' => 'The deposit amount is required',
                 'amount.numeric' => 'The deposit amount can only be numeric form',
                 'payment_method.required' => 'The payment method is required',
@@ -897,10 +897,12 @@ class HomeController extends Controller
                 'amount' => 'required',
                 'terms' => 'required',
                 'confirm' => 'required',
+                'confirm_fee' => 'required',
             ], [
                 'amount.required' => 'The Amount to withdraw is required',
                 'terms.required' => 'Terms and Agreement is required',
                 'confirm.required' => 'Confirm Details is required',
+                'confirm_fee.required' => 'Transaction Fee Confirmation is required',
             ]);
             if ($request->amount > Auth::user()->balance) {
                 return back()->with('warning', 'You do not have upto the requested amount in Naira Wallet');
