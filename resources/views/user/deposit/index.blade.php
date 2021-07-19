@@ -20,6 +20,7 @@
                 <p class="lead">You currently have <span><b>{{$basic->currency_sym}}{{number_format(Auth::user()->balance, $basic->decimal)}}</b></span> in your Naira Wallet. Fill the form below to proceed.</p>
                 <p>You can choose any of following payment method to fund your wallet. The fund will appear in your account after successfull payment.</p>
                 <p><span><b>Note: The minimum amount you can deposit is ₦20,000</b></span></p>
+                <p><span><b>Note: A service charge of ₦1,000 applies</b></span></p>
                 <form method="POST" action="{{ route('make_deposit_now') }}">
                   @csrf
                   <div class="row">
@@ -108,7 +109,7 @@
                       <h5 class="mgt-1-5x font-mid">Amount IN {{$basic->currency}} ({{$basic->currency_sym}}):</h5>
                       <div class="copy-wrap mgb-0-5x">
                         <input value="{{$basic->rate}}" type="hidden" id="rate">
-                        <input required="" type="" name="amount" id="naira" class="copy-address" value="{{ old('amount') }}" placeholder="{{$basic->currency_sym}}0.00">
+                        <input required="" type="number" name="amount" id="naira" class="copy-address" value="{{ old('amount') }}" placeholder="{{$basic->currency_sym}}0.00">
                         <!-- <input type="hidden" name="amount" id="naira_amount" value="{{ old('amount') }}" readonly> -->
                         <buttonn class="copy-trigger"><em class="ti ti-wallet"></em></buttonn>
                       </div>
@@ -123,7 +124,7 @@
 
                   <div class="pdb-2-5x pdt-1-5x">
                     <input type="checkbox" name="terms" class="input-checkbox input-checkbox-md" id="agree-term-3" @if (old('terms')=='on' ) checked @endif>
-                    <label for="agree-term-3">I hereby agree to the <strong>BMY GUIDE agreement &amp; deposit terms term</strong>.</label>
+                    <label for="agree-term-3">I hereby agree to the <strong>PM247crypto agreement &amp; deposit terms term</strong>.</label>
                     <div class="p">
                       @if ($errors->has('terms'))
                       <span class="error">

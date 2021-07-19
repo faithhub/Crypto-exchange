@@ -19,6 +19,8 @@
                 <h4 class="popup-title">Withdraw From Your Naira Wallet</h4>
                 <p class="lead">You currently have <span><b>{{$basic->currency_sym}}{{number_format(Auth::user()->balance, $basic->decimal)}}</b></span> in your Naira Wallet. Fill the form below to proceed.</p>
                 <p>Specify the amount you want to withdraw. The fund will appear in your account after it has been confirmed.</p>
+                <p><span><b>Note: The minimum amount you can withdraw is ₦20,000</b></span></p>
+                <p><span><b>Note: A service charge of ₦1,000 applies</b></span></p>
                 <form method="POST" action="{{ route('withdraw_fund') }}">
                   @csrf
                   <input value="{{Auth::user()->balance}}" type="hidden" id="balance">
@@ -94,7 +96,7 @@
 
                       <div class="pdb-2-5x pdt-1-5x">
                         <input type="checkbox" name="terms" class="input-checkbox input-checkbox-md" id="agree-term-3" @if (old('terms')=='on' ) checked @endif>
-                        <label for="agree-term-3">I hereby agree to the <strong>BMY GUIDE agreement &amp; deposit terms term</strong>.</label>
+                        <label for="agree-term-3">I hereby agree to the <strong>PM247crypto agreement &amp; deposit terms term</strong>.</label>
                         <div class="p">
                           @if ($errors->has('terms'))
                           <span class="error">

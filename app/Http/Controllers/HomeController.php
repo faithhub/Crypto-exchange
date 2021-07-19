@@ -400,7 +400,7 @@ class HomeController extends Controller
                 $depo['payment_method_id'] = $request->payment_method;
                 $depo['method_id'] = $request->method;
                 $depo['gateway_id'] = 0;
-                $depo['amount'] = $request->amount;
+                $depo['amount'] = $request->amount + 1000;
                 $depo['charge'] = 0;
                 $depo['status'] = "Pending";
                 $depo['bank'] = $acc_details->name;
@@ -894,11 +894,12 @@ class HomeController extends Controller
         }
         if ($_POST) {
             $this->validate($request, [
-                'amount' => 'required',
+                'amount' => 'required|numeric|min:20000',
                 'terms' => 'required',
                 'confirm' => 'required',
                 'confirm_fee' => 'required',
             ], [
+                'amount.min' => 'The minimum amount you can withdraw is ₦20,000.00',
                 'amount.required' => 'The Amount to withdraw is required',
                 'terms.required' => 'Terms and Agreement is required',
                 'confirm.required' => 'Confirm Details is required',
@@ -916,7 +917,7 @@ class HomeController extends Controller
             $depo['user_id'] = Auth::id();
             $depo['type'] = "Withdraw";
             $depo['trx'] = $trx;
-            $depo['amount'] = $request->amount;
+            $depo['amount'] = $request->amount - 1000;
             $depo['bank'] = Auth::user()->bank;
             $depo['acc_name'] = Auth::user()->accountname;
             $depo['acc_num'] = Auth::user()->accountno;
