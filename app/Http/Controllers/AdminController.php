@@ -322,7 +322,7 @@ class AdminController extends Controller
         $data->status = "Confirmed";
 
         $user = User::find($data->user_id);
-        $user->balance = $user->balance + $data->amount;
+        $user->balance = $user->balance + ($data->amount - 1000);
         $user->save();
 
         Message::create([

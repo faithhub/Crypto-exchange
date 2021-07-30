@@ -52,7 +52,6 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-
         $gates = Gateway::whereStatus(1)->orderBy('name', 'asc')->get();
         $this->middleware('auth');
 
@@ -905,11 +904,11 @@ class HomeController extends Controller
                 'confirm.required' => 'Confirm Details is required',
                 'confirm_fee.required' => 'Transaction Fee Confirmation is required',
             ]);
-            if ($request->amount > Auth::user()->balance) {
+            if (($request->amount + 1000) > Auth::user()->balance) {
                 return back()->with('warning', 'You do not have upto the requested amount in Naira Wallet');
             }
             $user = User::find(Auth::user()->id);
-            $user->balance = $user->balance - $request->amount;
+            $user->balance = $user->balance - $request->amount - 1000;
             $user->save();
 
 
@@ -917,7 +916,7 @@ class HomeController extends Controller
             $depo['user_id'] = Auth::id();
             $depo['type'] = "Withdraw";
             $depo['trx'] = $trx;
-            $depo['amount'] = $request->amount - 1000;
+            $depo['amount'] = $request->amount;
             $depo['bank'] = Auth::user()->bank;
             $depo['acc_name'] = Auth::user()->accountname;
             $depo['acc_num'] = Auth::user()->accountno;
