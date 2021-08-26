@@ -44,7 +44,7 @@
                       </div>
                     </div>
                     <div class="col-md-3 col-sm-6">
-                      <div class="token-bonus token-bonus-amount"><span class="token-overview-title">{{$data->currency->symbol}} Sell Rate</span><span class="token-overview-value bonus-on-amount">${{number_format($data->currency_rate, $basic->decimal)}}</span></div>
+                      <div class="token-bonus token-bonus-amount"><span class="token-overview-title">{{$data->currency->symbol}} Sell Rate</span><span class="token-overview-value bonus-on-amount">{{ $basic->currency_sym}}{{number_format($data->currency_rate, $basic->decimal)}}/$</span></div>
                     </div>
                     <div class="col-md-3 col-sm-6">
                       <div class="token-bonus token-bonus-amount"><span class="token-overview-title">Amount IN USD</span><span class="token-overview-value bonus-on-amount">${{number_format($data->currency_amount_usd, $basic->decimal)}}</span></div>
