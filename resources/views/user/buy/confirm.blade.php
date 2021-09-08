@@ -33,7 +33,7 @@
                           <div class="pdb-1x">
                             <h5 class="schedule-title"><span>Naira Wallet Balance</span> </h5><span><b style="color: #21a184;">{{$basic->currency_sym}}{{ number_format(Auth::user()->balance, $basic->decimal) }}</b></span>
                           </div>
-                        </div>
+                        </div>                   
                         <div class="col-xl-4 col-md-5 col-lg-4">
                           <div class="pdb-1x">
                             <h5 class="schedule-title"><span>{{$currency->symbol}} Buy Rate</span> </h5><span><b style="color: #21a184;">1USD = {{$basic->currency_sym}}{{ number_format($currency->buy, $basic->decimal) }}</b></span>

@@ -20,7 +20,10 @@ function goBack() {
 @if($exchange->type > 0)
 <li><div class="data-details-head">Payment Number</div><div class="data-details-des"><span><strong>{{$exchange->transaction_number}}</strong></span></div></li>
 
-<li><br><div class="data-details-head">Payment Screenshot</div><div class="data-doc-item data-doc-item-lg"><div class="data-doc-image"><img src="{{asset('exchange/'.$exchange->image)}}" alt="..." class="img-thumbnail"></div><ul class="data-doc-actions"><li><a href="{{asset('exchange/'.$exchange->image)}}" download><em class="ti ti-import"></em></a></li></ul></div></li>
+<li><br><div class="data-details-head">Payment Screenshot</div>
+<div class="data-doc-item data-doc-item-lg">
+    <div class="data-doc-image"><img src="{{asset('exchange/'.$exchange->image)}}" alt="..." class="img-thumbnail"></div>
+    <ul class="data-doc-actions"><li><a href="{{asset('exchange/'.$exchange->image)}}" download><em class="ti ti-import"></em></a></li></ul></div></li>
 
 
 @endif<!-- li -->

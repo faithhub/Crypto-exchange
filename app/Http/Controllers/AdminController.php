@@ -142,6 +142,47 @@ class AdminController extends Controller
         return back()->with($notification);
     }
 
+    public function buyapprovesendprove(Request $request)
+    {
+
+        $this->validate(
+            $request,
+            [
+                'prove' => 'required|image|max:5000',
+                'user_id' => 'required',
+                'trans_id' => 'required',
+            ],
+            [
+                'prove.required' => "Purchase Prove File is required",
+                'prove.image' => "Purchase Prove File must be Image type",
+                'prove.max' => "Purchase Prove File must not more than 5mb",
+            ]
+        );
+        $data = Transaction::where('type', 'Buy')->where(['id' => $request->trans_id, 'status' => 'Confirmed', 'user_id' => $request->user_id])->first();
+
+        // dd($request->all(), $data);
+        $path = 'assets/purchase_prove/' . $data->image;
+        if (file_exists($path)) {
+            @unlink($path);
+        }
+        if ($request->hasFile('prove')) {
+            $data->image = 'purchase_prove_' . time() . uniqid() . '.jpg';
+            $request->prove->move('assets/purchase_prove/', $data['image']);
+        }
+
+        $basic = GeneralSettings::first();
+        $data->save();
+        Message::create([
+            'user_id' => $data->user_id,
+            'title' => 'Coin Purchase Prove Sent',
+            'details' => 'Your cryptocurrency purchase with transaction number ' . $data->trx . '  has been Confirmed. and the prove has been sent to you, Thank you for choosing ' . $basic->sitename . '',
+            'admin' => 1,
+            'status' =>  0
+        ]);
+        $notification =  array('message' => 'Purchase Prove Sent Successfully !!', 'alert-type' => 'success');
+        return back()->with($notification);
+    }
+
     public function buyreject($id)
     {
         $data = Transaction::where('type', 'Buy')->where('id', $id)->where('status', '!=', 'Declined')->first();

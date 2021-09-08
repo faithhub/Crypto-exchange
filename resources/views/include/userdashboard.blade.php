@@ -133,9 +133,9 @@
       <div class="row align-items-center justify-content-center">
         <div class="col-md-8">
           <ul class="footer-links">
-            <li><a href="{{route('user.faq')}}">FAQs</a></li>
+            <!-- <li><a href="{{route('user.faq')}}">FAQs</a></li>
             <li><a href="{{url('/#privacy')}}">Privacy Policy</a></li>
-            <li><a href="{{url('/#privacy')}}">Terms of Condition</a></li>
+            <li><a href="{{url('/#privacy')}}">Terms of Condition</a></li> -->
           </ul>
         </div><!-- .col -->
         <div class="col-md-4 mt-2 mt-sm-0">

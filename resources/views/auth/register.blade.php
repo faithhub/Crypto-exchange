@@ -34,11 +34,11 @@
 	</script>
 </head>
 
-<body class="nk-body body-wider theme-dark mode-onepage">
+<body class="nk-body body-wider mode-onepage" style="background-color: #024C5D !important">
 
-	<body class="nk-body body-wider theme-dark container">
+	<body class="nk-body body-wider container" style="background-color: #024C5D !important">
 		<div class="nk-wrap row">
-			<main class="nk-pages nk-pages-centered theme-dark col-lg-6 offset-lg-3">
+			<main class="nk-pages nk-pages-centered col-lg-6 offset-lg-3" style="background-color: #024C5D !important">
 				<div class=" col-lg-12 ath-container">
 					<div class="ath-header text-center">
 						<center><a href="{{url('/')}}" class="logo-link"><img class="logo-dark" src="{{asset('assets/images/logo/logo.png')}}" srcset="{{asset('assets/images/logo/logo.png')}}" width="70" alt="logo"><img class="logo-light" src="{{asset('assets/images/logo/logo.png')}}" srcset="{{asset('assets/images/logo/logo.png')}}" width="70 alt=" logo"></a></center>

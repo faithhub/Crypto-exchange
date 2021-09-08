@@ -37,7 +37,7 @@
 
   <body class="nk-body body-wider bg-light-alt">
     <div class="nk-wrap">
-      <main class="nk-pages nk-pages-centered bg-theme">
+      <main class="nk-pages nk-pages-centered" style="background-color: #024C5D !important">
         <div class="ath-container">
           <div class="ath-header text-center">
             <center><a href="{{ url('/') }}" class="logo-link"><img class="logo-dark" src="{{ asset('assets/images/logo/logo.png') }}" srcset="{{ asset('assets/images/logo/logo.png') }}" width="70" alt="logo"><img class="logo-light" src="{{ asset('assets/images/logo/logo.png') }}" srcset="{{ asset('assets/images/logo/logo.png') }}" width="70 alt=" logo"></a>

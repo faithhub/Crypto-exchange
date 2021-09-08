@@ -142,6 +142,12 @@
                               <div class="data-details-head">{{$data->currency->name}} Wallet</div>
                               <div class="data-details-des"><span>{{$data->wallet}}</span></div>
                             </li>
+                            @if($data->image)
+                            <li>
+                              <div class="data-details-head">Purchase Prove</div>
+                              <div class="data-details-des"><a href="{{asset('assets/purchase_prove/'.$data->image)}}" download=""><img src="{{asset('assets/purchase_prove/'.$data->image)}}" alt="..." class="img-thumbnail" style="width: 100px;"></a></div>
+                            </li>
+                            @endif
                           </ul>
                         </div><!-- .card -->
                       </div>

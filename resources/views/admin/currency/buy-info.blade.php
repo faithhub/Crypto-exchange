@@ -64,11 +64,12 @@
                         <div class="data-details-head">Wallet / Account ID</div>
                         <div class="data-details-des"><span><strong>{{$exchange->wallet}}</strong></span></div>
                     </li>
-                    <!-- li -->
-                    <!-- <li>
-                        <div class="data-details-head">Details</div>
-                        <div class="data-details-des">{{$exchange->remark}}</div>
-                    </li> -->
+                    @if($exchange->image)
+                    <li>
+                        <div class="data-details-head">Purchase Prove</div>
+                        <div class="data-details-des"><a href="{{asset('assets/purchase_prove/'.$exchange->image)}}" download=""><img src="{{asset('assets/purchase_prove/'.$exchange->image)}}" alt="..." class="img-thumbnail" style="width: 100px;"></a></div>
+                    </li>
+                    @endif
                 </ul><!-- .data-details -->
                 <div class="gaps-3x"></div>
             </div>

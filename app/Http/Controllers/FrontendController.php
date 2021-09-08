@@ -19,6 +19,7 @@ use App\Service;
 use App\Subscriber;
 use App\Testimonial;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class FrontendController extends Controller
 {
@@ -30,12 +31,30 @@ class FrontendController extends Controller
         $data['currency2'] = Currency::whereStatus(1)->orderBy('symbol','desc')->get();
         $data['testimonial'] = Testimonial::whereStatus(1)->get();
         $data['faq'] = Faq::all();
+        // dd(Hash::make('password'));
 
         if($basic->maintain == 1){
         return view('front.maintain', $data);
         }
 
         return view('front.home', $data);
+    }
+    public function index2()
+    {
+        $basic = GeneralSettings::first();
+        $data['page_title'] = "Home";
+        $data['currency'] = Currency::whereStatus(1)->orderBy('symbol','asc')->get();
+        $data['currency2'] = Currency::whereStatus(1)->orderBy('symbol','desc')->get();
+        $data['testimonial'] = Testimonial::whereStatus(1)->get();
+        $data['faq'] = Faq::all();
+        $data['currency'] = Currency::whereDeleted_at(Null)->orderBy('symbol','asc')->get();
+        // dd(Hash::make('password'));
+
+        if($basic->maintain == 1){
+        return view('front.maintain', $data);
+        }
+
+        return view('landing.index', $data);
     }
 
      public function rate()
@@ -48,7 +67,8 @@ class FrontendController extends Controller
         return view('front.maintain', $data);
         }
 
-        return view('front.rate', $data);
+        return view('landing.rate', $data);
+        // return view('front.rate', $data);
     }
 
    public function privacy()
@@ -60,7 +80,7 @@ class FrontendController extends Controller
         return view('front.maintain', $data);
         }
 
-        return view('front.privacy', $data);
+        return view('landing.privacy', $data);
     }
 
     public function blog()

@@ -30,7 +30,7 @@
                         <select onchange="showDiv()" class="select-bordered select-block" id="payment_method" name="payment_method">
                           <option value="" selected>Choose...</option>
                           <option value="Bank Transfer" @if (old("payment_method")=="Bank Transfer" ) selected @endif>Bank Transfer </option>
-                          <option value="Online Payment" @if (old("payment_method")=="Online Payment" ) selected @endif>Online Payment </option>
+                          <!-- <option value="Online Payment" @if (old("payment_method")=="Online Payment" ) selected @endif>Online Payment </option> -->
                         </select>
                         @if ($errors->has('payment_method'))
                         <span class="error">

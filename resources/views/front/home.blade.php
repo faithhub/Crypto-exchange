@@ -4,7 +4,7 @@
 <!-- Banner @s -->
 <div class="header-banner bg-theme-grad-s2">
   <div class="nk-banner">
-    <div class="banner banner-fs banner-single banner-s1 banner-s1-overlay">
+    <div class="banner banner-fs banner-single banner-s1 banner-s1-overlay" style="background-color: #3CB4C4 !important;">
       <div class="banner-wrap">
         <div class="container">
           <div class="row align-items-center justify-content-center justify-content-lg-between gutter-vr-60px">
@@ -53,7 +53,7 @@
 </div><!-- .header-banner @e -->
 </header>
 <main class="nk-pages">
-  <section class="section bg-light" id="about">
+  <section class="section bg-light" id="about" style="background-color: #DAF0F3 !important;">
     <div class="container">
       <!-- Block @s -->
       <div class="nk-block nk-block-features-s2">
@@ -110,14 +110,13 @@
       </div><!-- .block @e -->
     </div>
   </section><!-- // -->
-  <section class="section bg-white" id="overview">
+  <!-- <section class="section bg-white" id="overview">
     <div class="container">
-      <!-- Block @s -->
       <div class="nk-block nk-block-features-s2">
         <div class="row align-items-center gutter-vr-30px">
           <div class="col-lg-6">
             <div class="gfx py-4 mx-auto mx-lg-0 animated" data-animate="fadeInUp" data-delay=".1"><img src="{{asset('assets/images/vmg.jpg')}}" alt="gfx"></div>
-          </div><!-- .col -->
+          </div>
           <div class="col-lg-6">
             <div class="feature animated" data-animate="fadeInUp" data-delay=".2">
               <h2 class="title-xl-2 title-thin pdb-s">Vision</h2>
@@ -137,11 +136,11 @@
                 <p>{{$basic->goal}}</p>
               </div>
             </div>
-          </div><!-- .col -->
-        </div><!-- .row -->
-      </div><!-- .block @e -->
+          </div>
+        </div>
+      </div>
     </div>
-  </section><!-- // -->
+  </section> -->
   <section class="section bg-light">
     <div class="container">
       <!-- Block @s -->
@@ -261,7 +260,7 @@
   </section>
 
 
-  <section class="section bg-theme ov-h text-center tc-light">
+  <section class="section bg-theme ov-h text-center tc-light" style="background-color: #024C5D !important;">
     <div class="container">
       <div class="section-head text-center animated" data-animate="fadeInUp" data-delay=".1">
         <h2 class="title">What Our Customers Say</h2>

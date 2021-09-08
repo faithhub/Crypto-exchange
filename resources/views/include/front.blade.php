@@ -25,7 +25,7 @@
 		<div class="nk-wrap">
 			<header class="nk-header page-header is-transparent is-sticky is-shrink" id="header">
 				<!-- Header @s -->
-				<div class="header-main">
+				<div class="header-main" style="background-color: #024C5D !important;">
 					<div class="container">
 						<div class="header-wrap">
 							<!-- Logo @s -->
@@ -88,7 +88,7 @@
 
 			@yield('content')
 
-			<footer class="nk-footer bg-theme ov-h overlay-x fw-4">
+			<footer class="nk-footer bg-theme ov-h overlay-x fw-4" style="background-color: #024C5D !important;">
 				<section class="section section-m  tc-light tc-light-alt bg-transparent">
 					<div class="container">
 						<!-- Block @s -->

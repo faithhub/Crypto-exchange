@@ -40,6 +40,7 @@ Route::post('/ipnvoguepay', 'PaymentController@ipnVoguePay')->name('ipn.voguepay
 //Payment IPN
 
 
+Route::get('/home', 'FrontendController@index2')->name('main2');
 
 Route::get('/', 'FrontendController@index')->name('main');
 Route::get('/rates', 'FrontendController@rate')->name('rates');
@@ -260,6 +261,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('/sell-reject/{id}', 'AdminController@sellreject')->name('sell.reject');
 
     Route::get('/buy-log', 'AdminController@buyLog')->name('buy-currency');
+    Route::post('/buy-send-prove', 'AdminController@buyapprovesendprove')->name('buy-send-prove');
     Route::get('/pending-buy-log', 'AdminController@pendingbuyLog')->name('pendingbuy-currency');
     Route::get('/declined-buy-log', 'AdminController@declinedbuyLog')->name('declinedbuy-currency');
     Route::get('/cancelled-buy-log', 'AdminController@cancelledbuyLog')->name('cancelledbuy-currency');
