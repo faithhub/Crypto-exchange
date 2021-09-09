@@ -75,11 +75,11 @@
                                             <li><a href="{{route('buy-info',$data->id)}}"><em class="ti ti-eye"></em> View Details</a></li>
 
                                             @if($data->status == "Confirmed" && $data->image)
-                                            <li><a data-toggle="modal" data-target="#pove-modal{{$data->id}}" href="#"><em class="ti ti-check-box"></em> Re-upload Prove</a></li>
+                                            <li><a data-toggle="modal" data-target="#pove-modal{{$data->id}}" href="#"><em class="ti ti-check-box"></em> Re-upload Proof</a></li>
                                             @endif
 
                                             @if($data->status == "Confirmed" && $data->image == Null)
-                                            <li><a data-toggle="modal" data-target="#pove-modal{{$data->id}}" href="#"><em class="ti ti-check-box"></em> Upload Prove</a></li>
+                                            <li><a data-toggle="modal" data-target="#pove-modal{{$data->id}}" href="#"><em class="ti ti-check-box"></em> Upload Proof</a></li>
                                             @endif
                                             @if($data->status == "Pending")
                                             <li><a href="{{route('buy.approve',$data->id)}}"><em class="ti ti-check-box"></em> Approve</a></li>
@@ -97,7 +97,7 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Upload Prove for <b>{{$data->user->username}}</b> Purchase</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Upload Proof for <b>{{$data->user->username}}</b> Purchase</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -107,7 +107,7 @@
                                         <div class="modal-body">
                                             <input type="hidden" value="{{$data->id}}" name="trans_id">
                                             <input type="hidden" value="{{$data->user->id}}" name="user_id">
-                                            <label>Upload Purchase Prove File</label>
+                                            <label>Upload Purchase Proof File</label>
                                             <input type="file" name="prove" class="form-control" accept="image/*">
                                         </div>
                                         <div class="modal-footer">

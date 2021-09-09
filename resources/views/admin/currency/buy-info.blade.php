@@ -66,7 +66,7 @@
                     </li>
                     @if($exchange->image)
                     <li>
-                        <div class="data-details-head">Purchase Prove</div>
+                        <div class="data-details-head">Purchase Proof</div>
                         <div class="data-details-des"><a href="{{asset('assets/purchase_prove/'.$exchange->image)}}" download=""><img src="{{asset('assets/purchase_prove/'.$exchange->image)}}" alt="..." class="img-thumbnail" style="width: 100px;"></a></div>
                     </li>
                     @endif

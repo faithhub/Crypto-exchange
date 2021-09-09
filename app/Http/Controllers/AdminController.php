@@ -153,9 +153,9 @@ class AdminController extends Controller
                 'trans_id' => 'required',
             ],
             [
-                'prove.required' => "Purchase Prove File is required",
-                'prove.image' => "Purchase Prove File must be Image type",
-                'prove.max' => "Purchase Prove File must not more than 5mb",
+                'prove.required' => "Purchase Proof File is required",
+                'prove.image' => "Purchase Proof File must be Image type",
+                'prove.max' => "Purchase Proof File must not more than 5mb",
             ]
         );
         $data = Transaction::where('type', 'Buy')->where(['id' => $request->trans_id, 'status' => 'Confirmed', 'user_id' => $request->user_id])->first();

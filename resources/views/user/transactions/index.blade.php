@@ -144,7 +144,7 @@
                             </li>
                             @if($data->image)
                             <li>
-                              <div class="data-details-head">Purchase Prove</div>
+                              <div class="data-details-head">Purchase Proof</div>
                               <div class="data-details-des"><a href="{{asset('assets/purchase_prove/'.$data->image)}}" download=""><img src="{{asset('assets/purchase_prove/'.$data->image)}}" alt="..." class="img-thumbnail" style="width: 100px;"></a></div>
                             </li>
                             @endif
@@ -302,7 +302,7 @@
                             @endif
                             @if(isset($data->image))
                             <li>
-                              <div class="data-details-head">Payment Prove</div>
+                              <div class="data-details-head">Payment Proof</div>
                               <div class="data-details-des">
                                 <a href="{{asset('transaction_proves/'.$data->image)}}" download="">
                                   <img class="img-fluid" src="{{asset('transaction_proves/'.$data->image)}}" style="width:50px">
